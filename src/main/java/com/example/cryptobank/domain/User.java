@@ -33,8 +33,13 @@ public  abstract class User implements Comparable<User>{
         this.password = password;
     }
 
+
     @Override
     public String toString() {
-        return "User met username: " + username;
+        return "User{" +
+                "username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", salt='" + salt + '\'' +
+                '}';
     }
 }

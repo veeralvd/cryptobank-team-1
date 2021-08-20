@@ -1,6 +1,9 @@
 package com.example.cryptobank.domain;
 
+
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Customer extends User{
 
@@ -10,6 +13,7 @@ public class Customer extends User{
     private int socialSecurityNumber;
     //private BankAccount bankAccount;
     private Address address;
+    private List<Asset> assetList;
 
 
     public Customer(String username, String password, String salt,
@@ -21,6 +25,7 @@ public class Customer extends User{
         this.dateOfBirth = dateOfBirth;
         this.socialSecurityNumber = socialSecurityNumber;
         this.address = address;
+        this.assetList = new ArrayList<>();
     }
 
     public Customer(String username, String password) {
