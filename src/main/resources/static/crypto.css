@@ -1,0 +1,12 @@
+body {
+    background-color: hsl(81, 33%, 81%);
+}
+
+button {
+    background-color: lightgray;
+}
+
+.container-fluid #inlogheader {
+    color: indianred;
+    margin-bottom: 1em;
+}
