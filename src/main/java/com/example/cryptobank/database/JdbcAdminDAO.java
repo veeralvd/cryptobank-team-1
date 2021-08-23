@@ -33,10 +33,11 @@ public class JdbcAdminDAO implements AdminDAO {
 
     private PreparedStatement insertAdminStatement(Admin admin, Connection connection) throws SQLException{
         PreparedStatement preparedStatement = connection.prepareStatement(
-                "insert into admin (username, password) values (?, ?)"
+                "insert into admin (username, password) values (?, ?, ?)"
         );
         preparedStatement.setString(1, admin.getUsername());
         preparedStatement.setString(2, admin.getPassword());
+        preparedStatement.setString(3, admin.getSalt());
         return preparedStatement;
     }
 
@@ -67,6 +68,9 @@ public class JdbcAdminDAO implements AdminDAO {
         String sql = "SELECT * from admin where username = ?";
         List<Admin> adminToFind = jdbcTemplate.query(sql, new AdminRowMapper(), username);
         logger.info("Tot hier gaat het goed");
-        return adminToFind.get(0);
+        if (adminToFind.size() == 1) {
+            return adminToFind.get(0);
+        }
+        return null;
     }
 }

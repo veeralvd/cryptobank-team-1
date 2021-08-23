@@ -28,6 +28,9 @@ public class AdminService {
     public Admin register(String  username, String password) {
         Admin adminToRegister = new Admin(username, password);
         if (checkIfUserCanBeRegistred(username)) {
+            String salt = new Saltmaker().generateSalt();
+            String hashedPassword = HashHelper.hash(password, salt, PepperService.getPepper());
+            adminToRegister.setSalt(salt);
             Admin registredAdmin = adminDAO.save(adminToRegister);
             return registredAdmin;
         }
