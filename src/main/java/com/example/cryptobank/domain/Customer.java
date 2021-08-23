@@ -11,7 +11,7 @@ public class Customer extends User{
     private String lastName;
     private LocalDate dateOfBirth;
     private int socialSecurityNumber;
-    //private BankAccount bankAccount;
+    private BankAccount bankAccount;
     private Address address;
     private List<Asset> assetList;
 
