@@ -6,11 +6,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 @Repository
 public class JdbcAdminDAO implements AdminDAO {
@@ -45,9 +48,25 @@ public class JdbcAdminDAO implements AdminDAO {
     }
 
 
+    // TODO: 23/08/2021 kan je hier ook User van maken? dat is veel mooier
+
+    private static class AdminRowMapper implements RowMapper<Admin> {
+
+        @Override
+        public Admin mapRow(ResultSet resultSet, int i) throws SQLException {
+            String username = resultSet.getString("username");
+            String password = resultSet.getString("password");
+            String salt = resultSet.getString("salt");
+            Admin admin = new Admin(username, password, salt);
+            return admin;
+        }
+    }
 
     @Override
     public Admin findByUsername(String username) {
-        return null;
+        String sql = "SELECT * from admin where username = ?";
+        List<Admin> adminToFind = jdbcTemplate.query(sql, new AdminRowMapper(), username);
+        logger.info("Tot hier gaat het goed");
+        return adminToFind.get(0);
     }
 }
