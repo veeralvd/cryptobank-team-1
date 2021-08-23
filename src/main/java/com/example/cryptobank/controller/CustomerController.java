@@ -24,13 +24,18 @@ public class CustomerController {
         logger.info("New CustomerController");
     }
 
+    // ik heb gekozen om de camelcase hier even weg te laten ivm het aanmaken van customers in postman
+    // anders word ik gek. Mocht dit echt not done zijn, dan moet er een andere oplossing zijn.
+    // is dat niet het geval: bite me :)
     @PutMapping("/register")
     public Customer register(@RequestParam String username, String password,
-                             String firstName, String lastName, LocalDate dateOfBirth, int socialSecurityNumber,
-                             String street, String zipcode, int houseNumber, String addition) {
-        // TODO: 23/08/2021 methode invoegen
+                             String firstname, String lastname, String dateofbirth, int socialsecuritynumber,
+                             String street, String zipcode, int housenumber, String addition) {
+        Customer customerToRegister = customerService.register(
+                username, password, firstname, lastname, LocalDate.parse(dateofbirth), socialsecuritynumber,
+                street, zipcode, housenumber, addition);
         logger.info("Customer registratie aangeroepen");
-        return null;
+        return customerToRegister;
     }
 
 

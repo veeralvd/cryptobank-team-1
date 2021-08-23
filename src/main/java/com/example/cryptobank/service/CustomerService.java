@@ -34,7 +34,7 @@ public class CustomerService {
         Customer customerToRegister = new Customer(username, password);
         if (checkIfCustomerCanBeRegistred(username)) {
             String salt = new Saltmaker().generateSalt();
-            String hashedPassword = HashHelper.hash(password, salt, PepperService.getPepper());
+            customerToRegister.setPassword(HashHelper.hash(password, salt, PepperService.getPepper()));
             customerToRegister.setSalt(salt);
             customerToRegister.setFirstName(firstName);
             customerToRegister.setLastName(lastName);
