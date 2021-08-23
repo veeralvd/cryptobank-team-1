@@ -20,14 +20,14 @@ public class AdminService {
         logger.info("New AdminService");
     }
 
-    public boolean checkIfUserCanBeRegistred(String username) {
+    public boolean checkIfAdminCanBeRegistred(String username) {
        Admin adminToCheck = adminDAO.findByUsername(username);
         return adminToCheck == null;
     }
 
-    public Admin register(String  username, String password) {
+    public Admin register(String username, String password) {
         Admin adminToRegister = new Admin(username, password);
-        if (checkIfUserCanBeRegistred(username)) {
+        if (checkIfAdminCanBeRegistred(username)) {
             String salt = new Saltmaker().generateSalt();
             String hashedPassword = HashHelper.hash(password, salt, PepperService.getPepper());
             adminToRegister.setSalt(salt);

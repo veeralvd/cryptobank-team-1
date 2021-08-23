@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDate;
+
 @RestController
 public class CustomerController {
 
@@ -23,10 +25,15 @@ public class CustomerController {
     }
 
     @PutMapping("/register")
-    public Customer register(@RequestParam String username, String password) {
+    public Customer register(@RequestParam String username, String password,
+                             String firstName, String lastName, LocalDate dateOfBirth, int socialSecurityNumber,
+                             String street, String zipcode, int houseNumber, String addition) {
         // TODO: 23/08/2021 methode invoegen
         logger.info("Customer registratie aangeroepen");
         return null;
     }
 
+
+    // TODO: 23/08/2021 Graag aan Huub vragen of we een customer ook wat slimmer kunnen aanmaken
+    // dit kost ons iedere keer echt veel type werk en is daarmee extra foutgevoelig
 }
