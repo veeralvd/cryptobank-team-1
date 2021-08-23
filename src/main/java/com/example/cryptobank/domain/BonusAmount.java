@@ -5,9 +5,9 @@ import org.slf4j.LoggerFactory;
 
 public class BonusAmount {
     private final Logger logger = LoggerFactory.getLogger(BonusAmount.class);
-    private static double amountBonus;
-
+    private static double amountBonus = 0.0;
     public BonusAmount() {
+
         logger.info("New BonusAmount");
     }
 
