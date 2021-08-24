@@ -2,6 +2,7 @@ package com.example.cryptobank.service;
 
 import com.example.cryptobank.database.CustomerDAO;
 import com.example.cryptobank.domain.Address;
+import com.example.cryptobank.domain.BankAccount;
 import com.example.cryptobank.domain.Customer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,6 +43,7 @@ public class CustomerService {
             customerToRegister.setDateOfBirth(dateOfBirth);
             customerToRegister.setSocialSecurityNumber(socialSecurityNumber);
             customerToRegister.setAddress(new Address(street, zipcode, houseNumber, addition));
+            customerToRegister.setBankAccount(new BankAccount());
             Customer customerRegistred = customerDAO.save(customerToRegister);
             return customerRegistred;
         }

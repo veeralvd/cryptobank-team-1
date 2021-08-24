@@ -26,6 +26,7 @@ public class Customer extends User{
         this.socialSecurityNumber = socialSecurityNumber;
         this.address = address;
         this.assetList = new ArrayList<>();
+        this.bankAccount = new BankAccount();
     }
 
     public Customer(String username, String password) {

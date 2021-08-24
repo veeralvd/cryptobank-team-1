@@ -2,6 +2,7 @@ package com.example.cryptobank.database;
 
 import com.example.cryptobank.domain.Address;
 import com.example.cryptobank.domain.Admin;
+import com.example.cryptobank.domain.BankAccount;
 import com.example.cryptobank.domain.Customer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,10 +26,17 @@ public class JdbcCustomerDAO implements CustomerDAO{
         logger.info("New JdbcCustomerDAO");
     }
 
+    private PreparedStatement insertBankAccount(BankAccount account, Connection connection) throws SQLException {
+        PreparedStatement preparedStatement = connection.prepareStatement("insert into bankaccount (iban, balance) values(?,?)");
+        preparedStatement.setString(1, account.getIban());
+        preparedStatement.setDouble(2, account.getBalance());
+        return preparedStatement;
+    }
+
     private PreparedStatement insertCustomer(Customer customer, Connection connection) throws SQLException {
         PreparedStatement preparedStatement = connection.prepareStatement(
                 "insert into customer (username, password, salt, firstname, lastname, dateofbirth, " +
-                        "socialsecuritynumber, street, zipcode, housenumber, addition) values (?,?,?,?,?,?,?,?,?,?,?)"
+                        "socialsecuritynumber, street, zipcode, housenumber, addition, iban) values (?,?,?,?,?,?,?,?,?,?,?,?)"
         );
         preparedStatement.setString(1, customer.getUsername());
         preparedStatement.setString(2, customer.getPassword());
@@ -41,12 +49,15 @@ public class JdbcCustomerDAO implements CustomerDAO{
         preparedStatement.setString(9, customer.getAddress().getzipcode());
         preparedStatement.setInt(10, customer.getAddress().getHouseNumber());
         preparedStatement.setString(11, customer.getAddress().getAddition());
+        preparedStatement.setString(12, customer.getBankAccount().getIban());
         return preparedStatement;
     }
 
     @Override
     public Customer save(Customer customer) {
         logger.info("customer.save aangeroepen");
+        jdbcTemplate.update(connection -> insertBankAccount(customer.getBankAccount(), connection));
+        logger.info("bank account opgeslagen");
         jdbcTemplate.update(connection -> insertCustomer(customer, connection));
         return customer;
     }

@@ -26,4 +26,19 @@ public class BankAccount {
         return new String(IBAN_PREFIX_CRYPTOKNIGHTS + ibanStartingNumber);
     }
 
+    public String getIban() {
+        return iban;
+    }
+
+    public void setIban(String iban) {
+        this.iban = iban;
+    }
+
+    public double getBalance() {
+        return balance;
+    }
+
+    public void setBalance(double balance) {
+        this.balance = balance;
+    }
 }
