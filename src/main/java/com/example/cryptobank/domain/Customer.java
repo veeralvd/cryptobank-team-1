@@ -33,6 +33,10 @@ public class Customer extends User{
         super(username, password);
     }
 
+    public Customer(){
+        super();
+    }
+
 
     // TODO: 20/08/2021 We moeten de usernames gaan vergelijken op username dus moeten we de comparable correct implementeren
     // de vraag die ik hier bij heb is of je dit steeds moet gaan willen vergelijken met de DB of dat je een lijst hebt met alle usernames en de
@@ -97,5 +101,18 @@ public class Customer extends User{
 
     public void setAssetList(List<Asset> assetList) {
         this.assetList = assetList;
+    }
+
+    @Override
+    public String toString() {
+        return "Customer{" +
+                "firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", dateOfBirth=" + dateOfBirth +
+                ", socialSecurityNumber=" + socialSecurityNumber +
+                ", address=" + address +
+                ", bankAccount=" + bankAccount +
+                ", assetList=" + assetList +
+                '}';
     }
 }

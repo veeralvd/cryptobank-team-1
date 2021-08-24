@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -35,6 +36,13 @@ public class CustomerController {
                 username, password, firstname, lastname, LocalDate.parse(dateofbirth), socialsecuritynumber,
                 street, zipcode, housenumber, addition);
         logger.info("Customer registratie aangeroepen");
+        return customerToRegister;
+    }
+
+    @PutMapping("/registerTwee")
+    public Customer registerTwee(@RequestBody Customer customer) {
+        logger.info(customer.toString());
+        Customer customerToRegister = customerService.register(customer);
         return customerToRegister;
     }
 

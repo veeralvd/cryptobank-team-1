@@ -50,4 +50,18 @@ public class CustomerService {
         return customerToRegister;
     }
 
+    public Customer register(Customer customerToRegister) {
+        String salt = new Saltmaker().generateSalt();
+        if (checkIfCustomerCanBeRegistred(customerToRegister.getUsername())) {
+            customerToRegister.setPassword(HashHelper.hash(customerToRegister.getPassword(),
+                    salt,
+                    PepperService.getPepper()));
+            customerToRegister.setSalt(salt);
+            customerToRegister.setBankAccount(new BankAccount());
+            Customer customerRegistred = customerDAO.save(customerToRegister);
+            return customerRegistred;
+        }
+        return customerToRegister;
+    }
+
 }
