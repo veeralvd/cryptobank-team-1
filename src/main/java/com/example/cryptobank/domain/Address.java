@@ -3,19 +3,19 @@ package com.example.cryptobank.domain;
 public class Address {
 
     private String street;
-    private String postalCode;
+    private String zipcode;
     private int houseNumber;
     private String addition;
 
-    public Address(String street, String postalCode, int houseNumber, String addition) {
+    public Address(String street, String zipcode, int houseNumber, String addition) {
         this.street = street;
-        this.postalCode = postalCode;
+        this.zipcode = zipcode;
         this.houseNumber = houseNumber;
         this.addition = addition;
     }
 
-    public Address(String street, String postalCode, int houseNumber) {
-        this(street, postalCode, houseNumber, "");
+    public Address(String street, String zipcode, int houseNumber) {
+        this(street, zipcode, houseNumber, "");
     }
 
     public String getStreet() {
@@ -26,12 +26,12 @@ public class Address {
         this.street = street;
     }
 
-    public String getPostalCode() {
-        return postalCode;
+    public String getzipcode() {
+        return zipcode;
     }
 
-    public void setPostalCode(String postalCode) {
-        this.postalCode = postalCode;
+    public void setzipcode(String zipcode) {
+        this.zipcode = zipcode;
     }
 
     public int getHouseNumber() {
@@ -54,7 +54,7 @@ public class Address {
     public String toString() {
         return "Address{" +
                 "street='" + street + '\'' +
-                ", postalCode='" + postalCode + '\'' +
+                ", postalCode='" + zipcode + '\'' +
                 ", houseNumber=" + houseNumber +
                 ", addition='" + addition + '\'' +
                 '}';

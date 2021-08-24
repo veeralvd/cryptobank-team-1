@@ -20,9 +20,21 @@ public class AdminService {
         logger.info("New AdminService");
     }
 
-    public Admin register(String  username, String password) {
+    public boolean checkIfAdminCanBeRegistred(String username) {
+       Admin adminToCheck = adminDAO.findByUsername(username);
+        return adminToCheck == null;
+    }
+
+    public Admin register(String username, String password) {
         Admin adminToRegister = new Admin(username, password);
-        adminDAO.save(adminToRegister);
+        if (checkIfAdminCanBeRegistred(username)) {
+            String salt = new Saltmaker().generateSalt();
+            String hashedPassword = HashHelper.hash(password, salt, PepperService.getPepper());
+            adminToRegister.setSalt(salt);
+            Admin registredAdmin = adminDAO.save(adminToRegister);
+            return registredAdmin;
+        }
+
         return adminToRegister;
     }
 
