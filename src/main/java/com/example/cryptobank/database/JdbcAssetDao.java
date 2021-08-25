@@ -55,6 +55,7 @@ public class JdbcAssetDao implements AssetDao {
             String abbreviation = resultSet.getString("abbreviation");
             String name = resultSet.getString("nameCrypto");
             String description = resultSet.getString("description");
+
             Asset asset = new Asset(abbreviation, name, description, ); //TODO hoe zit dit nou met koers? Slaan we niet op in db, dus gewoon constructor met default koers aanmaken?
             return asset;
         }
