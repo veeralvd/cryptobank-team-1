@@ -2,8 +2,6 @@ package com.example.cryptobank.domain;
 
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Customer extends User{
 
@@ -13,7 +11,7 @@ public class Customer extends User{
     private int socialSecurityNumber;
     private Address address;
     private BankAccount bankAccount;
-    private List<Asset> assetList;
+    private Portfolio portfolio;
 
 
     public Customer(String username, String password, String salt,
@@ -25,7 +23,7 @@ public class Customer extends User{
         this.dateOfBirth = dateOfBirth;
         this.socialSecurityNumber = socialSecurityNumber;
         this.address = address;
-        this.assetList = new ArrayList<>();
+        this.portfolio = new Portfolio();
         this.bankAccount = new BankAccount();
     }
 
@@ -95,12 +93,12 @@ public class Customer extends User{
         this.bankAccount = bankAccount;
     }
 
-    public List<Asset> getAssetList() {
-        return assetList;
+    public Portfolio getPortfolio() {
+        return portfolio;
     }
 
-    public void setAssetList(List<Asset> assetList) {
-        this.assetList = assetList;
+    public void setPortfolio(Portfolio portfolio) {
+        this.portfolio = portfolio;
     }
 
     @Override
@@ -112,7 +110,7 @@ public class Customer extends User{
                 ", socialSecurityNumber=" + socialSecurityNumber +
                 ", address=" + address +
                 ", bankAccount=" + bankAccount +
-                ", assetList=" + assetList +
+                ", portfolio=" + portfolio +
                 '}';
     }
 }

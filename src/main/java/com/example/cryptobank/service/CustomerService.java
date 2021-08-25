@@ -14,7 +14,7 @@ import java.time.LocalDate;
 @Service
 public class CustomerService {
 
-
+    // TODO: 25/08/2021 Mark: customerDAo refactoren naar rootrepository met bijbehorende methoden 
     private CustomerDAO customerDAO;
 
     private final Logger logger = LoggerFactory.getLogger(CustomerService.class);

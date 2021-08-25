@@ -10,12 +10,13 @@ import org.springframework.stereotype.Repository;
 public class RootRepository {
     private final Logger logger = LoggerFactory.getLogger(RootRepository.class);
     private AdminDAO adminDAO;
-//    private CustomerDAO customerDAO;
+    private CustomerDAO customerDAO;
 
     @Autowired
-    public RootRepository(AdminDAO adminDAO) {
-        logger.info("New RootRepository");
+    public RootRepository(AdminDAO adminDAO, CustomerDAO customerDAO) {
         this.adminDAO = adminDAO;
+        this.customerDAO = customerDAO;
+        logger.info("New RootRepository");
     }
 
     public Admin getAdminByUsername(String username) {
