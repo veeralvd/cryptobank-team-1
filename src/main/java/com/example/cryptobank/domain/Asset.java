@@ -9,7 +9,7 @@ public class Asset {
     private String abbreviation;
     private String name;
     private String description;
-    private CurrencyRate rate;
+    private CurrencyRate rate; // in dollar
 
     public Asset(String abbreviation, String name, String description, CurrencyRate rate) {
         this.abbreviation = abbreviation;
