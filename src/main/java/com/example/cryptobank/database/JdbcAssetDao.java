@@ -12,8 +12,14 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author Sarah-Jayne Nogarede
+ * Dit is de JDBC DAO voor het object 'Asset'. Deze DAO implementeert de methoden save, findByAbbreviation, findByName, findAsset
+ * en getAll uit de AssetDao Interface.
+ */
 @Repository
 public class JdbcAssetDao implements AssetDao {
 
@@ -49,7 +55,7 @@ public class JdbcAssetDao implements AssetDao {
             String abbreviation = resultSet.getString("abbreviation");
             String name = resultSet.getString("nameCrypto");
             String description = resultSet.getString("description");
-            Asset asset = new Asset(abbreviation, name, description, ); //TODO hoe zit dit nou met koers? Slaan we niet op in db, dus gewoon constructor zonder koers aanmaken?
+            Asset asset = new Asset(abbreviation, name, description, ); //TODO hoe zit dit nou met koers? Slaan we niet op in db, dus gewoon constructor met default koers aanmaken?
             return asset;
         }
     } // end of nested class AssetRowMapper
@@ -64,6 +70,7 @@ public class JdbcAssetDao implements AssetDao {
         return findAsset(name);
     }
 
+    @Override
     public Asset findAsset(String searchTerm) {
         String sql = "SELECT * from asset where searchTerm = ?";
         List<Asset> assetToFind = jdbcTemplate.query(sql, new AssetRowMapper(), searchTerm);
@@ -71,6 +78,14 @@ public class JdbcAssetDao implements AssetDao {
             return assetToFind.get(0);
         }
         return null;
+    }
+
+    //TODO List -> ArrayList en RowMapper, check hoe dit precies zit. Waarom moet ik hem casten naar Arraylist?
+    @Override
+    public ArrayList<Asset> getAll() {
+        String sql = "SELECT * from asset";
+        List<Asset> allAssets = jdbcTemplate.query(sql, new AssetRowMapper());
+        return (ArrayList<Asset>) allAssets;
     }
 
 } // end of class JdbcAssetDao
