@@ -1,5 +1,6 @@
 package com.example.cryptobank.database;
 
+import com.example.cryptobank.domain.Asset;
 import com.example.cryptobank.domain.Customer;
 import com.example.cryptobank.domain.Portfolio;
 import com.example.cryptobank.domain.Purchase;
@@ -7,12 +8,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementSetter;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
+import java.util.HashMap;
+import java.util.Map;
 
 @Repository
 public class JdbcPortfolioDao {
@@ -27,8 +29,8 @@ public class JdbcPortfolioDao {
         logger.info("New JdbcPortfolioDao");
     }
 
-    private PreparedStatement insertPortfolioStatement (Portfolio portfolio, Customer customer,
-                                                        Purchase purchase, Connection connection) throws SQLException {
+    // gebruik indien asset in kwestie nog niet eerder in de portfolio
+    private PreparedStatement insertAssetInPortfolioStatement (Purchase purchase, Connection connection) throws SQLException {
         PreparedStatement ps = connection.prepareStatement(
                 "INSERT INTO ownedasset_table (IBAN, abbreviation, aantalEenheden) values (?, ?, ?)"
         );
@@ -51,6 +53,7 @@ public class JdbcPortfolioDao {
         return ps;
     }
 
+    // Bij verkoop van een deel van opgeslagen asset wordt de hoeveelheid verminderd
     private PreparedStatement updatePortfolioStatementNegative (Portfolio portfolio, Customer customer,
                                                                 Purchase purchase, Connection connection) throws SQLException {
         PreparedStatement ps = connection.prepareStatement(
@@ -64,8 +67,8 @@ public class JdbcPortfolioDao {
         return ps;
     }
 
-    private PreparedStatement deletePortfolioStatement (Portfolio portfolio, Customer customer,
-                                                        Purchase purchase, Connection connection) throws SQLException {
+    private PreparedStatement deletePortfolioStatement (Purchase purchase, Connection connection)
+            throws SQLException {
         PreparedStatement ps = connection.prepareStatement(
                 "DELETE FROM ownedasset_table WHERE iban = ?"
         );
@@ -73,4 +76,46 @@ public class JdbcPortfolioDao {
         return ps;
     }
 
+    public Map<Asset, Double> test (String iban){
+
+        return jdbcTemplate.query("SELECT * FROM ownedasset_table WHERE iban = ?;"
+                , new PreparedStatementSetter[] {iban}, (ResultSet rs) -> {
+                    HashMap<Asset, Double> results = new HashMap<>();
+                    while(rs.next()){
+                        Asset asset = AssetDao.getAssetByAbbr (rs.getString("abbreviation"));
+                        results.put(asset), rs.getDouble("aantalEenheden");
+                    }
+                    return results;
+                }).get(0);
+    }
+
+
+
+    /*public Portfolio findByIban (String iban){
+
+        //String sql = "SELECT * FROM ownedasset_table WHERE iban = ? ;";
+
+        HashMap<Asset, Double> results = jdbcTemplate.query("SELECT * FROM ownedasset_table WHERE iban = ? ;"
+                , new Object[] {iban}, (ResultSet rs) -> {
+                    results = new HashMap<>();
+                    while(rs.next()){
+                        Asset asset = AssetDao.getAssetByAbbr (rs.getString("abbreviation"));
+                        results.put(asset), rs.getDouble("aantalEenheden"));
+                    }
+
+                    return null;
+                }).get(0);
+    }
+
+
+    public Map<Integer,Integer> getAvailableTime(Date date, Integer guru_fid) {
+        return jdbctemp.query("Select a.hour, s.duration from appointment as a inner join services as s on a.service_fid=s.id where date=? and guru_fid=? "
+                ,new Object[] { date, guru_fid }, (ResultSet rs) -> {HashMap<Integer,Integer> results = new HashMap<>();
+                    while (rs.next()) {
+                        results.put(rs.getInt("a.hour"), rs.getInt("s.duration"));
+                    }
+                    return results;
+                }).get(0);
+
+    }*/
 }

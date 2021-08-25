@@ -25,21 +25,4 @@ public class Portfolio {
         this.assetMap = assetMap;
     }
 
-// TODO @putmapping bij een toevoeging aan de portfolio van een specifieke klant
-/*    public void testmethodAddToList(Asset asset, Double numOfAssets){
-        List<Asset> testlist = new ArrayList<>();
-        // als geen list, maak nieuwe List.
-        // als list al bestaat, voeg toe aan bestaande list.
-        asset = new Asset("sdf", "sodefo", "sdf", new CurrencyRate("sdf", 0.1, 1.0));
-
-        testlist.set(1, asset); // index in list moet anders, misschien HashSet
-        setAmountOfAssets(numOfAssets);
-    }
-
-    public void testRemoveAssetFromList(Asset asset, Purchase purchase){
-        // gegeven Asset met bijbehorende records moet verwijderd worden uit de List.
-    }*/
-
-
-
 }
