@@ -32,6 +32,9 @@ public class RootRepository {
         return adminDAO.save(admin);
     }
 
+    @Autowired
+    public RootRepository(AssetDao assetDao)
+
     public Asset save(Asset asset) {
         return assetDao.save(asset);
     }
