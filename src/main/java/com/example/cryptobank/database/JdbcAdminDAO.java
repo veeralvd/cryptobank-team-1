@@ -27,10 +27,6 @@ public class JdbcAdminDAO implements AdminDAO {
         logger.info("New JdbcAdminDAO");
     }
 
-    // TODO: 20/08/2021 Ik kreeg het niet helemaal spits om een userdao inteace te programmeren voor zowel een admin als een customer
-    // het ging mis bij het implementeren van deze klasse. Daar wilde de methode save() alleen een user als parameter en geen admin
-    // om die reden heb ik het aangepast naar een adminDao interace. hoewel ik nu wel het gevoel heb dat die interace vrij nutteloos is geworden maagroed.
-
     private PreparedStatement insertAdminStatement(Admin admin, Connection connection) throws SQLException{
         PreparedStatement preparedStatement = connection.prepareStatement(
                 "insert into admin (username, password, salt) values (?, ?, ?)"
@@ -47,9 +43,6 @@ public class JdbcAdminDAO implements AdminDAO {
         jdbcTemplate.update(connection -> insertAdminStatement(admin, connection));
         return admin;
     }
-
-
-    // TODO: 23/08/2021 kan je hier ook User van maken? dat is veel mooier
 
     private static class AdminRowMapper implements RowMapper<Admin> {
 

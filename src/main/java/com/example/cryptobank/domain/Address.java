@@ -18,6 +18,9 @@ public class Address {
         this(street, zipcode, houseNumber, "");
     }
 
+    public Address() {
+    }
+
     public String getStreet() {
         return street;
     }

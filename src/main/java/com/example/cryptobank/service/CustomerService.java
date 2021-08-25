@@ -14,7 +14,7 @@ import java.time.LocalDate;
 @Service
 public class CustomerService {
 
-
+    // TODO: 25/08/2021 Mark: customerDAo refactoren naar rootrepository met bijbehorende methoden 
     private CustomerDAO customerDAO;
 
     private final Logger logger = LoggerFactory.getLogger(CustomerService.class);
@@ -43,6 +43,20 @@ public class CustomerService {
             customerToRegister.setDateOfBirth(dateOfBirth);
             customerToRegister.setSocialSecurityNumber(socialSecurityNumber);
             customerToRegister.setAddress(new Address(street, zipcode, houseNumber, addition));
+            customerToRegister.setBankAccount(new BankAccount());
+            Customer customerRegistred = customerDAO.save(customerToRegister);
+            return customerRegistred;
+        }
+        return customerToRegister;
+    }
+
+    public Customer register(Customer customerToRegister) {
+        String salt = new Saltmaker().generateSalt();
+        if (checkIfCustomerCanBeRegistred(customerToRegister.getUsername())) {
+            customerToRegister.setPassword(HashHelper.hash(customerToRegister.getPassword(),
+                    salt,
+                    PepperService.getPepper()));
+            customerToRegister.setSalt(salt);
             customerToRegister.setBankAccount(new BankAccount());
             Customer customerRegistred = customerDAO.save(customerToRegister);
             return customerRegistred;
