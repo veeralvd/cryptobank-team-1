@@ -31,7 +31,9 @@ public class JdbcBankAccountDao implements BankAccountDao {
         return ps;
     }
 
-    @Override
+
+
+    /*@Override
     public BankAccount save(BankAccount bankAccount) {
         jdbcTemplate.update(connection -> insertBankAccountStatement(bankAccount, connection));
         return bankAccount;
@@ -41,5 +43,20 @@ public class JdbcBankAccountDao implements BankAccountDao {
     public BankAccount findByIban(String iban) {
         return null;
     }
+
+    @Override
+    public boolean checkBankAccount(TestIban iban, double amount) {
+        return false;
+    }
+
+    @Override
+    public BankAccount withdraw(TestIban iban, double amount, String description) {
+        return null;
+    }
+
+    @Override
+    public BankAccount deposit(TestIban iban, double amount, String description) {
+        return null;
+    }*/
 
 }

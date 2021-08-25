@@ -1,10 +1,11 @@
 package com.example.cryptobank.database;
 
-import com.example.cryptobank.domain.BankAccount;
-
 public interface BankAccountDao {
 
-    BankAccount save(BankAccount bankAccount);
+    /*BankAccount save(BankAccount bankAccount);
     BankAccount findByIban(String iban);
+    BankAccount withdraw(TestIban iban, double amount, String description);
+    BankAccount deposit(TestIban iban, double amount, String description);
+    boolean checkBankAccount(TestIban iban, double amount);*/
 
 }
