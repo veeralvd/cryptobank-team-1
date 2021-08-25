@@ -100,6 +100,7 @@ DEFAULT CHARACTER SET = utf8;
 CREATE TABLE IF NOT EXISTS `cryptobank`.`crypto_currency_rate` (
     `abbreviation` VARCHAR(5) NOT NULL,
     `datetime` DATETIME NOT NULL,
+    `value` DECIMAL(15,2) not null ,
     PRIMARY KEY (`abbreviation`, `datetime`),
     CONSTRAINT `fk_crypto_currency_rate_asset1`
     FOREIGN KEY (`abbreviation`)
