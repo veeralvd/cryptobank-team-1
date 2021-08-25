@@ -9,11 +9,13 @@ import java.time.LocalDateTime;
 public class Purchase {
     private final Logger logger = LoggerFactory.getLogger(Purchase.class);
 
+    private Customer customer;
     private LocalDateTime localDateTime;
     private Asset asset;
-    private int amount;
+    private double amount;
 
-    public Purchase(LocalDateTime localDateTime, Asset asset, int amount) {
+    public Purchase(Customer customer, LocalDateTime localDateTime, Asset asset, double amount) {
+        this.customer = customer;
         this.localDateTime = localDateTime;
         this.asset = asset;
         this.amount = amount;
@@ -27,17 +29,24 @@ public class Purchase {
 
         Purchase purchase = (Purchase) o;
 
-        if (amount != purchase.amount) return false;
+        if (Double.compare(purchase.amount, amount) != 0) return false;
         if (!localDateTime.equals(purchase.localDateTime)) return false;
         return asset.equals(purchase.asset);
     }
 
     @Override
     public int hashCode() {
-        int result = localDateTime.hashCode();
+        int result;
+        long temp;
+        result = localDateTime.hashCode();
         result = 31 * result + asset.hashCode();
-        result = 31 * result + amount;
+        temp = Double.doubleToLongBits(amount);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
         return result;
+    }
+
+    public Customer getCustomer() {
+        return customer;
     }
 
     public LocalDateTime getLocalDateTime() {
@@ -48,14 +57,15 @@ public class Purchase {
         return asset;
     }
 
-    public int getAmount() {
+    public double getAmount() {
         return amount;
     }
 
     @Override
     public String toString() {
         return "Purchase{" +
-                "localDateTime=" + localDateTime +
+                "customer=" + customer +
+                ", localDateTime=" + localDateTime +
                 ", asset=" + asset +
                 ", amount=" + amount +
                 '}';
