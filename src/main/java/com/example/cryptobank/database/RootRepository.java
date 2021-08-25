@@ -14,13 +14,15 @@ import java.util.ArrayList;
 public class RootRepository {
     private final Logger logger = LoggerFactory.getLogger(RootRepository.class);
     private AdminDAO adminDAO;
-//    private CustomerDAO customerDAO;
+    private CustomerDAO customerDAO;
     private AssetDao assetDao;
 
     @Autowired
-    public RootRepository(AdminDAO adminDAO) {
+    public RootRepository(AdminDAO adminDAO, AssetDao assetDao, CustomerDAO customerDAO) {
         logger.info("New RootRepository");
         this.adminDAO = adminDAO;
+        this.assetDao = assetDao;
+        this.customerDAO = customerDAO;
     }
 
     public Admin getAdminByUsername(String username) {
@@ -31,9 +33,6 @@ public class RootRepository {
     public Admin save(Admin admin) {
         return adminDAO.save(admin);
     }
-
-    @Autowired
-    public RootRepository(AssetDao assetDao)
 
     public Asset save(Asset asset) {
         return assetDao.save(asset);
