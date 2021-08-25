@@ -17,6 +17,11 @@ public class Portfolio {
         logger.info("New Portfolio");
     }
 
+    // TODO tijdelijke default constructor
+    public Portfolio() {
+
+    }
+
     public Map<Asset, Double> getAssetMap() {
         return assetMap;
     }

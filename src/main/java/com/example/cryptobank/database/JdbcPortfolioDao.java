@@ -76,7 +76,7 @@ public class JdbcPortfolioDao {
         return ps;
     }
 
-    public Map<Asset, Double> test (String iban){
+   /* public Map<Asset, Double> test (String iban){
 
         return jdbcTemplate.query("SELECT * FROM ownedasset_table WHERE iban = ?;"
                 , new PreparedStatementSetter[] {iban}, (ResultSet rs) -> {
@@ -87,7 +87,7 @@ public class JdbcPortfolioDao {
                     }
                     return results;
                 }).get(0);
-    }
+    }*/
 
 
 

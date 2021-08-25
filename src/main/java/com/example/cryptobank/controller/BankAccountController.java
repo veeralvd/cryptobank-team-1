@@ -29,7 +29,13 @@ public class BankAccountController {
     // Admin kan bedragen op rekeningen wijzigen (via webapplicatie)
     // Use case: Admin kan geld storten op/opnemen van willekeurige rekening
 
+    // Klant kan eigen rekening inzien, geld storten, ermee betalen
 
+    @GetMapping("/bankaccount")
+    public String getTestBankAccount(@RequestParam String iban) {
+        String response = "BankAccount met IBAN: " + iban;
+        return response;
+    }
 
 
 }
