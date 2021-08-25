@@ -9,9 +9,9 @@ public class Asset {
     private String abbreviation;
     private String name;
     private String description;
-    private CurrencyRate rate; // in dollar
+    private CryptoCurrencyRate rate; // in dollar
 
-    public Asset(String abbreviation, String name, String description, CurrencyRate rate) {
+    public Asset(String abbreviation, String name, String description, CryptoCurrencyRate rate) {
         this.abbreviation = abbreviation;
         this.name = name;
         this.description = description;

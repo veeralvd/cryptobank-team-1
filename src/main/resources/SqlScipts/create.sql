@@ -97,6 +97,18 @@ CREATE TABLE IF NOT EXISTS `cryptobank`.`ownedasset` (
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
 
+CREATE TABLE IF NOT EXISTS `cryptobank`.`crypto_currency_rate` (
+    `abbreviation` VARCHAR(5) NOT NULL,
+    `datetime` DATETIME NOT NULL,
+    `value` DECIMAL(15,2) not null ,
+    PRIMARY KEY (`abbreviation`, `datetime`),
+    CONSTRAINT `fk_crypto_currency_rate_asset1`
+    FOREIGN KEY (`abbreviation`)
+    REFERENCES `cryptobank`.`asset` (`abbreviation`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+    ENGINE = InnoDB;
+
 -- Gebruiker definiëren en toegang verlenen
 CREATE USER 'cryptoUser'@'localhost' IDENTIFIED BY 'cryptoDB';
 GRANT ALL PRIVILEGES ON cryptobank.* TO 'cryptoUser'@'localhost';

@@ -1,7 +1,6 @@
 package com.example.cryptobank.database;
 
 import com.example.cryptobank.domain.Asset;
-import com.example.cryptobank.domain.CurrencyRate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,7 +55,6 @@ public class JdbcAssetDao implements AssetDao {
             String abbreviation = resultSet.getString("abbreviation");
             String name = resultSet.getString("nameCrypto");
             String description = resultSet.getString("description");
-            CurrencyRate currencyRate
             Asset asset = new Asset(abbreviation, name, description, ); //TODO hoe zit dit nou met koers? Slaan we niet op in db, dus gewoon constructor met default koers aanmaken?
             return asset;
         }
