@@ -12,15 +12,11 @@ public class Portfolio {
     private final Logger logger = LoggerFactory.getLogger(Portfolio.class);
     private Map<Asset, Double> assetMap;
 
-    public Portfolio() {
-        this.assetMap = new HashMap<>();
+    public Portfolio(Map<Asset, Double> assetMap) {
+        this.assetMap = assetMap;
         logger.info("New Portfolio");
     }
 
-    // TODO tijdelijke default constructor
-    public Portfolio() {
-
-    }
 
     public Map<Asset, Double> getAssetMap() {
         return assetMap;
