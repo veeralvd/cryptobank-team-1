@@ -30,20 +30,28 @@ public class BankAccountController {
 
     @GetMapping("/bankaccounts/balance")
     public double getBalanceByIban(@RequestParam String iban) {
-        double balanceToRetrieve = bankAccountService.getBalanceByIban(iban);
+        double balanceRetrieved = bankAccountService.getBalanceByIban(iban);
         logger.info("getBalanceByIban aangeroepen");
-        return balanceToRetrieve;
+        return balanceRetrieved;
     }
 
     /**
      * Methode deposit vraagt om IBAN en het bij te schrijven bedrag.
      * Het huidige bedrag op de rekening wordt opgehaald en verrekend met het bij te schrijven bedrag.
+     * Verrekenen gebeurt in JdbcBankAccountDao.
      * Na bijschrijving wordt het geactualseerde bedrag geretourneerd.
      */
     @PutMapping("/bankaccounts/deposit")
     public double deposit(@RequestParam String iban, double amount) {
         double balanceUpdated = bankAccountService.deposit(iban, amount);
         logger.info("deposit aangeroepen");
+        return balanceUpdated;
+    }
+
+    @PutMapping("/bankaccounts/withdraw")
+    public double withdraw(@RequestParam String iban, double amount) {
+        double balanceUpdated = bankAccountService.withdraw(iban, amount);
+        logger.info("withdraw aangeroepen");
         return balanceUpdated;
     }
 

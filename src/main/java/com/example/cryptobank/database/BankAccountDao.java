@@ -6,7 +6,7 @@ public interface BankAccountDao {
 
     //BankAccount save(BankAccount bankAccount);
     double getBalanceByIban(String iban);
-    BankAccount withdraw(String iban, double amount, String description);
+    double withdraw(String iban, double amount);
     double deposit(String iban, double amount);
     boolean checkBankAccount(String iban, double amount);
 

@@ -56,13 +56,20 @@ public class JdbcBankAccountDao implements BankAccountDao {
     public double getBalanceByIban(String iban) {
         String sql = "SELECT balance FROM bankaccount WHERE iban = ?";
         // Query for single record, according to this example needs: (sql, String.class, new Object[] { studentId })
-        double balanceToRetieve = jdbcTemplate.queryForObject(sql, double.class, new Object[] {iban});
-        return balanceToRetieve;
+        double balanceRetrieved = jdbcTemplate.queryForObject(sql, double.class, new Object[] {iban});
+        return balanceRetrieved;
     }
 
     @Override
     public double deposit(String iban, double amount) {
-        double updatedBalance = this.getBalanceByIban(iban) + amount;
+        double updatedBalance = this.getBalanceByIban(iban) - amount;
+        jdbcTemplate.update(connection -> updateBankAccount(iban, updatedBalance, connection));
+        return updatedBalance;
+    }
+
+    @Override
+    public double withdraw(String iban, double amount) {
+        double updatedBalance = getBalanceByIban(iban) + amount;
         jdbcTemplate.update(connection -> updateBankAccount(iban, updatedBalance, connection));
         return updatedBalance;
     }
@@ -72,10 +79,7 @@ public class JdbcBankAccountDao implements BankAccountDao {
         return false;
     }
 
-    @Override
-    public BankAccount withdraw(String iban, double amount, String description) {
-        return null;
-    }
+
 
 
 

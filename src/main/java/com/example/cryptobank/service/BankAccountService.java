@@ -22,7 +22,6 @@ public class BankAccountService {
         logger.info("New BankAccountService");
     }
 
-    // TODO postman check
     public double getBalanceByIban(String iban) {
         double balanceToRetrieve = rootRepository.getBalanceByIban(iban);
         return balanceToRetrieve;
@@ -31,6 +30,11 @@ public class BankAccountService {
     public double deposit(String iban, double amount) {
         double updatedBalance = rootRepository.deposit(iban, amount);
         return updatedBalance;
+    }
+
+    public double withdraw(String iban, double amount) {
+        double updatedBalance = rootRepository.withdraw(iban, amount);
+        return  updatedBalance;
     }
 
 }

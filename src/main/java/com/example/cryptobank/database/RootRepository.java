@@ -58,12 +58,17 @@ public class RootRepository {
 
 
     public double getBalanceByIban(String iban) {
-        double balanceToRetrieve = bankAccountDao.getBalanceByIban(iban);
-        return balanceToRetrieve;
+        double balanceRetrieved = bankAccountDao.getBalanceByIban(iban);
+        return balanceRetrieved;
     }
 
     public double deposit(String iban, double amount) {
         double balanceUpdated = bankAccountDao.deposit(iban, amount);
+        return balanceUpdated;
+    }
+
+    public double withdraw(String iban, double amount) {
+        double balanceUpdated = bankAccountDao.withdraw(iban, amount);
         return balanceUpdated;
     }
 
