@@ -75,7 +75,7 @@ public class JdbcAssetDao implements AssetDao {
 
     @Override
     public Asset findAsset(String searchTerm) {
-        String sql = "SELECT * from asset where searchTerm = ?";
+        String sql = "SELECT * from asset where abbreviation = ?";
         List<Asset> assetToFind = jdbcTemplate.query(sql, new AssetRowMapper(), searchTerm);
         if (assetToFind.size() == 1) {
             return assetToFind.get(0);
