@@ -22,10 +22,13 @@ public class JdbcPortfolioDao {
 
     private JdbcTemplate jdbcTemplate;
 
+    private JdbcAssetDao jdbcAssetDao;
+
     @Autowired
-    public JdbcPortfolioDao(JdbcTemplate jdbcTemplate) {
+    public JdbcPortfolioDao(JdbcTemplate jdbcTemplate, JdbcAssetDao jdbcAssetDao) {
         super();
         this.jdbcTemplate = jdbcTemplate;
+        this.jdbcAssetDao = jdbcAssetDao;
         logger.info("New JdbcPortfolioDao");
     }
 
@@ -76,7 +79,23 @@ public class JdbcPortfolioDao {
         return ps;
     }
 
-    public Map<Asset, Double> test (String iban){
+    private Portfolio getByIban (Connection connection, String iban) throws SQLException {
+        HashMap<Asset, Double> assetMap = new HashMap<>();
+        PreparedStatement ps = connection.prepareStatement(
+                "SELECT abbreviation, aantalEenheden FROM ownedasset_table WHERE iban = ?"
+        );
+        ps.setString(1, iban);
+        ResultSet resultSet = ps.executeQuery();
+        if (resultSet.next()) {
+            String abbr = resultSet.getString("abbreviation");
+            Asset asset = jdbcAssetDao.findByAbbreviation(abbr);
+            double amount = resultSet.getDouble("aantalEenheden");
+            assetMap.put(asset, amount);
+        }
+        return new Portfolio(assetMap);
+    }
+
+/*    public Map<Asset, Double> test (String iban){
 
         return jdbcTemplate.query("SELECT * FROM ownedasset_table WHERE iban = ?;"
                 , new PreparedStatementSetter[] {iban}, (ResultSet rs) -> {
@@ -87,28 +106,9 @@ public class JdbcPortfolioDao {
                     }
                     return results;
                 }).get(0);
-    }
+    }*/
 
-
-
-    /*public Portfolio findByIban (String iban){
-
-        //String sql = "SELECT * FROM ownedasset_table WHERE iban = ? ;";
-
-        HashMap<Asset, Double> results = jdbcTemplate.query("SELECT * FROM ownedasset_table WHERE iban = ? ;"
-                , new Object[] {iban}, (ResultSet rs) -> {
-                    results = new HashMap<>();
-                    while(rs.next()){
-                        Asset asset = AssetDao.getAssetByAbbr (rs.getString("abbreviation"));
-                        results.put(asset), rs.getDouble("aantalEenheden"));
-                    }
-
-                    return null;
-                }).get(0);
-    }
-
-
-    public Map<Integer,Integer> getAvailableTime(Date date, Integer guru_fid) {
+/*    public Map<Integer,Integer> getAvailableTime(Date date, Integer guru_fid) {
         return jdbctemp.query("Select a.hour, s.duration from appointment as a inner join services as s on a.service_fid=s.id where date=? and guru_fid=? "
                 ,new Object[] { date, guru_fid }, (ResultSet rs) -> {HashMap<Integer,Integer> results = new HashMap<>();
                     while (rs.next()) {
