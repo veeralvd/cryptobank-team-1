@@ -42,4 +42,18 @@ public class Asset {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    public void setRate(CryptoCurrencyRate rate) {
+        this.rate = rate;
+    }
+
+    @Override
+    public String toString() {
+        return "Asset{" +
+                "abbreviation='" + abbreviation + '\'' +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", rate=" + rate +
+                '}';
+    }
 }

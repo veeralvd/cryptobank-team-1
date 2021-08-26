@@ -42,6 +42,10 @@ public class RootRepository {
 
     public Asset getByAbbreviation(String abbreviation) {
         Asset asset = assetDao.findByAbbreviation(abbreviation);
+        ArrayList<CryptoCurrencyRate> cryptoCurrencyRateList = cryptoCurrencyRateDAO.findByAbbreviation(abbreviation);
+        CryptoCurrencyRate currentRate = cryptoCurrencyRateList.get(cryptoCurrencyRateList.size()-1);
+        asset.setRate(currentRate);
+        logger.info("currentRate " + currentRate);
         return asset;
     }
 
