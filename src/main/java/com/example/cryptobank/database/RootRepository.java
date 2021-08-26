@@ -16,13 +16,15 @@ public class RootRepository {
     private AdminDAO adminDAO;
     private CustomerDAO customerDAO;
     private AssetDao assetDao;
+    private BankAccountDao bankAccountDao;
 
     @Autowired
-    public RootRepository(AdminDAO adminDAO, AssetDao assetDao, CustomerDAO customerDAO) {
+    public RootRepository(AdminDAO adminDAO, AssetDao assetDao, CustomerDAO customerDAO, BankAccountDao bankAccountDao) {
         logger.info("New RootRepository");
         this.adminDAO = adminDAO;
         this.assetDao = assetDao;
         this.customerDAO = customerDAO;
+        this.bankAccountDao = bankAccountDao;
     }
 
     public Admin getAdminByUsername(String username) {
@@ -52,5 +54,26 @@ public class RootRepository {
         ArrayList allAssets = assetDao.getAll();
         return allAssets;
     }
+
+
+
+    public double getBalanceByIban(String iban) {
+        double balanceRetrieved = bankAccountDao.getBalanceByIban(iban);
+        return balanceRetrieved;
+    }
+
+    public double deposit(String iban, double amount) {
+        double balanceUpdated = bankAccountDao.deposit(iban, amount);
+        return balanceUpdated;
+    }
+
+    public double withdraw(String iban, double amount) {
+        double balanceUpdated = bankAccountDao.withdraw(iban, amount);
+        return balanceUpdated;
+    }
+
+    /*public void deleteBankAccount(String iban) {
+        bankAccountDao.deleteBankAccount(iban);
+    }*/
 
 } // end of class RootRepository

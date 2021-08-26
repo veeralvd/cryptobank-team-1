@@ -76,18 +76,18 @@ public class JdbcPortfolioDao {
         return ps;
     }
 
-//    public Map<Asset, Double> test (String iban){
-//
-//        return jdbcTemplate.query("SELECT * FROM ownedasset_table WHERE iban = ?;"
-//                , new PreparedStatementSetter[] {iban}, (ResultSet rs) -> {
-//                    HashMap<Asset, Double> results = new HashMap<>();
-//                    while(rs.next()){
-//                        Asset asset = AssetDao.getAssetByAbbr (rs.getString("abbreviation"));
-//                        results.put(asset), rs.getDouble("aantalEenheden");
-//                    }
-//                    return results;
-//                }).get(0);
-//    }
+   /* public Map<Asset, Double> test (String iban){
+
+        return jdbcTemplate.query("SELECT * FROM ownedasset_table WHERE iban = ?;"
+                , new PreparedStatementSetter[] {iban}, (ResultSet rs) -> {
+                    HashMap<Asset, Double> results = new HashMap<>();
+                    while(rs.next()){
+                        Asset asset = AssetDao.getAssetByAbbr (rs.getString("abbreviation"));
+                        results.put(asset), rs.getDouble("aantalEenheden");
+                    }
+                    return results;
+                }).get(0);
+    }*/
 
 
 
