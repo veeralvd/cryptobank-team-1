@@ -23,7 +23,7 @@ public class Customer extends User{
         this.dateOfBirth = dateOfBirth;
         this.socialSecurityNumber = socialSecurityNumber;
         this.address = address;
-        this.portfolio = new Portfolio();
+        //this.portfolio = new Portfolio();
         this.bankAccount = new BankAccount();
     }
 
