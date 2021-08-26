@@ -62,4 +62,9 @@ public class RootRepository {
         return balanceToRetrieve;
     }
 
+    public double deposit(String iban, double amount) {
+        double balanceUpdated = bankAccountDao.deposit(iban, amount);
+        return balanceUpdated;
+    }
+
 } // end of class RootRepository

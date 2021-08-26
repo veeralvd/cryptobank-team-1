@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -27,17 +28,23 @@ public class BankAccountController {
 
     // Klant kan eigen rekening inzien, geld storten, ermee betalen
 
-    @GetMapping("/bankaccount")
-    public String getTestBankAccount(@RequestParam String iban) {
-        String response = "BankAccount met IBAN: " + iban;
-        return response;
-    }
-
     @GetMapping("/bankaccounts/balance")
     public double getBalanceByIban(@RequestParam String iban) {
         double balanceToRetrieve = bankAccountService.getBalanceByIban(iban);
         logger.info("getBalanceByIban aangeroepen");
         return balanceToRetrieve;
+    }
+
+    /**
+     * Methode deposit vraagt om IBAN en het bij te schrijven bedrag.
+     * Het huidige bedrag op de rekening wordt opgehaald en verrekend met het bij te schrijven bedrag.
+     * Na bijschrijving wordt het geactualseerde bedrag geretourneerd.
+     */
+    @PutMapping("/bankaccounts/deposit")
+    public double deposit(@RequestParam String iban, double amount) {
+        double balanceUpdated = bankAccountService.deposit(iban, amount);
+        logger.info("deposit aangeroepen");
+        return balanceUpdated;
     }
 
 
