@@ -13,16 +13,51 @@ import java.time.LocalDateTime;
 public class CryptoCurrencyRate {
 
     private final Logger logger = LoggerFactory.getLogger(CryptoCurrencyRate.class);
+    private String abbreviation;
     private double cryptoRate;
     private LocalDateTime dateTime;
+    private String dateTimeAsString;
 
-    public CryptoCurrencyRate(double cryptoRate, LocalDateTime dateTime) {
+    public CryptoCurrencyRate(String abbreviation, double cryptoRate, LocalDateTime dateTime) {
+        this.abbreviation = abbreviation;
         this.cryptoRate = cryptoRate;
         this.dateTime = dateTime;
     }
 
-    public CryptoCurrencyRate(double cryptoRate) {
-        this(cryptoRate, LocalDateTime.now());
+    public CryptoCurrencyRate(String abbreviation, double cryptoRate, String dateTimeAsString) {
+        this.abbreviation = abbreviation;
+        this.cryptoRate = cryptoRate;
+        this.dateTimeAsString = dateTimeAsString;
+    }
+
+    public CryptoCurrencyRate(String abbreviation, double cryptoRate) {
+        this(abbreviation, cryptoRate, LocalDateTime.now());
+    }
+
+    public String getAbbreviation() {
+        return abbreviation;
+    }
+
+    @Override
+    public String toString() {
+        return "CryptoCurrencyRate{" +
+                "abbreviation='" + abbreviation + '\'' +
+                ", cryptoRate=" + cryptoRate +
+                ", dateTime=" + dateTime +
+                ", dateTimeAsString='" + dateTimeAsString + '\'' +
+                '}';
+    }
+
+    public String getDateTimeAsString() {
+        return dateTimeAsString;
+    }
+
+    public void setDateTimeAsString(String dateTimeAsString) {
+        this.dateTimeAsString = dateTimeAsString;
+    }
+
+    public void setAbbreviation(String abbreviation) {
+        this.abbreviation = abbreviation;
     }
 
     public double getCryptoRate() {

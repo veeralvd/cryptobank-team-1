@@ -2,7 +2,6 @@ package com.example.cryptobank.database;
 
 import com.example.cryptobank.domain.Admin;
 import com.example.cryptobank.domain.Asset;
-import com.example.cryptobank.domain.Purchase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,13 +15,15 @@ public class RootRepository {
     private AdminDAO adminDAO;
     private CustomerDAO customerDAO;
     private AssetDao assetDao;
+    private CryptoCurrencyRateDAO cryptoCurrencyRateDAO;
 
     @Autowired
-    public RootRepository(AdminDAO adminDAO, AssetDao assetDao, CustomerDAO customerDAO) {
+    public RootRepository(AdminDAO adminDAO, AssetDao assetDao, CustomerDAO customerDAO, CryptoCurrencyRateDAO cryptoCurrencyRateDAO) {
         logger.info("New RootRepository");
         this.adminDAO = adminDAO;
         this.assetDao = assetDao;
         this.customerDAO = customerDAO;
+        this.cryptoCurrencyRateDAO = cryptoCurrencyRateDAO;
     }
 
     public Admin getAdminByUsername(String username) {
