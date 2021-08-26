@@ -17,7 +17,6 @@ public class CryptoCurrencyRate {
     private String abbreviation;
     private double cryptoRate;
     private LocalDateTime dateTime;
-    private String dateTimeAsString;
 
     public CryptoCurrencyRate(String abbreviation, double cryptoRate, LocalDateTime dateTime) {
         this.abbreviation = abbreviation;
@@ -25,9 +24,6 @@ public class CryptoCurrencyRate {
         this.dateTime = dateTime;
     }
 
-//    public CryptoCurrencyRate(String abbreviation, double cryptoRate, String dateTimeAsString) {
-//        this(abbreviation, cryptoRate, LocalDateTime.parse(dateTimeAsString, DateTimeFormatter.ISO_LOCAL_DATE_TIME));
-//    }
 
     public CryptoCurrencyRate(String abbreviation, double cryptoRate) {
         this(abbreviation, cryptoRate, LocalDateTime.now());
@@ -45,17 +41,10 @@ public class CryptoCurrencyRate {
                 "abbreviation='" + abbreviation + '\'' +
                 ", cryptoRate=" + cryptoRate +
                 ", dateTime=" + dateTime +
-                ", dateTimeAsString='" + dateTimeAsString + '\'' +
                 '}';
     }
 
-    public String getDateTimeAsString() {
-        return dateTimeAsString;
-    }
 
-    public void setDateTimeAsString(String dateTimeAsString) {
-        this.dateTimeAsString = dateTimeAsString;
-    }
 
     public void setAbbreviation(String abbreviation) {
         this.abbreviation = abbreviation;

@@ -36,9 +36,12 @@ public class JdbcCryptoCurrencyRateDAOTest {
 
     }
 
+    // TODO: 26/08/2021 nog een fatsoenlijke test voor schrijven. deze test laat alleen zien dat de datetime correct wordt geformat ván en náár de database 
     @Test
     void getAll() {
-        System.out.println(LocalDateTime.now());
+        ArrayList<CryptoCurrencyRate> cryptoCurrencyRateArrayList = cryptoCurrencyRateDAOTest.getAll();
+        CryptoCurrencyRate testje = cryptoCurrencyRateArrayList.get(1);
+        logger.info(testje.getDateTime().toString());
     }
 
     @Test
