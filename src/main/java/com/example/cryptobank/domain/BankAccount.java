@@ -15,7 +15,6 @@ public class BankAccount {
     public BankAccount() {
         this.iban = IbanGenerator.generate();
         this.balance = BonusAmount.getAmountBonus();
-
         logger.info("New BankAccount created met iban:" + iban);
     }
 

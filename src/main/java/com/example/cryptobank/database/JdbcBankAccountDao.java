@@ -24,39 +24,44 @@ public class JdbcBankAccountDao implements BankAccountDao {
         logger.info("New JdbcBankAccountDao");
     }
 
-    private PreparedStatement insertBankAccountStatement(BankAccount bankAccount, Connection connection) throws SQLException {
+    // TODO staat nog dubbel, hier en in JdbcCustomerDao
+    /*private PreparedStatement insertBankAccount(BankAccount bankAccount, Connection connection) throws SQLException {
         PreparedStatement ps = connection.prepareStatement("insert into bankaccount (iban, balance) values (?,?);");
         ps.setString(1, bankAccount.getIban());
         ps.setDouble(2, bankAccount.getBalance());
         return ps;
-    }
+    }*/
 
 
 
-    /*@Override
+    // TODO checken of saveBankAccount ergens dubbel staat
+   /* @Override
     public BankAccount save(BankAccount bankAccount) {
         jdbcTemplate.update(connection -> insertBankAccountStatement(bankAccount, connection));
         return bankAccount;
+    }*/
+
+    @Override
+    public double getBalanceByIban(String iban) {
+        String sql = "SELECT balance FROM bankaccount WHERE IBAN = ?";
+        // Query for single record, according to this example needs: (sql, String.class, new Object[] { studentId })
+        double balanceToRetieve = jdbcTemplate.queryForObject(sql, double.class, new Object[] {iban});
+        return balanceToRetieve;
     }
 
     @Override
-    public BankAccount findByIban(String iban) {
-        return null;
-    }
-
-    @Override
-    public boolean checkBankAccount(TestIban iban, double amount) {
+    public boolean checkBankAccount(String iban, double amount) {
         return false;
     }
 
     @Override
-    public BankAccount withdraw(TestIban iban, double amount, String description) {
+    public BankAccount withdraw(String iban, double amount, String description) {
         return null;
     }
 
     @Override
-    public BankAccount deposit(TestIban iban, double amount, String description) {
+    public BankAccount deposit(String iban, double amount, String description) {
         return null;
-    }*/
+    }
 
 }
