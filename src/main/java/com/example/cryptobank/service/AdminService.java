@@ -1,6 +1,6 @@
 package com.example.cryptobank.service;
 
-import com.example.cryptobank.database.AdminDAO;
+import com.example.cryptobank.database.RootRepository;
 import com.example.cryptobank.domain.Admin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,32 +10,55 @@ import org.springframework.stereotype.Service;
 @Service
 public class AdminService {
 
-    private AdminDAO adminDAO;
+
+    private RootRepository rootRepository;
 
     private final Logger logger = LoggerFactory.getLogger(AdminService.class);
 
     @Autowired
-    public AdminService(AdminDAO adminDAO) {
-        this.adminDAO = adminDAO;
+    public AdminService(RootRepository rootRepository) {
+        this.rootRepository = rootRepository;
         logger.info("New AdminService");
     }
 
-    public boolean checkIfAdminCanBeRegistred(String username) {
-       Admin adminToCheck = adminDAO.findByUsername(username);
-        return adminToCheck == null;
-    }
 
     public Admin register(String username, String password) {
-        Admin adminToRegister = new Admin(username, password);
-        if (checkIfAdminCanBeRegistred(username)) {
-            String salt = new Saltmaker().generateSalt();
-            String hashedPassword = HashHelper.hash(password, salt, PepperService.getPepper());
-            adminToRegister.setSalt(salt);
-            Admin registredAdmin = adminDAO.save(adminToRegister);
+        Admin attemptToRegister = new Admin(username, password);
+        Admin adminInDatabase = findByUsername(username);
+
+        if(adminInDatabase == null || attemptToRegister.getUsername().equals(adminInDatabase.getUsername())) {
+            String salt = new Saltmaker().generateSalt();attemptToRegister.setPassword(HashHelper.hash(password, salt, PepperService.getPepper()));
+            attemptToRegister.setSalt(salt);
+            Admin registredAdmin = rootRepository.save(attemptToRegister);
             return registredAdmin;
         }
+        return attemptToRegister;
+    }
 
-        return adminToRegister;
+    public Admin login(String username, String password) {
+        Admin attemptToLogin = new Admin(username, password);
+        Admin adminInDatabase = findByUsername(username);
+
+        if(attemptToLogin.getUsername().equals(adminInDatabase.getUsername())) {
+            String salt = adminInDatabase.getSalt();
+            String hashedPassword = HashHelper.hash(attemptToLogin.getPassword(), salt, PepperService.getPepper());
+
+            if(authenticate(adminInDatabase.getPassword(), hashedPassword)) {
+                attemptToLogin.setPassword(hashedPassword);
+                attemptToLogin.setSalt(salt);
+                return attemptToLogin;
+            }
+        }
+        return attemptToLogin;
+    }
+
+    public boolean authenticate(String hashInDatabase, String hashedPassword) {
+        return hashInDatabase.equals(hashedPassword);
+    }
+
+    private Admin findByUsername(String username) {
+        Admin adminToCheck = rootRepository.findByUsername(username);
+        return adminToCheck;
     }
 
 }

@@ -30,7 +30,7 @@ public class RootRepository {
         this.cryptoCurrencyRateDAO = cryptoCurrencyRateDAO;
     }
 
-    public Admin getAdminByUsername(String username) {
+    public Admin findByUsername(String username) {
         Admin admin = adminDAO.findByUsername(username);
         return admin;
     }

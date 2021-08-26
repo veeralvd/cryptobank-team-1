@@ -60,7 +60,6 @@ public class JdbcAdminDAO implements AdminDAO {
     public Admin findByUsername(String username) {
         String sql = "SELECT * from admin where username = ?";
         List<Admin> adminToFind = jdbcTemplate.query(sql, new AdminRowMapper(), username);
-        logger.info("Tot hier gaat het goed");
         if (adminToFind.size() == 1) {
             return adminToFind.get(0);
         }

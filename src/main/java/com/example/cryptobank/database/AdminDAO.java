@@ -8,4 +8,5 @@ public interface AdminDAO {
     Admin save(Admin admin);
 
     Admin findByUsername(String username);
+
 }

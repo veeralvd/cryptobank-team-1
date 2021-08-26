@@ -17,7 +17,6 @@ public class BankAccountService {
 
     @Autowired
     public BankAccountService(RootRepository rootRepository) {
-        //this.bankAccountDao = bankAccountDao;
         this.rootRepository = rootRepository;
         logger.info("New BankAccountService");
     }

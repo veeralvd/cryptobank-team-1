@@ -8,17 +8,13 @@ public class Admin extends User{
     }
 
     public Admin(String username, String password) {
-        super(username, password);
+        this(username, password, null);
     }
-
-
 
 
     @Override
     public int compareTo(User o) {
         return 0;
     }
-
-
 
 }

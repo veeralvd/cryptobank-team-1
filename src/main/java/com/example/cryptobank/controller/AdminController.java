@@ -39,4 +39,11 @@ public class AdminController {
         return testAdmin;
     }
 
+    @PutMapping("/admin/login")
+    public Admin login(@RequestParam String username, String password) {
+        Admin adminToLogin = adminService.login(username, password);
+        logger.info("login admin aangeroepen");
+        return adminToLogin;
+    }
+
 }
