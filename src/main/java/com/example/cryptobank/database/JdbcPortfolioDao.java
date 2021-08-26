@@ -44,7 +44,7 @@ public class JdbcPortfolioDao implements PortfolioDao {
     }
 
     private PreparedStatement updatePortfolioStatementPositive (Portfolio portfolio, Customer customer,
-                                                        Purchase purchase, Connection connection) throws SQLException {
+                                                                Purchase purchase, Connection connection) throws SQLException {
         PreparedStatement ps = connection.prepareStatement(
                 "UPDATE ownedasset_table SET aantalEenheden = ? WHERE iban=? AND abbreviation=?"
         );
@@ -79,23 +79,6 @@ public class JdbcPortfolioDao implements PortfolioDao {
         return ps;
     }
 
-<<<<<<< HEAD
-   /* public Map<Asset, Double> test (String iban){
-
-        return jdbcTemplate.query("SELECT * FROM ownedasset_table WHERE iban = ?;"
-                , new PreparedStatementSetter[] {iban}, (ResultSet rs) -> {
-                    HashMap<Asset, Double> results = new HashMap<>();
-                    while(rs.next()){
-                        Asset asset = AssetDao.getAssetByAbbr (rs.getString("abbreviation"));
-                        results.put(asset), rs.getDouble("aantalEenheden");
-                    }
-                    return results;
-                }).get(0);
-    }*/
-
-
-=======
->>>>>>> 741e433cb52cfc28a939419ce77603a1c713730b
 
     public Map<String, Double> getByIban (Connection connection, String iban) throws SQLException {
         HashMap<String, Double> assetMap = new HashMap<>();
