@@ -69,14 +69,14 @@ public class JdbcBankAccountDao implements BankAccountDao {
 
     @Override
     public double deposit(String iban, double amount) {
-        double updatedBalance = this.getBalanceByIban(iban) - amount;
+        double updatedBalance = this.getBalanceByIban(iban) + amount;
         jdbcTemplate.update(connection -> updateBankAccount(iban, updatedBalance, connection));
         return updatedBalance;
     }
 
     @Override
     public double withdraw(String iban, double amount) {
-        double updatedBalance = getBalanceByIban(iban) + amount;
+        double updatedBalance = getBalanceByIban(iban) - amount;
         jdbcTemplate.update(connection -> updateBankAccount(iban, updatedBalance, connection));
         return updatedBalance;
     }
