@@ -9,6 +9,7 @@ package com.example.cryptobank.domain;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class CryptoCurrencyRate {
 
@@ -24,10 +25,9 @@ public class CryptoCurrencyRate {
         this.dateTime = dateTime;
     }
 
-    public CryptoCurrencyRate(String abbreviation, double cryptoRate, String dateTimeAsString) {
-        this(abbreviation, cryptoRate);
-        this.dateTime = LocalDateTime.parse(dateTimeAsString);
-    }
+//    public CryptoCurrencyRate(String abbreviation, double cryptoRate, String dateTimeAsString) {
+//        this(abbreviation, cryptoRate, LocalDateTime.parse(dateTimeAsString, DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+//    }
 
     public CryptoCurrencyRate(String abbreviation, double cryptoRate) {
         this(abbreviation, cryptoRate, LocalDateTime.now());

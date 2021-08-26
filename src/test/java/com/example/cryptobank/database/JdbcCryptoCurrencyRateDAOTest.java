@@ -38,6 +38,7 @@ public class JdbcCryptoCurrencyRateDAOTest {
 
     @Test
     void getAll() {
+        System.out.println(LocalDateTime.now());
     }
 
     @Test

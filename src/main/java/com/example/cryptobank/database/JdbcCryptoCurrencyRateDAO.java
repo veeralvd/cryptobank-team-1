@@ -7,6 +7,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 import java.sql.*;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,7 +37,7 @@ public class JdbcCryptoCurrencyRateDAO implements CryptoCurrencyRateDAO{
 
     @Override
     public CryptoCurrencyRate save(CryptoCurrencyRate cryptoCurrencyRate) {
-        logger.info("cryptoCurrencySaver aangeroepn");
+        logger.info("cryptoCurrencySaver aangeroepen");
         jdbcTemplate.update(connection -> insertCryptoCurrencyStatement(cryptoCurrencyRate, connection));
         return cryptoCurrencyRate;
     }
@@ -47,9 +48,9 @@ public class JdbcCryptoCurrencyRateDAO implements CryptoCurrencyRateDAO{
         @Override
         public CryptoCurrencyRate mapRow(ResultSet resultSet, int i) throws SQLException {
             String abbreviation = resultSet.getString("abbreviation");
-            String date = resultSet.getString("datetime");
+            Date date = resultSet.getDate("datetime");
             double cryptoRate = resultSet.getDouble("value");
-            return new CryptoCurrencyRate(abbreviation, cryptoRate, date); //returns date as string, gets handled in domain
+            return new CryptoCurrencyRate(abbreviation, cryptoRate, date.toLocalDate().atTime(LocalTime.ofNanoOfDay(date.getTime()))); //returns date as string, gets handled in domain
         }
     }
 
