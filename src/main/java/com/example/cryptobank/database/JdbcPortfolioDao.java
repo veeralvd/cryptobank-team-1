@@ -98,7 +98,7 @@ public class JdbcPortfolioDao implements PortfolioDao {
         return assetMap;
     }
 
-    private static class MapRowMapper implements RowMapper<Map<String,Double>>{
+/*    private static class MapRowMapper implements RowMapper<Map<String,Double>>{
 
         @Override
         public Map<String, Double> mapRow(ResultSet resultSet, int i) throws SQLException {
@@ -113,7 +113,7 @@ public class JdbcPortfolioDao implements PortfolioDao {
     public Map<String, Double> getByIban2 (String iban){
         String sql = "SELECT abbreviation, aantalEenheden FROM ownedasset_table WHERE iban = ?";
         Map<String, Double> abbreviationAmountMap = jdbcTemplate.queryForMap(sql);
-    }
+    }*/
 
 
 }

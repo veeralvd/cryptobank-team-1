@@ -68,6 +68,7 @@ CREATE TABLE IF NOT EXISTS `cryptobank`.`customer` (
   `housenumber` INT NOT NULL,
   `addition` VARCHAR (5) NULL DEFAULT NULL,
   `IBAN` VARCHAR(45) NOT NULL,
+  `city` VARCHAR (45) NOT NULL,
   UNIQUE INDEX `IBAN_UNIQUE` (`IBAN` ASC) VISIBLE,
   INDEX `fk_Customer_bankAccount1_idx` (`IBAN` ASC) VISIBLE,
   PRIMARY KEY (`username`),

@@ -6,16 +6,18 @@ public class Address {
     private String zipcode;
     private int houseNumber;
     private String addition;
+    private String city;
 
-    public Address(String street, String zipcode, int houseNumber, String addition) {
+    public Address(String street, String zipcode, int houseNumber, String addition, String city) {
         this.street = street;
         this.zipcode = zipcode;
         this.houseNumber = houseNumber;
         this.addition = addition;
+        this.city = city;
     }
 
-    public Address(String street, String zipcode, int houseNumber) {
-        this(street, zipcode, houseNumber, "");
+    public Address(String street, String zipcode, int houseNumber, String city) {
+        this(street, zipcode, houseNumber, "", city);
     }
 
     public Address() {
@@ -53,6 +55,15 @@ public class Address {
         this.addition = addition;
     }
 
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
     @Override
     public String toString() {
         return "Address{" +
@@ -60,6 +71,7 @@ public class Address {
                 ", postalCode='" + zipcode + '\'' +
                 ", houseNumber=" + houseNumber +
                 ", addition='" + addition + '\'' +
+                ", city='" + city + '\'' +
                 '}';
     }
 }
