@@ -16,14 +16,17 @@ public class RootRepository {
     private AdminDAO adminDAO;
     private CustomerDAO customerDAO;
     private AssetDao assetDao;
+    private BankAccountDao bankAccountDao;
     private CryptoCurrencyRateDAO cryptoCurrencyRateDAO;
 
     @Autowired
-    public RootRepository(AdminDAO adminDAO, AssetDao assetDao, CustomerDAO customerDAO, CryptoCurrencyRateDAO cryptoCurrencyRateDAO) {
+    public RootRepository(AdminDAO adminDAO, AssetDao assetDao, CustomerDAO customerDAO, BankAccountDao bankAccountDao,
+                          CryptoCurrencyRateDAO cryptoCurrencyRateDAO) {
         logger.info("New RootRepository");
         this.adminDAO = adminDAO;
         this.assetDao = assetDao;
         this.customerDAO = customerDAO;
+        this.bankAccountDao = bankAccountDao;
         this.cryptoCurrencyRateDAO = cryptoCurrencyRateDAO;
     }
 
@@ -57,6 +60,21 @@ public class RootRepository {
     public ArrayList<Asset> getAll() {
         ArrayList allAssets = assetDao.getAll();
         return allAssets;
+    }
+
+    public double getBalanceByIban(String iban) {
+        double balanceRetrieved = bankAccountDao.getBalanceByIban(iban);
+        return balanceRetrieved;
+    }
+
+    public double deposit(String iban, double amount) {
+        double balanceUpdated = bankAccountDao.deposit(iban, amount);
+        return balanceUpdated;
+    }
+
+    public double withdraw(String iban, double amount) {
+        double balanceUpdated = bankAccountDao.withdraw(iban, amount);
+        return balanceUpdated;
     }
 
     //public CryptoCurrencyRate save*()
