@@ -32,7 +32,7 @@ public class AssetController {
     @GetMapping("/assets/{abbreviation}")
     public Asset showSpecificAsset(@PathVariable("abbreviation") String abbreviation) {
         Asset assetToShow = assetService.getByAbbreviation(abbreviation);
-        logger.info("Show assets aangeroepen");
+        logger.info("Show assets aangeroepen" + assetToShow);
         return assetToShow;
     }
 

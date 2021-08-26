@@ -28,7 +28,7 @@ public class JdbcCryptoCurrencyRateDAOTest {
 
     @Test
     void saveCryptoCurrencyTest() {
-        CryptoCurrencyRate brankoCoin = new CryptoCurrencyRate("BRA", 1500 , LocalDateTime.now());
+        CryptoCurrencyRate brankoCoin = new CryptoCurrencyRate("SAR", 20000 , LocalDateTime.now());
         CryptoCurrencyRate actual = cryptoCurrencyRateDAOTest.save(brankoCoin);
         logger.info("brankoCoin is : " + String.valueOf(brankoCoin));
         logger.info("de opgeslagen coin is: " + String.valueOf(actual));
