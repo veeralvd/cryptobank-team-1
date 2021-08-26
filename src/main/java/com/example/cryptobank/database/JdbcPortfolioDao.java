@@ -17,15 +17,18 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Repository
-public class JdbcPortfolioDao {
+public class JdbcPortfolioDao implements PortfolioDao {
     private final Logger logger = LoggerFactory.getLogger(JdbcPortfolioDao.class);
 
     private JdbcTemplate jdbcTemplate;
 
+    private JdbcAssetDao jdbcAssetDao;
+
     @Autowired
-    public JdbcPortfolioDao(JdbcTemplate jdbcTemplate) {
+    public JdbcPortfolioDao(JdbcTemplate jdbcTemplate, JdbcAssetDao jdbcAssetDao) {
         super();
         this.jdbcTemplate = jdbcTemplate;
+        this.jdbcAssetDao = jdbcAssetDao;
         logger.info("New JdbcPortfolioDao");
     }
 
@@ -76,6 +79,7 @@ public class JdbcPortfolioDao {
         return ps;
     }
 
+<<<<<<< HEAD
    /* public Map<Asset, Double> test (String iban){
 
         return jdbcTemplate.query("SELECT * FROM ownedasset_table WHERE iban = ?;"
@@ -90,32 +94,43 @@ public class JdbcPortfolioDao {
     }*/
 
 
+=======
+>>>>>>> 741e433cb52cfc28a939419ce77603a1c713730b
 
-    /*public Portfolio findByIban (String iban){
-
-        //String sql = "SELECT * FROM ownedasset_table WHERE iban = ? ;";
-
-        HashMap<Asset, Double> results = jdbcTemplate.query("SELECT * FROM ownedasset_table WHERE iban = ? ;"
-                , new Object[] {iban}, (ResultSet rs) -> {
-                    results = new HashMap<>();
-                    while(rs.next()){
-                        Asset asset = AssetDao.getAssetByAbbr (rs.getString("abbreviation"));
-                        results.put(asset), rs.getDouble("aantalEenheden"));
-                    }
-
-                    return null;
-                }).get(0);
+    public Map<String, Double> getByIban (Connection connection, String iban) throws SQLException {
+        HashMap<String, Double> assetMap = new HashMap<>();
+        PreparedStatement ps = connection.prepareStatement(
+                "SELECT abbreviation, aantalEenheden FROM ownedasset_table WHERE iban = ?"
+        );
+        ps.setString(1, iban);
+        ResultSet resultSet = ps.executeQuery();
+        if (resultSet.next()) {
+            String abbr = resultSet.getString("abbreviation");
+            // Asset asset = jdbcAssetDao.findByAbbreviation(abbr); // null laten
+            // in rootrepo een asset via assetdao ophalen en dan samenvoegen in nieuwe map -
+            // voor portfolio
+            double amount = resultSet.getDouble("aantalEenheden");
+            assetMap.put(abbr, amount);
+        }
+        return assetMap;
     }
 
+/*    private static class MapRowMapper implements RowMapper<Map<String,Double>>{
 
-    public Map<Integer,Integer> getAvailableTime(Date date, Integer guru_fid) {
-        return jdbctemp.query("Select a.hour, s.duration from appointment as a inner join services as s on a.service_fid=s.id where date=? and guru_fid=? "
-                ,new Object[] { date, guru_fid }, (ResultSet rs) -> {HashMap<Integer,Integer> results = new HashMap<>();
-                    while (rs.next()) {
-                        results.put(rs.getInt("a.hour"), rs.getInt("s.duration"));
-                    }
-                    return results;
-                }).get(0);
+        @Override
+        public Map<String, Double> mapRow(ResultSet resultSet, int i) throws SQLException {
+            String abbr = resultSet.getString("abbreviation");
+            double amount = resultSet.getDouble("aantalEenheden");
+            Map<String, Double> abbreviationAmountMap = new HashMap<>();
+            abbreviationAmountMap.put(abbr, amount);
+            return abbreviationAmountMap;
+        }
+    }
 
+    public Map<String, Double> getByIban2 (String iban){
+        String sql = "SELECT abbreviation, aantalEenheden FROM ownedasset_table WHERE iban = ?";
+        Map<String, Double> abbreviationAmountMap = jdbcTemplate.queryForMap(sql);
     }*/
+
+
 }

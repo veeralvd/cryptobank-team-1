@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -94,5 +95,12 @@ public class JdbcCustomerDAO implements CustomerDAO{
             return customerToFind.get(0);
         }
         return null;
+    }
+
+    @Override
+    public List<Customer> getAll(){
+        String sql = "SELECT * from customer";
+        List<Customer> allCustomers = jdbcTemplate.query(sql, new CustomerRowMapper());
+        return allCustomers;
     }
 }

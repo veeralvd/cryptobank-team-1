@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Service
 public class CustomerService {
@@ -25,17 +26,29 @@ public class CustomerService {
         logger.info("New CustomerService");
     }
 
-    public boolean checkIfCustomerCanBeRegistred(String username) {
+    public boolean checkIfCustomerCanBeRegistered(String username) {
         Customer customerToCheck = customerDAO.findByUsername(username);
         logger.info(String.format("customerToCheck is: %s", customerToCheck==null? "user NULL": customerToCheck.toString()));
         return customerToCheck == null;
+    }
+
+    public boolean checkIfSocialSecurityNumberExists(int socialSecurityNumber){
+        List<Customer> customers = customerDAO.getAll();
+        boolean exists = true;
+        for (Customer customer : customers){
+            if (socialSecurityNumber == customer.getSocialSecurityNumber()){
+                exists = false;
+                logger.info("Social security number already exists.");
+            }
+        }
+        return exists;
     }
 
     public Customer register(String username, String password,
                              String firstName, String lastName, LocalDate dateOfBirth, int socialSecurityNumber,
                              String street, String zipcode, int houseNumber, String addition, String city) {
         Customer customerToRegister = new Customer(username, password);
-        if (checkIfCustomerCanBeRegistred(username)) {
+        if (checkIfCustomerCanBeRegistered(username) && checkIfSocialSecurityNumberExists(socialSecurityNumber)) {
             String salt = new Saltmaker().generateSalt();
             customerToRegister.setPassword(HashHelper.hash(password, salt, PepperService.getPepper()));
             customerToRegister.setSalt(salt);
@@ -45,22 +58,22 @@ public class CustomerService {
             customerToRegister.setSocialSecurityNumber(socialSecurityNumber);
             customerToRegister.setAddress(new Address(street, zipcode, houseNumber, addition, city));
             customerToRegister.setBankAccount(new BankAccount());
-            Customer customerRegistred = customerDAO.save(customerToRegister);
-            return customerRegistred;
+            Customer customerRegistered = customerDAO.save(customerToRegister);
+            return customerRegistered;
         }
         return customerToRegister;
     }
 
     public Customer registerTwee(Customer customerToRegister) {
         String salt = new Saltmaker().generateSalt();
-        if (checkIfCustomerCanBeRegistred(customerToRegister.getUsername())) {
+        if (checkIfCustomerCanBeRegistered(customerToRegister.getUsername())) {
             customerToRegister.setPassword(HashHelper.hash(customerToRegister.getPassword(),
                     salt,
                     PepperService.getPepper()));
             customerToRegister.setSalt(salt);
             customerToRegister.setBankAccount(new BankAccount());
-            Customer customerRegistred = customerDAO.save(customerToRegister);
-            return customerRegistred;
+            Customer customerRegistered = customerDAO.save(customerToRegister);
+            return customerRegistered;
         }
         return customerToRegister;
     }
