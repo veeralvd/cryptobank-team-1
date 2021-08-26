@@ -44,7 +44,7 @@ public class JdbcPortfolioDao implements PortfolioDao {
     }
 
     private PreparedStatement updatePortfolioStatementPositive (Portfolio portfolio, Customer customer,
-                                                        Purchase purchase, Connection connection) throws SQLException {
+                                                                Purchase purchase, Connection connection) throws SQLException {
         PreparedStatement ps = connection.prepareStatement(
                 "UPDATE ownedasset_table SET aantalEenheden = ? WHERE iban=? AND abbreviation=?"
         );

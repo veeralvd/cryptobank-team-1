@@ -9,20 +9,45 @@ package com.example.cryptobank.domain;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class CryptoCurrencyRate {
 
     private final Logger logger = LoggerFactory.getLogger(CryptoCurrencyRate.class);
+    private String abbreviation;
     private double cryptoRate;
     private LocalDateTime dateTime;
 
-    public CryptoCurrencyRate(double cryptoRate, LocalDateTime dateTime) {
+    public CryptoCurrencyRate(String abbreviation, double cryptoRate, LocalDateTime dateTime) {
+        this.abbreviation = abbreviation;
         this.cryptoRate = cryptoRate;
         this.dateTime = dateTime;
     }
 
-    public CryptoCurrencyRate(double cryptoRate) {
-        this(cryptoRate, LocalDateTime.now());
+
+    public CryptoCurrencyRate(String abbreviation, double cryptoRate) {
+        this(abbreviation, cryptoRate, LocalDateTime.now());
+    }
+
+    public String getAbbreviation() {
+        return abbreviation;
+    }
+
+
+
+    @Override
+    public String toString() {
+        return "CryptoCurrencyRate{" +
+                "abbreviation='" + abbreviation + '\'' +
+                ", cryptoRate=" + cryptoRate +
+                ", dateTime=" + dateTime +
+                '}';
+    }
+
+
+
+    public void setAbbreviation(String abbreviation) {
+        this.abbreviation = abbreviation;
     }
 
     public double getCryptoRate() {

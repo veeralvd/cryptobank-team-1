@@ -56,7 +56,7 @@ public class JdbcAssetDao implements AssetDao {
             String abbreviation = resultSet.getString("abbreviation");
             String name = resultSet.getString("nameCrypto");
             String description = resultSet.getString("description");
-            CryptoCurrencyRate rate = null; //TODO niet null natuurlijk:
+            CryptoCurrencyRate rate = null;
             Asset asset = new Asset(abbreviation, name, description, rate);
             return asset;
         }
@@ -75,7 +75,7 @@ public class JdbcAssetDao implements AssetDao {
 
     @Override
     public Asset findAsset(String searchTerm) {
-        String sql = "SELECT * from asset where searchTerm = ?";
+        String sql = "SELECT * from asset where abbreviation = ?";
         List<Asset> assetToFind = jdbcTemplate.query(sql, new AssetRowMapper(), searchTerm);
         if (assetToFind.size() == 1) {
             return assetToFind.get(0);
@@ -90,6 +90,4 @@ public class JdbcAssetDao implements AssetDao {
         List<Asset> allAssets = jdbcTemplate.query(sql, new AssetRowMapper());
         return (ArrayList<Asset>) allAssets;
     }
-
-
 } // end of class JdbcAssetDao
