@@ -25,9 +25,8 @@ public class CryptoCurrencyRate {
     }
 
     public CryptoCurrencyRate(String abbreviation, double cryptoRate, String dateTimeAsString) {
-        this.abbreviation = abbreviation;
-        this.cryptoRate = cryptoRate;
-        this.dateTimeAsString = dateTimeAsString;
+        this(abbreviation, cryptoRate);
+        this.dateTime = LocalDateTime.parse(dateTimeAsString);
     }
 
     public CryptoCurrencyRate(String abbreviation, double cryptoRate) {
@@ -37,6 +36,8 @@ public class CryptoCurrencyRate {
     public String getAbbreviation() {
         return abbreviation;
     }
+
+
 
     @Override
     public String toString() {
