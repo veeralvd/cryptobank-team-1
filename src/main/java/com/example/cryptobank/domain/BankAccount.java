@@ -1,5 +1,6 @@
 package com.example.cryptobank.domain;
 
+import com.example.cryptobank.service.IbanGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,7 +13,7 @@ public class BankAccount {
     private double balance;
 
     public BankAccount() {
-        this.iban = generateIban();
+        this.iban = IbanGenerator.generate();
         this.balance = BonusAmount.getAmountBonus();
 
         logger.info("New BankAccount created met iban:" + iban);

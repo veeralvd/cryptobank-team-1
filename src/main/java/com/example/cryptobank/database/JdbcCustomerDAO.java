@@ -36,7 +36,7 @@ public class JdbcCustomerDAO implements CustomerDAO{
     private PreparedStatement insertCustomer(Customer customer, Connection connection) throws SQLException {
         PreparedStatement preparedStatement = connection.prepareStatement(
                 "insert into customer (username, password, salt, firstname, lastname, dateofbirth, " +
-                        "socialsecuritynumber, street, zipcode, housenumber, addition, iban) values (?,?,?,?,?,?,?,?,?,?,?,?)"
+                        "socialsecuritynumber, street, zipcode, housenumber, addition, iban, city) values (?,?,?,?,?,?,?,?,?,?,?,?,?)"
         );
         preparedStatement.setString(1, customer.getUsername());
         preparedStatement.setString(2, customer.getPassword());
@@ -50,6 +50,7 @@ public class JdbcCustomerDAO implements CustomerDAO{
         preparedStatement.setInt(10, customer.getAddress().getHouseNumber());
         preparedStatement.setString(11, customer.getAddress().getAddition());
         preparedStatement.setString(12, customer.getBankAccount().getIban());
+        preparedStatement.setString(13, customer.getAddress().getCity());
         return preparedStatement;
     }
 
@@ -77,9 +78,10 @@ public class JdbcCustomerDAO implements CustomerDAO{
             String zipcode = resultSet.getString("zipcode");
             int houseNumber = resultSet.getInt("housenumber");
             String addition = resultSet.getString("addition");
+            String city = resultSet.getString("city");
 
             Customer customer = new Customer(username, password, salt, firstName, lastName, dateOfBirth,
-                    socialSecurityNumber, new Address(street, zipcode, houseNumber, addition));
+                    socialSecurityNumber, new Address(street, zipcode, houseNumber, addition, city));
             return customer;
         }
     }

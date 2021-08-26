@@ -12,8 +12,8 @@ public class Portfolio {
     private final Logger logger = LoggerFactory.getLogger(Portfolio.class);
     private Map<Asset, Double> assetMap;
 
-    public Portfolio(Map<Asset, Double> assetMap) {
-        this.assetMap = assetMap;
+    public Portfolio() {
+        this.assetMap = new HashMap<>();
         logger.info("New Portfolio");
     }
 

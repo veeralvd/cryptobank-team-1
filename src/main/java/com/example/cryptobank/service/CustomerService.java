@@ -27,12 +27,13 @@ public class CustomerService {
 
     public boolean checkIfCustomerCanBeRegistred(String username) {
         Customer customerToCheck = customerDAO.findByUsername(username);
+        logger.info(String.format("customerToCheck is: %s", customerToCheck==null? "user NULL": customerToCheck.toString()));
         return customerToCheck == null;
     }
 
     public Customer register(String username, String password,
                              String firstName, String lastName, LocalDate dateOfBirth, int socialSecurityNumber,
-                             String street, String zipcode, int houseNumber, String addition) {
+                             String street, String zipcode, int houseNumber, String addition, String city) {
         Customer customerToRegister = new Customer(username, password);
         if (checkIfCustomerCanBeRegistred(username)) {
             String salt = new Saltmaker().generateSalt();
@@ -42,7 +43,7 @@ public class CustomerService {
             customerToRegister.setLastName(lastName);
             customerToRegister.setDateOfBirth(dateOfBirth);
             customerToRegister.setSocialSecurityNumber(socialSecurityNumber);
-            customerToRegister.setAddress(new Address(street, zipcode, houseNumber, addition));
+            customerToRegister.setAddress(new Address(street, zipcode, houseNumber, addition, city));
             customerToRegister.setBankAccount(new BankAccount());
             Customer customerRegistred = customerDAO.save(customerToRegister);
             return customerRegistred;
@@ -50,7 +51,7 @@ public class CustomerService {
         return customerToRegister;
     }
 
-    public Customer register(Customer customerToRegister) {
+    public Customer registerTwee(Customer customerToRegister) {
         String salt = new Saltmaker().generateSalt();
         if (checkIfCustomerCanBeRegistred(customerToRegister.getUsername())) {
             customerToRegister.setPassword(HashHelper.hash(customerToRegister.getPassword(),

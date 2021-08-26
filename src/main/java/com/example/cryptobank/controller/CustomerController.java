@@ -31,18 +31,18 @@ public class CustomerController {
     @PutMapping("/register")
     public Customer register(@RequestParam String username, String password,
                              String firstname, String lastname, String dateofbirth, int socialsecuritynumber,
-                             String street, String zipcode, int housenumber, String addition) {
+                             String street, String zipcode, int housenumber, String addition, String city) {
         Customer customerToRegister = customerService.register(
                 username, password, firstname, lastname, LocalDate.parse(dateofbirth), socialsecuritynumber,
-                street, zipcode, housenumber, addition);
+                street, zipcode, housenumber, addition, city);
         logger.info("Customer registratie aangeroepen");
         return customerToRegister;
     }
 
-    @PutMapping("/registerTwee")
+    @PutMapping(value = "/registerTwee")
     public Customer registerTwee(@RequestBody Customer customer) {
         logger.info(customer.toString());
-        Customer customerToRegister = customerService.register(customer);
+        Customer customerToRegister = customerService.registerTwee(customer);
         return customerToRegister;
     }
 
