@@ -72,4 +72,8 @@ public class RootRepository {
         return balanceUpdated;
     }
 
+    /*public void deleteBankAccount(String iban) {
+        bankAccountDao.deleteBankAccount(iban);
+    }*/
+
 } // end of class RootRepository

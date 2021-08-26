@@ -39,13 +39,20 @@ public class JdbcBankAccountDao implements BankAccountDao {
         PreparedStatement ps = connection.prepareStatement(UPDATE_QUERY);
         ps.setDouble(1, updatedBalance);
         ps.setString(2, iban);
-        // ps.executeUpdate();
         return ps;
     }
 
+    private PreparedStatement deleteBankAccount(String iban, Connection connection) throws SQLException {
+        PreparedStatement ps = connection.prepareStatement(DELETE_QUERY);
+        ps.setString(1, iban);
+        return ps;
+    }
 
+    // TODO checken of saveBankAccount als aparte methode nodig is.
 
-    // TODO checken of saveBankAccount ergens dubbel staat
+    //  Nieuw BankAccount wordt eenmalig opgeslagen bij registratie Customer:
+    //  JdbcCustomerDao: public Customer save(Customer customer) {
+    //        jdbcTemplate.update(connection -> insertBankAccount(customer.getBankAccount(), connection));
    /* @Override
     public BankAccount save(BankAccount bankAccount) {
         jdbcTemplate.update(connection -> insertBankAccountStatement(bankAccount, connection));
@@ -79,7 +86,10 @@ public class JdbcBankAccountDao implements BankAccountDao {
         return false;
     }
 
-
+    /*@Override
+    public void deleteBankAccount(String iban) {
+        jdbcTemplate.update(connection -> deleteBankAccount(iban, connection));
+    }*/
 
 
 

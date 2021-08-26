@@ -9,5 +9,6 @@ public interface BankAccountDao {
     double withdraw(String iban, double amount);
     double deposit(String iban, double amount);
     boolean checkBankAccount(String iban, double amount);
+    //void deleteBankAccount(String iban);
 
 }
