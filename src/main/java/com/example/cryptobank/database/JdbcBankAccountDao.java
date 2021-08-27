@@ -18,7 +18,6 @@ public class JdbcBankAccountDao implements BankAccountDao {
     private final String SELECT_QUERY = "SELECT balance FROM bankaccount WHERE iban = ?";
     private final String INSERT_QUERY = "INSERT INTO bankaccount (iban, balance) VALUES (?,?)";
     private final String UPDATE_QUERY = "UPDATE bankaccount SET balance = ? WHERE iban = ?";
-    private final String DELETE_QUERY = "DELETE FROM bankaccount WHERE iban = ?";
 
     private final Logger logger = LoggerFactory.getLogger(JdbcBankAccountDao.class);
 
@@ -43,14 +42,10 @@ public class JdbcBankAccountDao implements BankAccountDao {
         return ps;
     }
 
-    // TODO checken of saveBankAccount als aparte methode nodig is.
-
-    //  Nieuw BankAccount wordt eenmalig opgeslagen bij registratie Customer:
-    //  JdbcCustomerDao: public Customer save(Customer customer) {
-    //        jdbcTemplate.update(connection -> insertBankAccount(customer.getBankAccount(), connection));
-   /* @Override
+    // TODO Save Bankaccount koppelen aan save Customer in Rootrepository
+    /*@Override
     public BankAccount save(BankAccount bankAccount) {
-        jdbcTemplate.update(connection -> insertBankAccountStatement(bankAccount, connection));
+        jdbcTemplate.update(connection -> insertBankAccount(bankAccount, connection));
         return bankAccount;
     }*/
 
