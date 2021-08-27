@@ -27,7 +27,7 @@ class JdbcAssetDaoTest {
     }
 
     @Test
-    public void AssetDaoNotNull() {
+    public void assetDaoNotNull() {
         assertThat(assetDaoUnderTest).isNotNull();
     }
 
