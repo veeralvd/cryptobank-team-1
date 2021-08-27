@@ -1,6 +1,7 @@
 package com.example.cryptobank.service;
 
 import com.example.cryptobank.database.CustomerDAO;
+import com.example.cryptobank.database.RootRepository;
 import com.example.cryptobank.domain.Address;
 import com.example.cryptobank.domain.BankAccount;
 import com.example.cryptobank.domain.Customer;
@@ -16,12 +17,14 @@ public class CustomerService {
 
     // TODO: 25/08/2021 Mark: customerDAo refactoren naar rootrepository met bijbehorende methoden 
     private CustomerDAO customerDAO;
+    private RootRepository rootRepository;
 
     private final Logger logger = LoggerFactory.getLogger(CustomerService.class);
 
     @Autowired
-    public CustomerService(CustomerDAO customerDAO) {
+    public CustomerService(CustomerDAO customerDAO, RootRepository rootRepository) {
         this.customerDAO = customerDAO;
+        this.rootRepository = rootRepository;
         logger.info("New CustomerService");
     }
 
@@ -63,6 +66,11 @@ public class CustomerService {
             return customerRegistred;
         }
         return customerToRegister;
+    }
+
+    public Customer findByUsername(String username){
+        //return rootRepository.getUserByUsername(username);
+        return null;
     }
 
 }
