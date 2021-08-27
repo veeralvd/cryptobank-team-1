@@ -22,7 +22,7 @@ public class LoginService {
         Admin attemptToLogin = new Admin(username, password);
         Admin adminInDatabase = rootRepository.findAdminByUsername(username);
 
-        if(attemptToLogin.getUsername().equals(adminInDatabase.getUsername())) {
+        if(adminInDatabase != null && attemptToLogin.getUsername().equals(adminInDatabase.getUsername())) {
             String salt = adminInDatabase.getSalt();
             String hashedPassword = HashHelper.hash(attemptToLogin.getPassword(), salt, PepperService.getPepper());
 
@@ -43,14 +43,12 @@ public class LoginService {
         Customer attemptToLogin = new Customer(username, password);
         Customer customerInDatabase = rootRepository.findCustomerByUsername(username);
 
-        if (attemptToLogin.getUsername().equals(customerInDatabase.getUsername())) {
+        if (customerInDatabase != null && attemptToLogin.getUsername().equals(customerInDatabase.getUsername())) {
             String salt = customerInDatabase.getSalt();
             String hashedPassword = HashHelper.hash(attemptToLogin.getPassword(), salt, PepperService.getPepper());
 
             if (authenticate(customerInDatabase.getPassword(), hashedPassword)) {
-                attemptToLogin.setPassword(hashedPassword);
-                attemptToLogin.setSalt(salt);
-                return attemptToLogin;
+                return customerInDatabase;
             }
         }
         return attemptToLogin;
