@@ -36,16 +36,4 @@ public class AdminService {
         Admin adminAttempToLogin = loginService.login(username, password);
         return adminAttempToLogin;
     }
-
-    public boolean authenticate(String hashInDatabase, String hashedPassword) {
-        return hashInDatabase.equals(hashedPassword);
-    }
-
-    private Admin findByUsername(String username) {
-        Admin adminToCheck = rootRepository.findByUsername(username);
-        return adminToCheck;
-    }
-
-
-
-}
+}''
