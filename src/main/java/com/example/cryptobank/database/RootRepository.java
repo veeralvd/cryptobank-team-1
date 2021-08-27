@@ -4,6 +4,7 @@ import com.example.cryptobank.domain.Admin;
 import com.example.cryptobank.domain.Asset;
 import com.example.cryptobank.domain.CryptoCurrencyRate;
 import com.example.cryptobank.domain.Customer;
+import com.example.cryptobank.domain.Portfolio;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,8 @@ import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 @Repository
 public class RootRepository {
@@ -20,16 +23,18 @@ public class RootRepository {
     private AssetDao assetDao;
     private BankAccountDao bankAccountDao;
     private CryptoCurrencyRateDAO cryptoCurrencyRateDAO;
+    private PortfolioDao portfolioDao;
 
     @Autowired
     public RootRepository(AdminDAO adminDAO, AssetDao assetDao, CustomerDAO customerDAO, BankAccountDao bankAccountDao,
-                          CryptoCurrencyRateDAO cryptoCurrencyRateDAO) {
+                          CryptoCurrencyRateDAO cryptoCurrencyRateDAO, PortfolioDao portfolioDao) {
         logger.info("New RootRepository");
         this.adminDAO = adminDAO;
         this.assetDao = assetDao;
         this.customerDAO = customerDAO;
         this.bankAccountDao = bankAccountDao;
         this.cryptoCurrencyRateDAO = cryptoCurrencyRateDAO;
+        this.portfolioDao = portfolioDao;
     }
 
     public Admin findAdminByUsername(String username) {
@@ -93,5 +98,20 @@ public class RootRepository {
         return customerDAO.getAll();
     }
 
+    public Portfolio getPortfolioByIban(String iban){
+        Map<String, Double> daoMap = portfolioDao.getAssetmapByIban(iban);
+        // test
+        System.out.println("ROOTREPO: " + daoMap);
+        Map<Asset, Double> assetMap = new HashMap<>();
+        for (Map.Entry<String, Double> entry : daoMap.entrySet()){
+            String abbreviation = entry.getKey();
+            double amount = entry.getValue();
 
+            Asset asset = assetDao.findByAbbreviation(abbreviation);
+            assetMap.put(asset, amount);
+        }
+        Portfolio portfolio = new Portfolio();
+        portfolio.setAssetMap(assetMap);
+        return portfolio;
+    }
 } // end of class RootRepository

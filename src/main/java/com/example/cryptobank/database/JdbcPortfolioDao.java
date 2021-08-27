@@ -22,13 +22,10 @@ public class JdbcPortfolioDao implements PortfolioDao {
 
     private JdbcTemplate jdbcTemplate;
 
-    private JdbcAssetDao jdbcAssetDao;
-
     @Autowired
-    public JdbcPortfolioDao(JdbcTemplate jdbcTemplate, JdbcAssetDao jdbcAssetDao) {
+    public JdbcPortfolioDao(JdbcTemplate jdbcTemplate) {
         super();
         this.jdbcTemplate = jdbcTemplate;
-        this.jdbcAssetDao = jdbcAssetDao;
         logger.info("New JdbcPortfolioDao");
     }
 
@@ -79,41 +76,16 @@ public class JdbcPortfolioDao implements PortfolioDao {
         return ps;
     }
 
-
-    public Map<String, Double> getByIban (Connection connection, String iban) throws SQLException {
-        HashMap<String, Double> assetMap = new HashMap<>();
-        PreparedStatement ps = connection.prepareStatement(
-                "SELECT abbreviation, aantalEenheden FROM ownedasset_table WHERE iban = ?"
-        );
-        ps.setString(1, iban);
-        ResultSet resultSet = ps.executeQuery();
-        if (resultSet.next()) {
-            String abbr = resultSet.getString("abbreviation");
-            // Asset asset = jdbcAssetDao.findByAbbreviation(abbr); // null laten
-            // in rootrepo een asset via assetdao ophalen en dan samenvoegen in nieuwe map -
-            // voor portfolio
-            double amount = resultSet.getDouble("aantalEenheden");
-            assetMap.put(abbr, amount);
-        }
-        return assetMap;
+    @Override
+    public Map<String, Double> getAssetmapByIban (String iban){
+        String sql = "SELECT abbreviation, aantalEenheden FROM ownedasset WHERE iban = ?";
+        HashMap<String, Double> results = new HashMap<>();
+        jdbcTemplate.query(sql, (ResultSet rs) -> {
+            while (rs.next()){
+                results.put(rs.getString("abbreviation"),
+                        rs.getDouble("aantalEenheden"));
+            }
+        }, iban);
+        return results;
     }
-
-/*    private static class MapRowMapper implements RowMapper<Map<String,Double>>{
-
-        @Override
-        public Map<String, Double> mapRow(ResultSet resultSet, int i) throws SQLException {
-            String abbr = resultSet.getString("abbreviation");
-            double amount = resultSet.getDouble("aantalEenheden");
-            Map<String, Double> abbreviationAmountMap = new HashMap<>();
-            abbreviationAmountMap.put(abbr, amount);
-            return abbreviationAmountMap;
-        }
-    }
-
-    public Map<String, Double> getByIban2 (String iban){
-        String sql = "SELECT abbreviation, aantalEenheden FROM ownedasset_table WHERE iban = ?";
-        Map<String, Double> abbreviationAmountMap = jdbcTemplate.queryForMap(sql);
-    }*/
-
-
 }
