@@ -33,7 +33,7 @@ public class AdminService {
     }
 
     public Admin login(String username, String password) {
-        Admin adminAttempToLogin = loginService.login(username, password);
+        Admin adminAttempToLogin = loginService.loginAdmin(username, password);
         return adminAttempToLogin;
     }
-}''
+}

@@ -19,7 +19,7 @@ public class RegistrationService {
 
     public Admin register(String username, String password) {
         Admin attemptToRegister = new Admin(username,password);
-        Admin adminInDatabase = rootRepository.findByUsername(username);
+        Admin adminInDatabase = rootRepository.findAdminByUsername(username);
 
         if(adminInDatabase == null || attemptToRegister.getUsername().equals(adminInDatabase.getUsername())) {
             String salt = new Saltmaker().generateSalt();attemptToRegister.setPassword(HashHelper.hash(password, salt, PepperService.getPepper()));

@@ -3,6 +3,7 @@ package com.example.cryptobank.database;
 import com.example.cryptobank.domain.Admin;
 import com.example.cryptobank.domain.Asset;
 import com.example.cryptobank.domain.CryptoCurrencyRate;
+import com.example.cryptobank.domain.Customer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +31,7 @@ public class RootRepository {
         this.cryptoCurrencyRateDAO = cryptoCurrencyRateDAO;
     }
 
-    public Admin findByUsername(String username) {
+    public Admin findAdminByUsername(String username) {
         Admin admin = adminDAO.findByUsername(username);
         return admin;
     }
@@ -76,6 +77,18 @@ public class RootRepository {
         double balanceUpdated = bankAccountDao.withdraw(iban, amount);
         return balanceUpdated;
     }
+
+    public Customer save(Customer customer) {
+        Customer customerToSave = customerDAO.save(customer);
+        return customerToSave;
+    }
+
+    public Customer findCustomerByUsername(String username) {
+        Customer customer = customerDAO.findByUsername(username);
+        return customer;
+    }
+
+
 
     //public CryptoCurrencyRate save*()
 

@@ -2,6 +2,7 @@ package com.example.cryptobank.service;
 
 import com.example.cryptobank.database.RootRepository;
 import com.example.cryptobank.domain.Admin;
+import com.example.cryptobank.domain.Customer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -17,9 +18,9 @@ public class LoginService {
         logger.info("New LoginService");
     }
 
-    public Admin login(String username, String password) {
+    public Admin loginAdmin(String username, String password) {
         Admin attemptToLogin = new Admin(username, password);
-        Admin adminInDatabase = rootRepository.findByUsername(username);
+        Admin adminInDatabase = rootRepository.findAdminByUsername(username);
 
         if(attemptToLogin.getUsername().equals(adminInDatabase.getUsername())) {
             String salt = adminInDatabase.getSalt();
@@ -36,5 +37,22 @@ public class LoginService {
 
     public boolean authenticate(String hashInDatabase, String hashedPassword) {
         return hashInDatabase.equals(hashedPassword);
+    }
+
+    public Customer loginCustomer(String username, String password) {
+        Customer attemptToLogin = new Customer(username, password);
+        Customer customerInDatabase = rootRepository.findCustomerByUsername(username);
+
+        if (attemptToLogin.getUsername().equals(customerInDatabase.getUsername())) {
+            String salt = customerInDatabase.getSalt();
+            String hashedPassword = HashHelper.hash(attemptToLogin.getPassword(), salt, PepperService.getPepper());
+
+            if (authenticate(customerInDatabase.getPassword(), hashedPassword)) {
+                attemptToLogin.setPassword(hashedPassword);
+                attemptToLogin.setSalt(salt);
+                return attemptToLogin;
+            }
+        }
+        return attemptToLogin;
     }
 }
