@@ -46,6 +46,13 @@ public class CustomerController {
         return customerToRegister;
     }
 
+    @PutMapping("/login")
+    public Customer login(@RequestParam String username, String password) {
+        Customer customerToLogin = customerService.login(username, password);
+        logger.info("login customer aangeroepen");
+        return customerToLogin;
+    }
+
 
     // TODO: 23/08/2021 Graag aan Huub vragen of we een customer ook wat slimmer kunnen aanmaken
     // dit kost ons iedere keer echt veel type werk en is daarmee extra foutgevoelig

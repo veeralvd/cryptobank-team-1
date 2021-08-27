@@ -5,6 +5,7 @@ import com.example.cryptobank.database.RootRepository;
 import com.example.cryptobank.domain.Address;
 import com.example.cryptobank.domain.BankAccount;
 import com.example.cryptobank.domain.Customer;
+import org.apache.tomcat.util.buf.CharsetUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -84,6 +85,27 @@ public class CustomerService {
     public Customer findByUsername(String username){
         //return rootRepository.getUserByUsername(username);
         return null;
+    }
+
+    public Customer login(String username, String password) {
+        Customer attemptToLogin = new Customer(username, password);
+        Customer customerInDatabase = findByUsername(username);
+
+        if (attemptToLogin.getUsername().equals(customerInDatabase.getUsername())) {
+            String salt = customerInDatabase.getSalt();
+            String hashedPassword = HashHelper.hash(attemptToLogin.getPassword(), salt, PepperService.getPepper());
+
+            if (authenticate(customerInDatabase.getPassword(), hashedPassword)) {
+                attemptToLogin.setPassword(hashedPassword);
+                attemptToLogin.setSalt(salt);
+                return attemptToLogin;
+            }
+        }
+        return attemptToLogin;
+    }
+
+    public boolean authenticate(String hashInDatabase, String hashedPassword) {
+        return hashInDatabase.equals(hashedPassword);
     }
 
 }
