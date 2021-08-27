@@ -3,12 +3,14 @@ package com.example.cryptobank.database;
 import com.example.cryptobank.domain.Admin;
 import com.example.cryptobank.domain.Asset;
 import com.example.cryptobank.domain.CryptoCurrencyRate;
+import com.example.cryptobank.domain.Customer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Repository
 public class RootRepository {
@@ -30,7 +32,7 @@ public class RootRepository {
         this.cryptoCurrencyRateDAO = cryptoCurrencyRateDAO;
     }
 
-    public Admin findByUsername(String username) {
+    public Admin findAdminByUsername(String username) {
         Admin admin = adminDAO.findByUsername(username);
         return admin;
     }
@@ -77,7 +79,19 @@ public class RootRepository {
         return balanceUpdated;
     }
 
+    public Customer save(Customer customer) {
+        Customer customerToSave = customerDAO.save(customer);
+        return customerToSave;
+    }
 
-    //public CryptoCurrencyRate save*()
+    public Customer findCustomerByUsername(String username) {
+        Customer customer = customerDAO.findByUsername(username);
+        return customer;
+    }
+
+    public List<Customer> getAllCustomers() {
+        return customerDAO.getAll();
+    }
+
 
 } // end of class RootRepository

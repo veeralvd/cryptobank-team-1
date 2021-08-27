@@ -12,53 +12,28 @@ public class AdminService {
 
 
     private RootRepository rootRepository;
+    private LoginService loginService;
+    private RegistrationService registrationService;
+
 
     private final Logger logger = LoggerFactory.getLogger(AdminService.class);
 
     @Autowired
-    public AdminService(RootRepository rootRepository) {
+    public AdminService(RootRepository rootRepository, LoginService loginService, RegistrationService registrationService) {
         this.rootRepository = rootRepository;
+        this.loginService = loginService;
+        this.registrationService = registrationService;
         logger.info("New AdminService");
     }
 
 
     public Admin register(String username, String password) {
-        Admin attemptToRegister = new Admin(username, password);
-        Admin adminInDatabase = findByUsername(username);
-
-        if(adminInDatabase == null || attemptToRegister.getUsername().equals(adminInDatabase.getUsername())) {
-            String salt = new Saltmaker().generateSalt();attemptToRegister.setPassword(HashHelper.hash(password, salt, PepperService.getPepper()));
-            attemptToRegister.setSalt(salt);
-            Admin registredAdmin = rootRepository.save(attemptToRegister);
-            return registredAdmin;
-        }
+        Admin attemptToRegister = registrationService.register(username, password);
         return attemptToRegister;
     }
 
     public Admin login(String username, String password) {
-        Admin attemptToLogin = new Admin(username, password);
-        Admin adminInDatabase = findByUsername(username);
-
-        if(attemptToLogin.getUsername().equals(adminInDatabase.getUsername())) {
-            String salt = adminInDatabase.getSalt();
-            String hashedPassword = HashHelper.hash(attemptToLogin.getPassword(), salt, PepperService.getPepper());
-
-            if(authenticate(adminInDatabase.getPassword(), hashedPassword)) {
-                attemptToLogin.setPassword(hashedPassword);
-                attemptToLogin.setSalt(salt);
-                return attemptToLogin;
-            }
-        }
-        return attemptToLogin;
+        Admin adminAttempToLogin = loginService.loginAdmin(username, password);
+        return adminAttempToLogin;
     }
-
-    public boolean authenticate(String hashInDatabase, String hashedPassword) {
-        return hashInDatabase.equals(hashedPassword);
-    }
-
-    private Admin findByUsername(String username) {
-        Admin adminToCheck = rootRepository.findByUsername(username);
-        return adminToCheck;
-    }
-
 }
