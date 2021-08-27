@@ -1,11 +1,16 @@
 package com.example.cryptobank.service;
 
 import com.example.cryptobank.database.RootRepository;
+import com.example.cryptobank.domain.Address;
 import com.example.cryptobank.domain.Admin;
+import com.example.cryptobank.domain.BankAccount;
 import com.example.cryptobank.domain.Customer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
+import java.util.List;
 
 @Service
 public class RegistrationService {
@@ -30,9 +35,42 @@ public class RegistrationService {
         return attemptToRegister;
     }
 
-    public Customer register(Customer customer) {
+    public Customer registerCustomer(String username, String password,
+                             String firstName, String lastName, LocalDate dateOfBirth, int socialSecurityNumber,
+                             String street, String zipcode, int houseNumber, String addition, String city) {
+        Customer customerToRegister = new Customer(username, password);
+        if (checkIfCustomerCanBeRegistered(username) && checkIfSocialSecurityNumberExists(socialSecurityNumber)) {
+            String salt = new Saltmaker().generateSalt();
+            customerToRegister.setPassword(HashHelper.hash(password, salt, PepperService.getPepper()));
+            customerToRegister.setSalt(salt);
+            customerToRegister.setFirstName(firstName);
+            customerToRegister.setLastName(lastName);
+            customerToRegister.setDateOfBirth(dateOfBirth);
+            customerToRegister.setSocialSecurityNumber(socialSecurityNumber);
+            customerToRegister.setAddress(new Address(street, zipcode, houseNumber, addition, city));
+            customerToRegister.setBankAccount(new BankAccount());
+            Customer customerRegistered = rootRepository.saveCustomer(customerToRegister);
+            return customerRegistered;
+        }
+        return customerToRegister;
+    }
 
-        return null;
+    public boolean checkIfCustomerCanBeRegistered(String username) {
+        Customer customerToCheck = rootRepository.findUserByUsername(username);
+        logger.info(String.format("customerToCheck is: %s", customerToCheck==null? "user NULL": customerToCheck.toString()));
+        return customerToCheck == null;
+    }
+
+    public boolean checkIfSocialSecurityNumberExists(int socialSecurityNumber){
+        List<Customer> customers = rootRepository.getAllCustomers();
+        boolean exists = true;
+        for (Customer customer : customers){
+            if (socialSecurityNumber == customer.getSocialSecurityNumber()){
+                exists = false;
+                logger.info("Social security number already exists.");
+            }
+        }
+        return exists;
     }
 
 }
