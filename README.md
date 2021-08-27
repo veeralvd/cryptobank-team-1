@@ -19,6 +19,7 @@
 - [ ] Aangeven welke gegevens ingevoerd moeten worden
 - [ ] Validatie / Check of juiste gegevens worden ingevoerd.
 - [ ] bij registratie krijgt de gebruiker feedback of het aan te maken wachtwoord wel of niet aan de eisen voldoet.
+- [ ] bij succesvolle registratie wordt de gebruiker doorgeleid naar de persoonlijke bankomgeving
 
 ## Als klant wil ik de totaalwaarde van mijn portfolio kunnen inzien
 
