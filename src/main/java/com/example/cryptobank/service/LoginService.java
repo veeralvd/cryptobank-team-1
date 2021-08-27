@@ -4,7 +4,9 @@ import com.example.cryptobank.database.RootRepository;
 import com.example.cryptobank.domain.Admin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
+@Service
 public class LoginService {
 
     private RootRepository rootRepository;
