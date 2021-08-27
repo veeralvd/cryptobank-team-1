@@ -17,7 +17,7 @@ public class LoginService {
 
     public Admin login(String username, String password) {
         Admin attemptToLogin = new Admin(username, password);
-        Admin adminInDatabase = findByUsername(username);
+        Admin adminInDatabase = rootRepository.findByUsername(username);
 
         if(attemptToLogin.getUsername().equals(adminInDatabase.getUsername())) {
             String salt = adminInDatabase.getSalt();
@@ -35,10 +35,4 @@ public class LoginService {
     public boolean authenticate(String hashInDatabase, String hashedPassword) {
         return hashInDatabase.equals(hashedPassword);
     }
-
-    private Admin findByUsername(String username) {
-        Admin adminToCheck = rootRepository.findByUsername(username);
-        return adminToCheck;
-    }
-
 }
