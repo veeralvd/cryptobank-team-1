@@ -12,6 +12,8 @@ public class AdminService {
 
 
     private RootRepository rootRepository;
+    private LoginService loginService;
+
 
     private final Logger logger = LoggerFactory.getLogger(AdminService.class);
 
@@ -36,20 +38,8 @@ public class AdminService {
     }
 
     public Admin login(String username, String password) {
-        Admin attemptToLogin = new Admin(username, password);
-        Admin adminInDatabase = findByUsername(username);
-
-        if(attemptToLogin.getUsername().equals(adminInDatabase.getUsername())) {
-            String salt = adminInDatabase.getSalt();
-            String hashedPassword = HashHelper.hash(attemptToLogin.getPassword(), salt, PepperService.getPepper());
-
-            if(authenticate(adminInDatabase.getPassword(), hashedPassword)) {
-                attemptToLogin.setPassword(hashedPassword);
-                attemptToLogin.setSalt(salt);
-                return attemptToLogin;
-            }
-        }
-        return attemptToLogin;
+        Admin adminAttempToLogin = loginService.login(username, password);
+        return adminAttempToLogin;
     }
 
     public boolean authenticate(String hashInDatabase, String hashedPassword) {
@@ -60,5 +50,7 @@ public class AdminService {
         Admin adminToCheck = rootRepository.findByUsername(username);
         return adminToCheck;
     }
+
+
 
 }
