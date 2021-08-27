@@ -43,17 +43,7 @@ public class CustomerService {
     }
 
     public Customer registerTwee(Customer customerToRegister) {
-        String salt = new Saltmaker().generateSalt();
-        if (checkIfCustomerCanBeRegistered(customerToRegister.getUsername())) {
-            customerToRegister.setPassword(HashHelper.hash(customerToRegister.getPassword(),
-                    salt,
-                    PepperService.getPepper()));
-            customerToRegister.setSalt(salt);
-            customerToRegister.setBankAccount(new BankAccount());
-            Customer customerRegistered = customerDAO.save(customerToRegister);
-            return customerRegistered;
-        }
-        return customerToRegister;
+        return registrationService.registerTwee(customerToRegister);
     }
 
     public Customer login(String username, String password) {

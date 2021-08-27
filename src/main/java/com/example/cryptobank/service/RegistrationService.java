@@ -49,14 +49,28 @@ public class RegistrationService {
             customerToRegister.setSocialSecurityNumber(socialSecurityNumber);
             customerToRegister.setAddress(new Address(street, zipcode, houseNumber, addition, city));
             customerToRegister.setBankAccount(new BankAccount());
-            Customer customerRegistered = rootRepository.saveCustomer(customerToRegister);
+            Customer customerRegistered = rootRepository.save(customerToRegister);
+            return customerRegistered;
+        }
+        return customerToRegister;
+    }
+
+    public Customer registerTwee(Customer customerToRegister) {
+        String salt = new Saltmaker().generateSalt();
+        if (checkIfCustomerCanBeRegistered(customerToRegister.getUsername())) {
+            customerToRegister.setPassword(HashHelper.hash(customerToRegister.getPassword(),
+                    salt,
+                    PepperService.getPepper()));
+            customerToRegister.setSalt(salt);
+            customerToRegister.setBankAccount(new BankAccount());
+            Customer customerRegistered = rootRepository.save(customerToRegister);
             return customerRegistered;
         }
         return customerToRegister;
     }
 
     public boolean checkIfCustomerCanBeRegistered(String username) {
-        Customer customerToCheck = rootRepository.findUserByUsername(username);
+        Customer customerToCheck = rootRepository.findCustomerByUsername(username);
         logger.info(String.format("customerToCheck is: %s", customerToCheck==null? "user NULL": customerToCheck.toString()));
         return customerToCheck == null;
     }
