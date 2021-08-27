@@ -55,10 +55,5 @@ public class BankAccountController {
         return balanceUpdated;
     }
 
-    /*@PutMapping("/bankaccounts/delete")
-    public void deleteBankAccount(@RequestParam String iban) {
-        bankAccountService.deleteBankAccount(iban);
-        logger.info("deleteBankAccount aangeroepen");
-    }*/
 
 }

@@ -8,7 +8,7 @@ public interface BankAccountDao {
     double getBalanceByIban(String iban);
     double withdraw(String iban, double amount);
     double deposit(String iban, double amount);
-    boolean checkBankAccount(String iban, double amount);
-    //void deleteBankAccount(String iban);
+    boolean checkIbanExists(String iban);
+
 
 }

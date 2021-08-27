@@ -15,9 +15,9 @@ import java.sql.SQLException;
 public class JdbcBankAccountDao implements BankAccountDao {
 
     private JdbcTemplate jdbcTemplate;
+    private final String SELECT_QUERY = "SELECT balance FROM bankaccount WHERE iban = ?";
     private final String INSERT_QUERY = "INSERT INTO bankaccount (iban, balance) VALUES (?,?)";
     private final String UPDATE_QUERY = "UPDATE bankaccount SET balance = ? WHERE iban = ?";
-    private final String DELETE_QUERY = "DELETE FROM bankaccount WHERE iban = ?";
 
     private final Logger logger = LoggerFactory.getLogger(JdbcBankAccountDao.class);
 
@@ -42,54 +42,61 @@ public class JdbcBankAccountDao implements BankAccountDao {
         return ps;
     }
 
-    private PreparedStatement deleteBankAccount(String iban, Connection connection) throws SQLException {
-        PreparedStatement ps = connection.prepareStatement(DELETE_QUERY);
-        ps.setString(1, iban);
-        return ps;
-    }
-
-    // TODO checken of saveBankAccount als aparte methode nodig is.
-
-    //  Nieuw BankAccount wordt eenmalig opgeslagen bij registratie Customer:
-    //  JdbcCustomerDao: public Customer save(Customer customer) {
-    //        jdbcTemplate.update(connection -> insertBankAccount(customer.getBankAccount(), connection));
-   /* @Override
+    // TODO Save Bankaccount koppelen aan save Customer in Rootrepository
+    /*@Override
     public BankAccount save(BankAccount bankAccount) {
-        jdbcTemplate.update(connection -> insertBankAccountStatement(bankAccount, connection));
+        jdbcTemplate.update(connection -> insertBankAccount(bankAccount, connection));
         return bankAccount;
     }*/
 
     @Override
     public double getBalanceByIban(String iban) {
-        String sql = "SELECT balance FROM bankaccount WHERE iban = ?";
-        // Query for single record, according to this example needs: (sql, String.class, new Object[] { studentId })
-        double balanceRetrieved = jdbcTemplate.queryForObject(sql, double.class, new Object[] {iban});
+        if (!checkIbanExists(iban)) {
+            logger.error("IBAN cannot be found");
+            return 0.0;
+        }
+        double balanceRetrieved = jdbcTemplate.queryForObject(SELECT_QUERY, double.class, new Object[] {iban});
         return balanceRetrieved;
     }
 
     @Override
     public double deposit(String iban, double amount) {
-        double updatedBalance = this.getBalanceByIban(iban) + amount;
-        jdbcTemplate.update(connection -> updateBankAccount(iban, updatedBalance, connection));
-        return updatedBalance;
+        if (!checkIbanExists(iban)) {
+            logger.error("IBAN cannot be found");
+            return 0.0;
+        }
+        double currentBalance = this.getBalanceByIban(iban);
+        double updatedBalance = currentBalance + amount;
+        int status = jdbcTemplate.update(connection -> updateBankAccount(iban, updatedBalance, connection));
+        if (status == 0) {
+            return currentBalance;
+        } else {
+            return updatedBalance;
+        }
     }
 
     @Override
     public double withdraw(String iban, double amount) {
-        double updatedBalance = getBalanceByIban(iban) - amount;
-        jdbcTemplate.update(connection -> updateBankAccount(iban, updatedBalance, connection));
-        return updatedBalance;
+        if (!checkIbanExists(iban)) {
+            logger.error("IBAN cannot be found");
+            return 0.0;
+        }
+        double currentBalance = this.getBalanceByIban(iban);
+        double updatedBalance = currentBalance - amount;
+        int status = jdbcTemplate.update(connection -> updateBankAccount(iban, updatedBalance, connection));
+        if (status == 0) {
+            return currentBalance;
+        } else {
+            return updatedBalance;
+        }
     }
 
+    // TODO implementeren
     @Override
-    public boolean checkBankAccount(String iban, double amount) {
-        return false;
+    public boolean checkIbanExists(String iban) {
+        return true;
     }
 
-    /*@Override
-    public void deleteBankAccount(String iban) {
-        jdbcTemplate.update(connection -> deleteBankAccount(iban, connection));
-    }*/
 
 
 
