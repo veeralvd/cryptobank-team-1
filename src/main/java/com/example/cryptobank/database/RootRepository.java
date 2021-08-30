@@ -124,9 +124,10 @@ public class RootRepository {
     }
 
     public void insertTokenByAdminUsername(String username, String token) {
-        
+        adminDAO.insertTokenByAdminUsername(username, token);
     }
 
     public void insertTokenByCustomerUsername(String username, String token) {
+        customerDAO.insertTokenByCustomerUsername(username, token);
     }
 } // end of class RootRepository

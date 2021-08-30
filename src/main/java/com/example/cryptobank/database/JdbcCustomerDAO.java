@@ -111,8 +111,7 @@ public class JdbcCustomerDAO implements CustomerDAO{
     @Override
     public String findCustomerUsernameByToken(String token) {
         String sql = "SELECT * FROM customer WHERE token = ?";
-        String tokenFromDatabase = jdbcTemplate.query(sql, new CustomerRowMapper(), token).get(0).getToken();
-        return tokenFromDatabase;
+        return jdbcTemplate.query(sql, new CustomerRowMapper(), token).get(0).getToken();
     }
 
     private PreparedStatement insertTokenByCustomerUsername(String username, String token, Connection connection)
