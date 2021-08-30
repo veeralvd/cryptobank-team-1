@@ -28,7 +28,8 @@ public class JdbcCustomerDAO implements CustomerDAO{
     }
 
     private PreparedStatement insertBankAccount(BankAccount account, Connection connection) throws SQLException {
-        PreparedStatement preparedStatement = connection.prepareStatement("insert into bankaccount (iban, balance) values(?,?)");
+        PreparedStatement preparedStatement = connection.prepareStatement(
+                "insert into bankaccount (iban, balance) values(?,?)");
         preparedStatement.setString(1, account.getIban());
         preparedStatement.setDouble(2, account.getBalance());
         return preparedStatement;
@@ -37,7 +38,8 @@ public class JdbcCustomerDAO implements CustomerDAO{
     private PreparedStatement insertCustomer(Customer customer, Connection connection) throws SQLException {
         PreparedStatement preparedStatement = connection.prepareStatement(
                 "insert into customer (username, password, salt, firstname, lastname, dateofbirth, " +
-                        "socialsecuritynumber, street, zipcode, housenumber, addition, iban, city) values (?,?,?,?,?,?,?,?,?,?,?,?,?)"
+                        "socialsecuritynumber, street, zipcode, housenumber, addition, iban, city, token)" +
+                        " values (?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
         );
         preparedStatement.setString(1, customer.getUsername());
         preparedStatement.setString(2, customer.getPassword());
@@ -52,6 +54,7 @@ public class JdbcCustomerDAO implements CustomerDAO{
         preparedStatement.setString(11, customer.getAddress().getAddition());
         preparedStatement.setString(12, customer.getBankAccount().getIban());
         preparedStatement.setString(13, customer.getAddress().getCity());
+        preparedStatement.setString(14, customer.getToken());
         return preparedStatement;
     }
 
@@ -80,9 +83,10 @@ public class JdbcCustomerDAO implements CustomerDAO{
             int houseNumber = resultSet.getInt("housenumber");
             String addition = resultSet.getString("addition");
             String city = resultSet.getString("city");
+            String token = resultSet.getString("token");
 
             Customer customer = new Customer(username, password, salt, firstName, lastName, dateOfBirth,
-                    socialSecurityNumber, new Address(street, zipcode, houseNumber, addition, city));
+                    socialSecurityNumber, street, zipcode, houseNumber, addition, city, token);
             return customer;
         }
     }
@@ -102,5 +106,26 @@ public class JdbcCustomerDAO implements CustomerDAO{
         String sql = "SELECT * from customer";
         List<Customer> allCustomers = jdbcTemplate.query(sql, new CustomerRowMapper());
         return allCustomers;
+    }
+
+    @Override
+    public String findCustomerUsernameByToken(String token) {
+        String sql = "SELECT * FROM customer WHERE token = ?";
+        String tokenFromDatabase = jdbcTemplate.query(sql, new CustomerRowMapper(), token).get(0).getToken();
+        return tokenFromDatabase;
+    }
+
+    private PreparedStatement insertTokenByCustomerUsername(String username, String token, Connection connection)
+            throws SQLException {
+        PreparedStatement preparedStatement = connection.prepareStatement(
+                "UPDATE customer SET token = ? WHERE username = ?");
+        preparedStatement.setString(1, token);
+        preparedStatement.setString(2, username);
+        return preparedStatement;
+    }
+
+    @Override
+    public void insertTokenByCustomerUsername(String username, String token) {
+        jdbcTemplate.update(connection -> insertTokenByCustomerUsername(username, token, connection));
     }
 }

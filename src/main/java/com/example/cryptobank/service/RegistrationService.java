@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class RegistrationService {
@@ -28,7 +29,9 @@ public class RegistrationService {
 
         if(adminInDatabase == null || attemptToRegister.getUsername().equals(adminInDatabase.getUsername())) {
             String salt = new Saltmaker().generateSalt();attemptToRegister.setPassword(HashHelper.hash(password, salt, PepperService.getPepper()));
+            String token = UUID.randomUUID().toString();
             attemptToRegister.setSalt(salt);
+            attemptToRegister.setToken(token);
             Admin registeredAdmin = rootRepository.save(attemptToRegister);
             return registeredAdmin;
         }
@@ -41,6 +44,7 @@ public class RegistrationService {
         Customer customerToRegister = new Customer(username, password);
         if (checkIfCustomerCanBeRegistered(username) && checkIfSocialSecurityNumberExists(socialSecurityNumber)) {
             String salt = new Saltmaker().generateSalt();
+            String token = UUID.randomUUID().toString();
             customerToRegister.setPassword(HashHelper.hash(password, salt, PepperService.getPepper()));
             customerToRegister.setSalt(salt);
             customerToRegister.setFirstName(firstName);
@@ -49,6 +53,7 @@ public class RegistrationService {
             customerToRegister.setSocialSecurityNumber(socialSecurityNumber);
             customerToRegister.setAddress(new Address(street, zipcode, houseNumber, addition, city));
             customerToRegister.setBankAccount(new BankAccount());
+            customerToRegister.setToken(token);
             Customer customerRegistered = rootRepository.save(customerToRegister);
             return customerRegistered;
         }

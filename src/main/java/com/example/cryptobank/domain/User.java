@@ -5,11 +5,13 @@ public  abstract class User implements Comparable<User>{
     private String username;
     private String password;
     private String salt;
+    private String token;
 
-    public User(String username, String password, String salt) {
+    public User(String username, String password, String salt, String token) {
         this.username = username;
         this.password = password;
         this.salt = salt;
+        this.token = token;
     }
 
     public User(String username, String password) {
@@ -43,6 +45,16 @@ public  abstract class User implements Comparable<User>{
     public void setSalt(String salt) {
         this.salt = salt;
     }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+
 
     @Override
     public String toString() {

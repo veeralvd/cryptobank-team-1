@@ -1,9 +1,12 @@
 package com.example.cryptobank.service;
 
+import org.springframework.stereotype.Service;
+
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+@Service
 public class HashHelper {
 
     public static final String SHA_256 = "SHA-256";

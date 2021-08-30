@@ -7,6 +7,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 public class LoginService {
 
@@ -21,6 +23,7 @@ public class LoginService {
     public Admin loginAdmin(String username, String password) {
         Admin attemptToLogin = new Admin(username, password);
         Admin adminInDatabase = rootRepository.findAdminByUsername(username);
+        String token = null;
 
         if(adminInDatabase != null && attemptToLogin.getUsername().equals(adminInDatabase.getUsername())) {
             String salt = adminInDatabase.getSalt();
@@ -29,6 +32,11 @@ public class LoginService {
             if(authenticate(adminInDatabase.getPassword(), hashedPassword)) {
                 attemptToLogin.setPassword(hashedPassword);
                 attemptToLogin.setSalt(salt);
+                token = UUID.randomUUID().toString();
+                rootRepository.insertTokenByAdminUsername(username, token);
+
+                attemptToLogin.setToken(token);
+
                 return attemptToLogin;
             }
         }
@@ -42,12 +50,15 @@ public class LoginService {
     public Customer loginCustomer(String username, String password) {
         Customer attemptToLogin = new Customer(username, password);
         Customer customerInDatabase = rootRepository.findCustomerByUsername(username);
+        String token = null;
 
         if (customerInDatabase != null && attemptToLogin.getUsername().equals(customerInDatabase.getUsername())) {
             String salt = customerInDatabase.getSalt();
             String hashedPassword = HashHelper.hash(attemptToLogin.getPassword(), salt, PepperService.getPepper());
 
             if (authenticate(customerInDatabase.getPassword(), hashedPassword)) {
+                token = UUID.randomUUID().toString();
+                rootRepository.insertTokenByCustomerUsername(username, token);
                 return customerInDatabase;
             }
         }

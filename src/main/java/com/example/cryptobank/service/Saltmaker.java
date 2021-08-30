@@ -1,7 +1,11 @@
 package com.example.cryptobank.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import java.security.SecureRandom;
 
+@Service
 public class Saltmaker {
 
     private static final int SALT_LENGHT = 8;

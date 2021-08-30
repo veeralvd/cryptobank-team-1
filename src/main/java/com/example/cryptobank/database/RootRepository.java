@@ -114,4 +114,19 @@ public class RootRepository {
         portfolio.setAssetMap(assetMap);
         return portfolio;
     }
+
+    public String findAdminUsernameByToken(String token) {
+        return adminDAO.findAdminUsernameByToken(token);
+    }
+
+    public String findCustomerUsernameByToken(String token) {
+        return customerDAO.findCustomerUsernameByToken(token);
+    }
+
+    public void insertTokenByAdminUsername(String username, String token) {
+        
+    }
+
+    public void insertTokenByCustomerUsername(String username, String token) {
+    }
 } // end of class RootRepository

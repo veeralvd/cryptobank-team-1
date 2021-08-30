@@ -9,4 +9,8 @@ public interface AdminDAO {
 
     Admin findByUsername(String username);
 
+    String findAdminUsernameByToken(String username);
+
+    void insertTokenByAdminUsername(String username, String token);
+
 }

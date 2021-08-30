@@ -15,12 +15,12 @@
 
 Use cryptobank;
 
---
+-- customer
 -- Dumping data for table `admin`
 --
 
 LOCK TABLES admin WRITE;
-INSERT INTO admin VALUES ('admin','admin','b853e2a0');
+INSERT INTO admin VALUES ('admin','admin','b853e2a0', 'firstToken');
 UNLOCK TABLES;
 
 --
@@ -52,7 +52,7 @@ UNLOCK TABLES;
 --
 
 LOCK TABLES customer WRITE;
-INSERT INTO customer VALUES ('sarah','4a31a7bf19a029ac766d1e9486216c579495022c7b12e41509a92ba7e245bc72','b1b63d09','sarah','van Norgaerde','1992-08-22',123456789,'cryptostreet','1234KB',12,'bis','NL69COKI5000000003');
+INSERT INTO customer VALUES ('sarah','4a31a7bf19a029ac766d1e9486216c579495022c7b12e41509a92ba7e245bc72','b1b63d09','sarah','van Norgaerde','1992-08-22',123456789,'cryptostreet','1234KB',12,'bis','NL69COKI5000000003', 'Vlaardingen','firstToken');
 UNLOCK TABLES;
 
 --

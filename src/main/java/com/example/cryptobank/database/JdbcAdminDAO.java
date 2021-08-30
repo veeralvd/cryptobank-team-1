@@ -29,11 +29,12 @@ public class JdbcAdminDAO implements AdminDAO {
 
     private PreparedStatement insertAdminStatement(Admin admin, Connection connection) throws SQLException{
         PreparedStatement preparedStatement = connection.prepareStatement(
-                "insert into admin (username, password, salt) values (?, ?, ?)"
+                "insert into admin (username, password, salt, token) values (?, ?, ?, ?)"
         );
         preparedStatement.setString(1, admin.getUsername());
         preparedStatement.setString(2, admin.getPassword());
         preparedStatement.setString(3, admin.getSalt());
+        preparedStatement.setString(4, admin.getToken());
         return preparedStatement;
     }
 
@@ -51,7 +52,8 @@ public class JdbcAdminDAO implements AdminDAO {
             String username = resultSet.getString("username");
             String password = resultSet.getString("password");
             String salt = resultSet.getString("salt");
-            Admin admin = new Admin(username, password, salt);
+            String token = resultSet.getString("token");
+            Admin admin = new Admin(username, password, salt, token);
             return admin;
         }
     }
@@ -64,5 +66,26 @@ public class JdbcAdminDAO implements AdminDAO {
             return adminToFind.get(0);
         }
         return null;
+    }
+
+    @Override
+    public String findAdminUsernameByToken(String token) {
+        String sql = "SELECT * from admin where token = ?";
+        String tokenFromDatabase = jdbcTemplate.query(sql, new AdminRowMapper(), token).get(0).getToken();
+        return tokenFromDatabase;
+    }
+
+    private PreparedStatement insertTokenStatement(String username, String token, Connection connection) throws SQLException{
+        PreparedStatement preparedStatement = connection.prepareStatement(
+                "UPDATE admin SET token = ? WHERE username = ?"
+        );
+        preparedStatement.setString(1, token);
+        preparedStatement.setString(2, username);
+        return preparedStatement;
+    }
+
+    @Override
+    public void insertTokenByAdminUsername(String username, String token) {
+        jdbcTemplate.update(connection -> insertTokenStatement(username, token, connection));
     }
 }
