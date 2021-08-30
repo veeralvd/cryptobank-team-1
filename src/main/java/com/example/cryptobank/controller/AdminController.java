@@ -5,15 +5,21 @@ import com.example.cryptobank.service.AdminService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.swing.text.html.parser.Entity;
+
 @RestController
 public class AdminController {
 
     private AdminService adminService;
+    private ResponseEntity responseEntity;
 
     private final Logger logger = LoggerFactory.getLogger(AdminController.class);
 
@@ -40,10 +46,14 @@ public class AdminController {
     }
 
     @PutMapping("/admin/login")
-    public Admin login(@RequestParam String username, String password) {
-        Admin adminToLogin = adminService.login(username, password);
+    ResponseEntity<?> login(@RequestParam String username, String password) {
         logger.info("login admin aangeroepen");
-        return adminToLogin;
-    }
 
+        Admin adminToLogin = adminService.login(username, password);
+        if (adminToLogin.getSalt() != null) {
+            return ResponseEntity.ok(adminToLogin.toString());
+        } else {
+            return ResponseEntity.ok(HttpStatus.UNAUTHORIZED);
+        }
+    }
 }

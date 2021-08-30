@@ -40,7 +40,7 @@ public class CustomerController {
         return customerToRegister;
     }
 
-    @PutMapping(value = "/registerTwee", consumes = {MediaType.APPLICATION_JSON_VALUE})
+    @PutMapping(value = "/registerTwee", produces = "application/json")
     public Customer registerTwee(@RequestBody Customer customer) {
         logger.info(customer.toString());
         Customer customerToRegister = customerService.registerTwee(customer);
