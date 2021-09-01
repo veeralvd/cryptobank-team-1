@@ -13,13 +13,19 @@ public class Purchase {
     private LocalDateTime localDateTime;
     private Asset asset;
     private double amount;
+    private Integer transactionNumber;
 
-    public Purchase(Customer customer, LocalDateTime localDateTime, Asset asset, double amount) {
+    public Purchase(Customer customer, LocalDateTime localDateTime, Asset asset, double amount, int transactionNumber) {
         this.customer = customer;
         this.localDateTime = localDateTime;
         this.asset = asset;
         this.amount = amount;
+        this.transactionNumber = transactionNumber;
         logger.info("New Purchase");
+    }
+
+    public Purchase(Customer customer, LocalDateTime localDateTime, Asset asset, double amount) {
+        this(customer, localDateTime, asset, amount, 0);
     }
 
     @Override
@@ -59,6 +65,14 @@ public class Purchase {
 
     public double getAmount() {
         return amount;
+    }
+
+    public Integer getTransactionNumber() {
+        return transactionNumber;
+    }
+
+    public void setTransactionNumber(Integer transactionNumber) {
+        this.transactionNumber = transactionNumber;
     }
 
     @Override

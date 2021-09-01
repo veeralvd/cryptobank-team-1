@@ -65,23 +65,24 @@ public class JdbcAssetDao implements AssetDao {
 
     @Override
     public Asset findByAbbreviation(String abbreviation) {
-        return findAsset(abbreviation);
-    }
-
-    @Override
-    public Asset findByName(String name) {
-        return findAsset(name);
-    }
-
-    @Override
-    public Asset findAsset(String searchTerm) {
         String sql = "SELECT * from asset where abbreviation = ?";
-        List<Asset> assetToFind = jdbcTemplate.query(sql, new AssetRowMapper(), searchTerm);
+        List<Asset> assetToFind = jdbcTemplate.query(sql, new AssetRowMapper(), abbreviation);
         if (assetToFind.size() == 1) {
             return assetToFind.get(0);
         }
         return null;
     }
+
+    @Override
+    public Asset findByName(String name) {
+        String sql = "SELECT * from asset where nameCrypto = ?";
+        List<Asset> assetToFind = jdbcTemplate.query(sql, new AssetRowMapper(), name);
+        if (assetToFind.size() == 1) {
+            return assetToFind.get(0);
+        }
+        return null;
+    }
+
 
     //TODO List -> ArrayList en RowMapper, check hoe dit precies zit. Waarom moet ik hem casten naar Arraylist?
     @Override

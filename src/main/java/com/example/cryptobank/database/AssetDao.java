@@ -14,7 +14,6 @@ public interface AssetDao {
     Asset save(Asset asset);
     Asset findByAbbreviation(String abbreviation);
     Asset findByName(String name);
-    Asset findAsset(String searchTerm);
     ArrayList<Asset> getAll();
 
 }
