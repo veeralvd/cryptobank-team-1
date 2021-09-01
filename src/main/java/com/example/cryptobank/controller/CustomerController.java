@@ -50,10 +50,10 @@ public class CustomerController {
     public int registerTwee(@RequestBody Customer customer) {
         logger.info(customer.toString());
         Customer customerToRegister = customerService.registerTwee(customer);
-        if(customerToRegister.getFirstName()== null) {
-            return new ResponseEntity<String>("Failed", HttpStatus.BAD_REQUEST).getStatusCodeValue();
+        if(customerToRegister.getSalt()== null) {
+            return new ResponseEntity<String>(HttpStatus.I_AM_A_TEAPOT).getStatusCodeValue();
         } else {
-            return new ResponseEntity<String>(HttpStatus.OK).getStatusCodeValue();
+            return new ResponseEntity<String>(HttpStatus.CREATED).getStatusCodeValue();
         }
     }
 
