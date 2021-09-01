@@ -62,12 +62,14 @@ public class RegistrationService {
 
     public Customer registerTwee(Customer customerToRegister) {
         String salt = new Saltmaker().generateSalt();
+        String token = UUID.randomUUID().toString();
         if (checkIfCustomerCanBeRegistered(customerToRegister.getUsername())) {
             customerToRegister.setPassword(HashHelper.hash(customerToRegister.getPassword(),
                     salt,
                     PepperService.getPepper()));
             customerToRegister.setSalt(salt);
             customerToRegister.setBankAccount(new BankAccount());
+            customerToRegister.setToken(token);
             Customer customerRegistered = rootRepository.save(customerToRegister);
             return customerRegistered;
         }
@@ -76,6 +78,7 @@ public class RegistrationService {
 
     public boolean checkIfCustomerCanBeRegistered(String username) {
         Customer customerToCheck = rootRepository.findCustomerByUsername(username);
+        // TODO: 1-9-2021 (Mark) logger is voor testen, moet later eruit
         logger.info(String.format("customerToCheck is: %s", customerToCheck==null? "user NULL": customerToCheck.toString()));
         return customerToCheck == null;
     }
