@@ -1,8 +1,8 @@
 -- MySQL Workbench Forward Engineering
 
--- SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
--- SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
--- SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
 
 -- -----------------------------------------------------
 -- Schema cryptobank
@@ -71,6 +71,7 @@ CREATE TABLE IF NOT EXISTS `cryptobank`.`customer` (
   `IBAN` VARCHAR(45) NOT NULL,
   `city` VARCHAR (45) NOT NULL,
   `token` VARCHAR(512) NOT NULL,
+  `email` VARCHAR(512) NOT NULL,
   UNIQUE INDEX `IBAN_UNIQUE` (`IBAN` ASC) VISIBLE,
   INDEX `fk_Customer_bankAccount1_idx` (`IBAN` ASC) VISIBLE,
   PRIMARY KEY (`username`),
@@ -112,8 +113,76 @@ CREATE TABLE IF NOT EXISTS `cryptobank`.`crypto_currency_rate` (
     ON UPDATE NO ACTION)
     ENGINE = InnoDB;
 
+-- -----------------------------------------------------
+-- Table `cryptobank`.`order`
+-- -----------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS `cryptobank`.`order` (
+    `orderId` INT AUTO_INCREMENT NOT NULL,
+    `abbreviation` VARCHAR(5) NOT NULL,
+    `assetAmount` DECIMAL(15,2) NOT NULL,
+    `desiredPrice` DOUBLE NOT NULL,
+    `iban` VARCHAR(45) NOT NULL,
+    `datetimecreated` DATETIME NOT NULL,
+    PRIMARY KEY (`orderId`),
+    CONSTRAINT `fk_order_asset`
+        FOREIGN KEY (`abbreviation`)
+            REFERENCES `cryptobank`.`asset` (`abbreviation`)
+            ON DELETE NO ACTION
+            ON UPDATE CASCADE,
+    CONSTRAINT `fk_order_bankaccount`
+        FOREIGN KEY (`iban`)
+            REFERENCES `cryptobank`.`bankaccount` (`IBAN`)
+            ON DELETE NO ACTION
+            ON UPDATE CASCADE)
+    ENGINE = InnoDB
+    DEFAULT CHARACTER SET = UTF8;
+
+-- -----------------------------------------------------
+-- Table `cryptobank`.`transaction`
+-- -----------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS `cryptobank`.`transaction` (
+      `transactionId` INT AUTO_INCREMENT NOT NULL,
+      `abbreviation` VARCHAR(5) NOT NULL,
+      `assetAmount` DECIMAL(15,2) NOT NULL,
+      `assetPrice` DOUBLE NOT NULL,
+      `ibanBuyer` VARCHAR(45) NOT NULL,
+      `ibanSeller` VARCHAR(45) NOT NULL,
+      `transactioncost` DOUBLE NOT NULL,
+      `datetimeprocessed` DATETIME NOT NULL,
+      PRIMARY KEY (`transactionId`),
+      CONSTRAINT `fk_transaction_asset`
+          FOREIGN KEY (`abbreviation`)
+              REFERENCES `cryptobank`.`asset` (`abbreviation`)
+              ON DELETE NO ACTION
+              ON UPDATE CASCADE,
+      CONSTRAINT `fk_transaction_bankaccount_buyer`
+          FOREIGN KEY (`ibanBuyer`)
+              REFERENCES `cryptobank`.`bankaccount` (`IBAN`)
+              ON DELETE NO ACTION
+              ON UPDATE CASCADE,
+      CONSTRAINT `fk_transaction_bankaccount_seller`
+          FOREIGN KEY (`ibanSeller`)
+              REFERENCES `cryptobank`.`bankaccount` (`IBAN`)
+              ON DELETE NO ACTION
+              ON UPDATE CASCADE)
+    ENGINE = InnoDB
+    DEFAULT CHARACTER SET = UTF8;
+
+
+-- -----------------------------------------------------
+-- View `cryptobank`.`Current_Rate`
+-- -----------------------------------------------------
+
+CREATE VIEW Current_Rate as SELECT cr.abbreviation, cr.datetime, cr.value
+                            from crypto_currency_rate cr inner join (
+                                select abbreviation, max(datetime) as MaxDate
+                                from crypto_currency_rate
+                                group by abbreviation) mostRecent on cr.abbreviation = mostRecent.abbreviation AND cr.datetime = mostRecent.MaxDate;
+
 -- Gebruiker definiëren en toegang verlenen
-CREATE USER 'cryptoUser'@'localhost' IDENTIFIED BY 'cryptoDB';
+-- CREATE USER 'cryptoUser'@'localhost' IDENTIFIED BY 'cryptoDB';
 GRANT ALL PRIVILEGES ON cryptobank.* TO 'cryptoUser'@'localhost';
 
 # SET SQL_MODE=@OLD_SQL_MODE;

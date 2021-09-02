@@ -3,12 +3,11 @@ package com.example.cryptobank.dto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 public class PortfolioDto {
     private String customerName;
-    private List<OADto> list;
+    private List<OwnedAssetDto> list;
 
 //    private String assetAbbreviation;
 //    private String assetName;
@@ -21,7 +20,7 @@ public class PortfolioDto {
 
     private final Logger logger = LoggerFactory.getLogger(PortfolioDto.class);
 
-    public PortfolioDto(String customerName, List<OADto> list) {
+    public PortfolioDto(String customerName, List<OwnedAssetDto> list) {
         this.customerName = customerName;
         this.list = list;
     }
@@ -51,11 +50,11 @@ public class PortfolioDto {
         this.customerName = customerName;
     }
 
-    public List<OADto> getList() {
+    public List<OwnedAssetDto> getList() {
         return list;
     }
 
-    public void setList(List<OADto> list) {
+    public void setList(List<OwnedAssetDto> list) {
         this.list = list;
     }
 
