@@ -1,5 +1,6 @@
 package com.example.cryptobank.database;
 
+import com.example.cryptobank.domain.Asset;
 import com.example.cryptobank.domain.Customer;
 import com.example.cryptobank.domain.Transaction;
 import org.slf4j.Logger;
@@ -14,6 +15,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.util.List;
 
 
 /**
@@ -53,20 +55,27 @@ public class JdbcTransactionDao implements TransactionDao {
 
     private static class TransactionRowMapper implements RowMapper<Transaction> {
 
-        private JdbcCustomerDAO jdbcCustomerDAO;
-
         @Override
         public Transaction mapRow(ResultSet resultSet, int i) throws SQLException {
-            String customerUsername = resultSet.getString("customerUsername");
             LocalDateTime dateTime = resultSet.getTimestamp("dateTime").toLocalDateTime();
-            String assetAbbr = resultSet.getString("assetAbbr");
             double amount = resultSet.getDouble("amount");
             int transactionNumber = resultSet.getInt("transactionNumber");
-            Customer customer = jdbcCustomerDAO.findByUsername(customerUsername);
+            Customer customer = null;
+            Asset asset = null;
             Transaction transaction = new Transaction(customer, dateTime, asset, amount, transactionNumber);
             return transaction;
         }
 
     } // end of nested class AssetRowMapper
+
+    @Override
+    public Transaction findByTransactionNumber(int transactionNumber) {
+        String sql = "SELECT * from transaction where transactionNumber = ?";
+        List<Transaction> transactionToFind = jdbcTemplate.query(sql, new JdbcTransactionDao.TransactionRowMapper(), transactionNumber);
+        if (transactionToFind.size() == 1) {
+            return transactionToFind.get(0);
+        }
+        return null;
+    }
 
 } // end of class JdbcTransactionDao

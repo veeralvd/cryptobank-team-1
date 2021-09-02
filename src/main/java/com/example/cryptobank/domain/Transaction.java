@@ -8,25 +8,34 @@ import java.time.LocalDateTime;
 public class Transaction {
     private final Logger logger = LoggerFactory.getLogger(Transaction.class);
 
-    private Customer customer;
+    private int transactionNumber;
+    private BankAccount buyerAccount;
+    private BankAccount sellerAccount;
     private LocalDateTime localDateTime;
     private Asset asset;
     private double amount;
-    private Integer transactionNumber;
+    private double sellingPrice;
 
-    public Transaction(Customer customer, LocalDateTime localDateTime, Asset asset, double amount, int transactionNumber) {
-        this.customer = customer;
+
+
+    public Transaction(int transactionNumber, BankAccount buyerAccount, BankAccount sellerAccount, LocalDateTime localDateTime,
+                       Asset asset, double amount, double sellingPrice) {
+        this.transactionNumber = transactionNumber;
+        this.buyerAccount = buyerAccount;
+        this.sellerAccount = sellerAccount;
         this.localDateTime = localDateTime;
         this.asset = asset;
         this.amount = amount;
-        this.transactionNumber = transactionNumber;
-        logger.info("New Purchase");
+        this.sellingPrice = sellingPrice;
+        logger.info("New Transaction");
     }
 
-    public Transaction(Customer customer, LocalDateTime localDateTime, Asset asset, double amount) {
-        this(customer, localDateTime, asset, amount, 0);
+    public Transaction(BankAccount buyerAccount, BankAccount sellerAccount, LocalDateTime localDateTime, Asset asset,
+                       double amount, double sellingPrice) {
+        this(0, buyerAccount, sellerAccount, localDateTime, asset, amount, sellingPrice);
     }
 
+    //TODO klopt equals method nog wel na aanpassen attributen?
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -39,6 +48,7 @@ public class Transaction {
         return asset.equals(transaction.asset);
     }
 
+    //TODO klopt hashcode method nog wel na aanpassen attributen?
     @Override
     public int hashCode() {
         int result;
@@ -50,8 +60,17 @@ public class Transaction {
         return result;
     }
 
-    public Customer getCustomer() {
-        return customer;
+
+    public int getTransactionNumber() {
+        return transactionNumber;
+    }
+
+    public BankAccount getBuyerAccount() {
+        return buyerAccount;
+    }
+
+    public BankAccount getSellerAccount() {
+        return sellerAccount;
     }
 
     public LocalDateTime getLocalDateTime() {
@@ -66,8 +85,8 @@ public class Transaction {
         return amount;
     }
 
-    public Integer getTransactionNumber() {
-        return transactionNumber;
+    public double getSellingPrice() {
+        return sellingPrice;
     }
 
     public void setTransactionNumber(Integer transactionNumber) {
@@ -76,11 +95,15 @@ public class Transaction {
 
     @Override
     public String toString() {
-        return "Purchase{" +
-                "customer=" + customer +
+        return "Transaction{" +
+                "transactionNumber=" + transactionNumber +
+                ", buyerAccount=" + buyerAccount +
+                ", sellerAccount=" + sellerAccount +
                 ", localDateTime=" + localDateTime +
                 ", asset=" + asset +
                 ", amount=" + amount +
+                ", sellingPrice=" + sellingPrice +
                 '}';
     }
-}
+
+} // end of class Transaction

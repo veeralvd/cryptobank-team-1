@@ -14,7 +14,7 @@ import java.util.ArrayList;
 public interface TransactionDao {
 
     Transaction save (Transaction transaction);
-    Transaction findByTransactionNumber (Integer transactionNumber);
+    Transaction findByTransactionNumber (int transactionNumber);
     ArrayList<Transaction> getAllByCustomer (Customer customer);
 
 }
