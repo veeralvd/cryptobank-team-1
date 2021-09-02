@@ -122,17 +122,18 @@ public class RootRepository {
         return orderDao.save(order);
     }
 
-    public Order findByTransactionNumber(int transactionNumber) {
-        Order order = orderDao.findByTransactionNumber(transactionNumber);
-        BankAccount buyerAccount = bankAccountDao.;
-        BankAccount sellerAccount = ;
-        Asset asset = ;
-
-        Asset asset = assetDao.findByAbbreviation(abbreviation);
-        ArrayList<CryptoCurrencyRate> cryptoCurrencyRateList = cryptoCurrencyRateDAO.findByAbbreviation(abbreviation);
-        CryptoCurrencyRate currentRate = cryptoCurrencyRateList.get(cryptoCurrencyRateList.size()-1);
-        asset.setRate(currentRate);
-        logger.info("currentRate " + currentRate);
-        return asset;
+    public Order findByOrderId(int orderId) {
+        Order order = orderDao.findByOrderId(orderId);
+        BankAccount bankAccount = bankAccountDao.findAccountByIban(order.getBankAccount().getIban());
+        Asset asset = assetDao.findByAbbreviation(order.getAsset().getAbbreviation());
+        order.setBankAccount(bankAccount);
+        order.setAsset(asset);
+        return order;
     }
+
+    public ArrayList<Order> getAllByIban (String iban) {
+        ArrayList<Order> allOrdersFromCustomer = orderDao.getAllByIban(iban);
+        return allOrdersFromCustomer;
+    }
+
 } // end of class RootRepository

@@ -87,6 +87,14 @@ public class Order {
         this.orderId = orderId;
     }
 
+    public void setBankAccount(BankAccount bankAccount) {
+        this.bankAccount = bankAccount;
+    }
+
+    public void setAsset(Asset asset) {
+        this.asset = asset;
+    }
+
     @Override
     public String toString() {
         return "Order{" +
