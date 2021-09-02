@@ -1,10 +1,6 @@
 package com.example.cryptobank.database;
 
-import com.example.cryptobank.domain.Admin;
-import com.example.cryptobank.domain.Asset;
-import com.example.cryptobank.domain.CryptoCurrencyRate;
-import com.example.cryptobank.domain.Customer;
-import com.example.cryptobank.domain.Portfolio;
+import com.example.cryptobank.domain.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +8,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.HashMap;
 import java.util.Map;
 
 @Repository
@@ -24,10 +19,11 @@ public class RootRepository {
     private BankAccountDao bankAccountDao;
     private CryptoCurrencyRateDAO cryptoCurrencyRateDAO;
     private PortfolioDao portfolioDao;
+    private OrderDao orderDao;
 
     @Autowired
     public RootRepository(AdminDAO adminDAO, AssetDao assetDao, CustomerDAO customerDAO, BankAccountDao bankAccountDao,
-                          CryptoCurrencyRateDAO cryptoCurrencyRateDAO, PortfolioDao portfolioDao) {
+                          CryptoCurrencyRateDAO cryptoCurrencyRateDAO, PortfolioDao portfolioDao, OrderDao orderDao) {
         logger.info("New RootRepository");
         this.adminDAO = adminDAO;
         this.assetDao = assetDao;
@@ -35,6 +31,7 @@ public class RootRepository {
         this.bankAccountDao = bankAccountDao;
         this.cryptoCurrencyRateDAO = cryptoCurrencyRateDAO;
         this.portfolioDao = portfolioDao;
+        this.orderDao = orderDao;
     }
 
     public Admin findAdminByUsername(String username) {
@@ -119,5 +116,23 @@ public class RootRepository {
 
     public void insertTokenByCustomerUsername(String username, String token) {
         customerDAO.insertTokenByCustomerUsername(username, token);
+    }
+
+    public Order save(Order order) {
+        return orderDao.save(order);
+    }
+
+    public Order findByTransactionNumber(int transactionNumber) {
+        Order order = orderDao.findByTransactionNumber(transactionNumber);
+        BankAccount buyerAccount = bankAccountDao.;
+        BankAccount sellerAccount = ;
+        Asset asset = ;
+
+        Asset asset = assetDao.findByAbbreviation(abbreviation);
+        ArrayList<CryptoCurrencyRate> cryptoCurrencyRateList = cryptoCurrencyRateDAO.findByAbbreviation(abbreviation);
+        CryptoCurrencyRate currentRate = cryptoCurrencyRateList.get(cryptoCurrencyRateList.size()-1);
+        asset.setRate(currentRate);
+        logger.info("currentRate " + currentRate);
+        return asset;
     }
 } // end of class RootRepository

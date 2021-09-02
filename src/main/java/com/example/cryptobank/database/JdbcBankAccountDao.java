@@ -97,6 +97,12 @@ public class JdbcBankAccountDao implements BankAccountDao {
         return true;
     }
 
+    //TODO implementeren
+    public BankAccount findAccountByIban (String iban) {
+        BankAccount bankAccount = new BankAccount();
+        return bankAccount;
+    }
+
 
 
 
