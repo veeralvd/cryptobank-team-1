@@ -27,17 +27,17 @@ public class TransactionService {
      * @return boolean status (voor nu, straks order teruggeven)
      */
     public Transaction placeOrder(Transaction orderPlaced) {
-        String invoiceNo = UUID.randomUUID().toString();
-        double assetCost = orderPlaced.getAsset().calculateAssetCost(asset, amount);
-        Transaction orderToSave= new Transaction(ibanBuyer, ibanSeller, asset, amount, invoiceNo);
-        return rootRepository.placeOrder(orderToSave);
+        double assetCost = calculateAssetCost(orderPlaced.getAsset(), orderPlaced.getAmount());
+        orderPlaced.setSellingPrice(assetCost);
+
+        return rootRepository.placeOrder(orderPlaced);
     }
 
     /**
      * Hulpmethode om bedrag asset koerwwaarde * aantal te berekenen
      */
     private double calculateAssetCost(Asset asset, double amount) {
-        return asset.calculateAssetCost(amount);
+        return asset.getRate().getCryptoRate() * amount;
     }
 
     /**

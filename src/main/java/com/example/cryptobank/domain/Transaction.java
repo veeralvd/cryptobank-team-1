@@ -93,6 +93,10 @@ public class Transaction {
         this.transactionNumber = transactionNumber;
     }
 
+    public void setSellingPrice(double sellingPrice) {
+        this.sellingPrice = sellingPrice;
+    }
+
     @Override
     public String toString() {
         return "Transaction{" +

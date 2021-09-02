@@ -1,10 +1,6 @@
 package com.example.cryptobank.database;
 
-import com.example.cryptobank.domain.Admin;
-import com.example.cryptobank.domain.Asset;
-import com.example.cryptobank.domain.CryptoCurrencyRate;
-import com.example.cryptobank.domain.Customer;
-import com.example.cryptobank.domain.Portfolio;
+import com.example.cryptobank.domain.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -119,5 +115,8 @@ public class RootRepository {
 
     public void insertTokenByCustomerUsername(String username, String token) {
         customerDAO.insertTokenByCustomerUsername(username, token);
+    }
+
+    public Transaction placeOrder(Transaction orderPlaced) {
     }
 } // end of class RootRepository

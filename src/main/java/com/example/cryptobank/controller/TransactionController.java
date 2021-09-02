@@ -31,12 +31,12 @@ public class TransactionController {
      */
     @PostMapping("/buyAsset")
     // public int buyAsset(@RequestParam String ibanBuyer, String ibanSeller, Asset asset, double amount) {
-    public int buyAsset(@Requestbody Transaction transaction) {
+    public int buyAsset(@RequestBody Transaction transaction) {
         Transaction orderToSave = transactionService.placeOrder(transaction);
-        if (orderToSave.getIbanBuyer() == null) {
+        if (orderToSave.getBuyerAccount().getIban() == null) {
             return new ResponseEntity<String>("Failed", HttpStatus.BAD_REQUEST).getStatusCodeValue();
         } else {
-            return new ResponseEntity<String>(HttpStatus.OK).getStatusCodeValue()
+            return new ResponseEntity<String>(HttpStatus.OK).getStatusCodeValue();
         }
     }
 
