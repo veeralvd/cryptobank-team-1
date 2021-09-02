@@ -1,8 +1,7 @@
 package com.example.cryptobank.controller;
 
-import com.example.cryptobank.domain.Asset;
-import com.example.cryptobank.domain.Transaction;
-import com.example.cryptobank.service.TransactionService;
+import com.example.cryptobank.domain.Order;
+import com.example.cryptobank.service.OrderService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,16 +10,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-public class TransactionController {
+public class OrderController {
 
-    private TransactionService transactionService;
+    private OrderService orderService;
 
-    private final Logger logger = LoggerFactory.getLogger(TransactionController.class);
+    private final Logger logger = LoggerFactory.getLogger(OrderController.class);
 
     @Autowired
-    public TransactionController(TransactionService transactionService) {
-        this.transactionService = transactionService;
-        logger.info("New TransactionController");
+    public OrderController(OrderService orderService) {
+        this.orderService = orderService;
+        logger.info("New OrderController");
     }
 
     /**
@@ -31,9 +30,9 @@ public class TransactionController {
      */
     @PostMapping("/buyAsset")
     // public int buyAsset(@RequestParam String ibanBuyer, String ibanSeller, Asset asset, double amount) {
-    public int buyAsset(@RequestBody Transaction transaction) {
-        Transaction orderToSave = transactionService.placeOrder(transaction);
-        if (orderToSave.getBuyerAccount().getIban() == null) {
+    public int buyAsset(@RequestBody Order order) {
+        Order orderToSave = orderService.placeOrder(order);
+        if (orderToSave.getBankAccount().getIban() == null) {
             return new ResponseEntity<String>("Failed", HttpStatus.BAD_REQUEST).getStatusCodeValue();
         } else {
             return new ResponseEntity<String>(HttpStatus.OK).getStatusCodeValue();
@@ -42,7 +41,7 @@ public class TransactionController {
 
 
     @GetMapping("/orders") // /{iban}
-    Transaction FindOrdersByIban(@RequestParam String iban) {
+    Order FindOrdersByIban(@RequestParam String iban) {
         return null;
     }
 

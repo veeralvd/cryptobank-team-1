@@ -8,106 +8,103 @@ import java.time.LocalDateTime;
 public class Transaction {
     private final Logger logger = LoggerFactory.getLogger(Transaction.class);
 
-    private int transactionNumber;
+    private int transactionId;
+    private Asset asset;
+    private double assetAmount;
+    private double assetPrice; // per unit
     private BankAccount buyerAccount;
     private BankAccount sellerAccount;
-    private LocalDateTime localDateTime;
-    private Asset asset;
-    private double amount;
-    private double sellingPrice;
+    private double transactionCost;
+    private LocalDateTime dateTimeTransaction;
 
-
-
-    public Transaction(int transactionNumber, BankAccount buyerAccount, BankAccount sellerAccount, LocalDateTime localDateTime,
-                       Asset asset, double amount, double sellingPrice) {
-        this.transactionNumber = transactionNumber;
+    public Transaction(int transactionId, Asset asset, double assetAmount, double assetPrice, BankAccount buyerAccount,
+                       BankAccount sellerAccount, double transactionCost, LocalDateTime dateTimeTransaction) {
+        this.transactionId = transactionId;
+        this.asset = asset;
+        this.assetAmount = assetAmount;
+        this.assetPrice = assetPrice;
         this.buyerAccount = buyerAccount;
         this.sellerAccount = sellerAccount;
-        this.localDateTime = localDateTime;
-        this.asset = asset;
-        this.amount = amount;
-        this.sellingPrice = sellingPrice;
+        this.transactionCost = transactionCost;
+        this.dateTimeTransaction = dateTimeTransaction;
         logger.info("New Transaction");
     }
 
-    public Transaction(BankAccount buyerAccount, BankAccount sellerAccount, LocalDateTime localDateTime, Asset asset,
-                       double amount, double sellingPrice) {
-        this(0, buyerAccount, sellerAccount, localDateTime, asset, amount, sellingPrice);
+    public int getTransactionId() {
+        return transactionId;
     }
 
-    //TODO klopt equals method nog wel na aanpassen attributen?
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Transaction transaction = (Transaction) o;
-
-        if (Double.compare(transaction.amount, amount) != 0) return false;
-        if (!localDateTime.equals(transaction.localDateTime)) return false;
-        return asset.equals(transaction.asset);
-    }
-
-    //TODO klopt hashcode method nog wel na aanpassen attributen?
-    @Override
-    public int hashCode() {
-        int result;
-        long temp;
-        result = localDateTime.hashCode();
-        result = 31 * result + asset.hashCode();
-        temp = Double.doubleToLongBits(amount);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
-        return result;
-    }
-
-
-    public int getTransactionNumber() {
-        return transactionNumber;
-    }
-
-    public BankAccount getBuyerAccount() {
-        return buyerAccount;
-    }
-
-    public BankAccount getSellerAccount() {
-        return sellerAccount;
-    }
-
-    public LocalDateTime getLocalDateTime() {
-        return localDateTime;
+    public void setTransactionId(int transactionId) {
+        this.transactionId = transactionId;
     }
 
     public Asset getAsset() {
         return asset;
     }
 
-    public double getAmount() {
-        return amount;
+    public void setAsset(Asset asset) {
+        this.asset = asset;
     }
 
-    public double getSellingPrice() {
-        return sellingPrice;
+    public double getAssetAmount() {
+        return assetAmount;
     }
 
-    public void setTransactionNumber(Integer transactionNumber) {
-        this.transactionNumber = transactionNumber;
+    public void setAssetAmount(double assetAmount) {
+        this.assetAmount = assetAmount;
     }
 
-    public void setSellingPrice(double sellingPrice) {
-        this.sellingPrice = sellingPrice;
+    public double getAssetPrice() {
+        return assetPrice;
+    }
+
+    public void setAssetPrice(double assetPrice) {
+        this.assetPrice = assetPrice;
+    }
+
+    public BankAccount getBuyerAccount() {
+        return buyerAccount;
+    }
+
+    public void setBuyerAccount(BankAccount buyerAccount) {
+        this.buyerAccount = buyerAccount;
+    }
+
+    public BankAccount getSellerAccount() {
+        return sellerAccount;
+    }
+
+    public void setSellerAccount(BankAccount sellerAccount) {
+        this.sellerAccount = sellerAccount;
+    }
+
+    public double getTransactionCost() {
+        return transactionCost;
+    }
+
+    public void setTransactionCost(double transactionCost) {
+        this.transactionCost = transactionCost;
+    }
+
+    public LocalDateTime getDateTimeTransaction() {
+        return dateTimeTransaction;
+    }
+
+    public void setDateTimeTransaction(LocalDateTime dateTimeTransaction) {
+        this.dateTimeTransaction = dateTimeTransaction;
     }
 
     @Override
     public String toString() {
         return "Transaction{" +
-                "transactionNumber=" + transactionNumber +
+                "transactionId=" + transactionId +
+                ", asset=" + asset +
+                ", assetAmount=" + assetAmount +
+                ", assetPrice=" + assetPrice +
                 ", buyerAccount=" + buyerAccount +
                 ", sellerAccount=" + sellerAccount +
-                ", localDateTime=" + localDateTime +
-                ", asset=" + asset +
-                ", amount=" + amount +
-                ", sellingPrice=" + sellingPrice +
+                ", transactionCost=" + transactionCost +
+                ", dateTimeTransaction=" + dateTimeTransaction +
                 '}';
     }
-
-} // end of class Transaction
+}
