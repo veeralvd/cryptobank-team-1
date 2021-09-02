@@ -1,8 +1,8 @@
 package com.example.cryptobank.database;
 
-import com.example.cryptobank.domain.Customer;
 import com.example.cryptobank.domain.Order;
 import com.example.cryptobank.domain.Portfolio;
+import com.example.cryptobank.domain.Order;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +37,7 @@ public class JdbcPortfolioDao implements PortfolioDao {
         return ps;
     }
 
-    private PreparedStatement updatePortfolioStatementPositive (Portfolio portfolio, Customer customer,
+    private PreparedStatement updatePortfolioStatementPositive (Portfolio portfolio,
                                                                 Order order, Connection connection) throws SQLException {
         PreparedStatement ps = connection.prepareStatement(
                 "UPDATE ownedasset_table SET aantalEenheden = ? WHERE iban=? AND abbreviation=?"
@@ -51,7 +51,7 @@ public class JdbcPortfolioDao implements PortfolioDao {
     }
 
     // Bij verkoop van een deel van opgeslagen asset wordt de hoeveelheid verminderd
-    private PreparedStatement updatePortfolioStatementNegative (Portfolio portfolio, Customer customer,
+    private PreparedStatement updatePortfolioStatementNegative (Portfolio portfolio,
                                                                 Order order, Connection connection) throws SQLException {
         PreparedStatement ps = connection.prepareStatement(
                 "UPDATE ownedasset_table SET aantalEenheden = ? WHERE iban=? AND abbreviation=?"

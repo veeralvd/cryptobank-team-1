@@ -13,8 +13,7 @@ public class Order {
     private LocalDateTime dateTimeCreated;
     private Asset asset;
     private double assetAmount;
-    private double desiredPrice;
-
+    private double desiredPrice; // per unit
 
 
     public Order(int orderId, BankAccount bankAccount, LocalDateTime dateTimeCreated,
@@ -25,7 +24,7 @@ public class Order {
         this.asset = asset;
         this.assetAmount = assetAmount;
         this.desiredPrice = desiredPrice;
-        logger.info("New Transaction");
+        logger.info("New Order");
     }
 
     public Order(BankAccount bankAccount, LocalDateTime dateTimeCreated, Asset asset,
@@ -63,36 +62,48 @@ public class Order {
         return orderId;
     }
 
+    public void setOrderId(int orderId) {
+        this.orderId = orderId;
+    }
+
     public BankAccount getBankAccount() {
         return bankAccount;
-    }
-
-    public LocalDateTime getDateTimeCreated() {
-        return dateTimeCreated;
-    }
-
-    public Asset getAsset() {
-        return asset;
-    }
-
-    public double getAssetAmount() {
-        return assetAmount;
-    }
-
-    public double getDesiredPrice() {
-        return desiredPrice;
-    }
-
-    public void setOrderId(Integer orderId) {
-        this.orderId = orderId;
     }
 
     public void setBankAccount(BankAccount bankAccount) {
         this.bankAccount = bankAccount;
     }
 
+    public LocalDateTime getDateTimeCreated() {
+        return dateTimeCreated;
+    }
+
+    public void setDateTimeCreated(LocalDateTime dateTimeCreated) {
+        this.dateTimeCreated = dateTimeCreated;
+    }
+
+    public Asset getAsset() {
+        return asset;
+    }
+
     public void setAsset(Asset asset) {
         this.asset = asset;
+    }
+
+    public double getAssetAmount() {
+        return assetAmount;
+    }
+
+    public void setAssetAmount(double assetAmount) {
+        this.assetAmount = assetAmount;
+    }
+
+    public double getDesiredPrice() {
+        return desiredPrice;
+    }
+
+    public void setDesiredPrice(double desiredPrice) {
+        this.desiredPrice = desiredPrice;
     }
 
     @Override
@@ -106,4 +117,6 @@ public class Order {
                 ", desiredPrice=" + desiredPrice +
                 '}';
     }
+
 } // end of class Order
+

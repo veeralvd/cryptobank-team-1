@@ -59,7 +59,7 @@ public class JdbcOrderDao implements OrderDao {
 
         @Override
         public Order mapRow(ResultSet resultSet, int i) throws SQLException {
-            int orderId = resultSet.getInt("transactionNumber");
+            int orderId = resultSet.getInt("orderId");
             BankAccount bankAccount = null;
             LocalDateTime dateTimeCreated = resultSet.getTimestamp("dateTimeCreated").toLocalDateTime();
             Asset asset = null;
@@ -71,6 +71,7 @@ public class JdbcOrderDao implements OrderDao {
 
     } // end of nested class OrderRowMapper
 
+
     @Override
     public Order findByOrderId(int orderId) {
         String sql = "SELECT * from order where orderId = ?";
@@ -81,6 +82,7 @@ public class JdbcOrderDao implements OrderDao {
         return null;
     }
 
+
     @Override
     public ArrayList<Order> getAllByIban (String iban) {
         String sql = "SELECT * from order where iban = ?";
@@ -89,3 +91,4 @@ public class JdbcOrderDao implements OrderDao {
     }
 
 } // end of class JdbcOrderDao
+

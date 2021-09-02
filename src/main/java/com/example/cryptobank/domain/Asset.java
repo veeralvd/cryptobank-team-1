@@ -43,6 +43,10 @@ public class Asset {
         this.description = description;
     }
 
+    public CryptoCurrencyRate getRate() {
+        return rate;
+    }
+
     public void setRate(CryptoCurrencyRate rate) {
         this.rate = rate;
     }

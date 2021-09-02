@@ -1,8 +1,6 @@
 package com.example.cryptobank.database;
 
 
-import com.example.cryptobank.domain.BankAccount;
-import com.example.cryptobank.domain.Customer;
 import com.example.cryptobank.domain.Order;
 
 import java.util.ArrayList;
