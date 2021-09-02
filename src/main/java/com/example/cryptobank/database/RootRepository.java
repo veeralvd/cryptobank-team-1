@@ -118,7 +118,6 @@ public class RootRepository {
         customerDAO.insertTokenByCustomerUsername(username, token);
     }
 
-<<<<<<< HEAD
     public Order save(Order order) {
         return orderDao.save(order);
     }
@@ -137,6 +136,5 @@ public class RootRepository {
         return allOrdersFromCustomer;
     }
 
-=======
->>>>>>> 453333a56c012d18b790aa9d48b33a558badcdfc
+
 } // end of class RootRepository
