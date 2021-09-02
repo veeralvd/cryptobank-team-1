@@ -142,7 +142,7 @@ public class RootRepository {
         return transactionDao.findByTransactionId(transactionId);
     }
 
-    /*public ArrayList<Transaction> getAllTransactionsByIban(String iban) {
-        return transactionDao.getAllTransactionsByIban(iban);
-    }*/
+    public Transaction save(Transaction transaction) {
+        return transactionDao.save(transaction);
+    }
 } // end of class RootRepository
