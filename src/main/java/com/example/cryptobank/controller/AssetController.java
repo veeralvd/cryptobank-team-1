@@ -36,4 +36,8 @@ public class AssetController {
         return assetToShow;
     }
 
+    // TODO endpoint buy asset naar hiertoe verplaatsen vanuit transactioncontroller
+    // /assets/{abbreviation}/buy
+    // /asset/bte/buy
+
 } // end of class AssetController
