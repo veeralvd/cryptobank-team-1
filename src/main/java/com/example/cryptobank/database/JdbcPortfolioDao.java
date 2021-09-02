@@ -76,12 +76,10 @@ public class JdbcPortfolioDao implements PortfolioDao {
     @Override
     public Map<String, Double> getAssetmapByIban (String iban){
         String sql = "SELECT abbreviation, aantalEenheden FROM ownedasset WHERE iban = ?";
-        HashMap<String, Double> results = new HashMap<>();
+        Map<String, Double> results = new HashMap<>();
         jdbcTemplate.query(sql, (ResultSet rs) -> {
-            while (rs.next()){
-                results.put(rs.getString("abbreviation"),
+            results.put(rs.getString("abbreviation"),
                         rs.getDouble("aantalEenheden"));
-            }
         }, iban);
         return results;
     }

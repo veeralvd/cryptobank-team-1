@@ -5,11 +5,10 @@ import com.example.cryptobank.service.CustomerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 
@@ -40,11 +39,22 @@ public class CustomerController {
         return customerToRegister;
     }
 
-    @PutMapping(value = "/registerTwee", produces = "application/json")
+/*    @PutMapping(value = "/registerTwee", produces = "application/json")
     public Customer registerTwee(@RequestBody Customer customer) {
         logger.info(customer.toString());
         Customer customerToRegister = customerService.registerTwee(customer);
         return customerToRegister;
+    }*/
+
+    @PutMapping(value = "/registerTwee", produces = "application/json")
+    public int registerTwee(@RequestBody Customer customer) {
+        logger.info(customer.toString());
+        Customer customerToRegister = customerService.registerTwee(customer);
+        if(customerToRegister.getFirstName()== null) {
+            return new ResponseEntity<String>("Failed", HttpStatus.BAD_REQUEST).getStatusCodeValue();
+        } else {
+            return new ResponseEntity<String>(HttpStatus.OK).getStatusCodeValue();
+        }
     }
 
     @PutMapping("/login")

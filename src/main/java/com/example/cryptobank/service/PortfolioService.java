@@ -24,9 +24,6 @@ public class PortfolioService {
     }
 
     public Portfolio getPortfolio (String iban){
-        Portfolio portfolio = rootRepository.getPortfolioByIban(iban);
-        logger.info("PortServrice: TEST TEST: PUNT WORDT BEREIKT");
-        System.out.println("PRINT PRINT PRINT" + portfolio.getAssetMap());
-        return portfolio;
+        return rootRepository.getPortfolioByIban(iban);
     }
 }

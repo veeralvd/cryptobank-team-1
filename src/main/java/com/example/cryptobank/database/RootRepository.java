@@ -99,19 +99,9 @@ public class RootRepository {
     }
 
     public Portfolio getPortfolioByIban(String iban){
-        Map<String, Double> daoMap = portfolioDao.getAssetmapByIban(iban);
-        // test
-        System.out.println("ROOTREPO: " + daoMap);
-        Map<Asset, Double> assetMap = new HashMap<>();
-        for (Map.Entry<String, Double> entry : daoMap.entrySet()){
-            String abbreviation = entry.getKey();
-            double amount = entry.getValue();
-
-            Asset asset = assetDao.findByAbbreviation(abbreviation);
-            assetMap.put(asset, amount);
-        }
+        Map<String, Double> portfolioMap = portfolioDao.getAssetmapByIban(iban);
         Portfolio portfolio = new Portfolio();
-        portfolio.setAssetMap(assetMap);
+        portfolio.setAssetMap(portfolioMap);
         return portfolio;
     }
 
