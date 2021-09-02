@@ -1,6 +1,7 @@
 package com.example.cryptobank.database;
 
 import com.example.cryptobank.domain.Asset;
+import com.example.cryptobank.domain.BankAccount;
 import com.example.cryptobank.domain.Customer;
 import com.example.cryptobank.domain.Transaction;
 import org.slf4j.Logger;
@@ -15,13 +16,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 
 /**
  * @author Sarah-Jayne Nogarede
- * Dit is de JDBC DAO voor het object 'Purchase'. Deze DAO implementeert de methoden save, findByTransactionNumber
- * en getAllByCustomer uit de PurchaseDao Interface.
+ * Dit is de JDBC DAO voor het object 'Transaction'. Deze DAO implementeert de methoden save, findByTransactionNumber
+ * en getAllByIban uit de TransactionDao Interface.
  */
 @Repository
 public class JdbcTransactionDao implements TransactionDao {
@@ -35,13 +37,15 @@ public class JdbcTransactionDao implements TransactionDao {
     }
 
     private PreparedStatement insertTransactionStatement(Transaction transaction, Connection connection) throws SQLException {
-        PreparedStatement preparedStatement = connection.prepareStatement("insert into purchase (cusomerUsername, dateTime, " +
-                "assetAbbr, amount, transactionNumber) values (?, ?, ?, ?, ?)");
-        preparedStatement.setString(1, transaction.getCustomer().getUsername());
+        PreparedStatement preparedStatement = connection.prepareStatement("insert into transaction (transactionNumber, buyerAccount, " +
+                "sellerAccount, dateTime, assetAbbr, amount, sellingPrice) values (?, ?, ?, ?, ?, ?, ?)");
+        preparedStatement.setInt(1, transaction.getTransactionNumber());
+        preparedStatement.setString(2, transaction.getBuyerAccount().getIban());
+        preparedStatement.setString(3, transaction.getSellerAccount().getIban());
         preparedStatement.setString(2, String.valueOf(transaction.getLocalDateTime()));
         preparedStatement.setString(3, transaction.getAsset().getAbbreviation());
         preparedStatement.setDouble(4, transaction.getAmount());
-        preparedStatement.setInt(5, transaction.getTransactionNumber());
+        preparedStatement.setDouble(5, transaction.getSellingPrice());
         return preparedStatement;
     }
 
@@ -57,12 +61,14 @@ public class JdbcTransactionDao implements TransactionDao {
 
         @Override
         public Transaction mapRow(ResultSet resultSet, int i) throws SQLException {
-            LocalDateTime dateTime = resultSet.getTimestamp("dateTime").toLocalDateTime();
-            double amount = resultSet.getDouble("amount");
             int transactionNumber = resultSet.getInt("transactionNumber");
-            Customer customer = null;
+            BankAccount buyerAccount = null;
+            BankAccount sellerAccount = null;
+            LocalDateTime dateTime = resultSet.getTimestamp("dateTime").toLocalDateTime();
             Asset asset = null;
-            Transaction transaction = new Transaction(customer, dateTime, asset, amount, transactionNumber);
+            double amount = resultSet.getDouble("amount");
+            double sellingPrice = resultSet.getDouble("sellingPrice");
+            Transaction transaction = new Transaction(transactionNumber, buyerAccount, sellerAccount, dateTime, asset, amount, sellingPrice);
             return transaction;
         }
 
@@ -76,6 +82,14 @@ public class JdbcTransactionDao implements TransactionDao {
             return transactionToFind.get(0);
         }
         return null;
+    }
+
+    //TODO nu 'vind alle transacties met deze iban', niet gesplitst in koper of verkoper. Goed of splitsen?
+    @Override
+    public ArrayList<Transaction> getAllByIban (String iban) {
+        String sql = "SELECT * from transaction where ibanBuyer = ? or ibanSeller = ?";
+        List<Transaction> allTransactions = jdbcTemplate.query(sql, new JdbcTransactionDao.TransactionRowMapper());
+        return (ArrayList<Transaction>) allTransactions;
     }
 
 } // end of class JdbcTransactionDao
