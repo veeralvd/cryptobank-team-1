@@ -31,7 +31,7 @@ public class JdbcPortfolioDao implements PortfolioDao {
         PreparedStatement ps = connection.prepareStatement(
                 "INSERT INTO ownedasset_table (IBAN, abbreviation, aantalEenheden) values (?, ?, ?)"
         );
-        ps.setString(1, order.getCustomer().getBankAccount().getIban());
+        ps.setString(1, order.getBankAccount().getIban());
         ps.setString(2, order.getAsset().getAbbreviation());
         ps.setDouble(3, order.getAssetAmount());
         return ps;
@@ -45,7 +45,7 @@ public class JdbcPortfolioDao implements PortfolioDao {
         // TODO: 25-8-2021 aantal in bezit ophalen via customer.portfolio en dan uit de map halen
         double storedAssetAmount = portfolio.getAssetMap().get(order.getAsset());
         ps.setDouble(1, order.getAssetAmount() + storedAssetAmount);
-        ps.setString(2, order.getCustomer().getBankAccount().getIban());
+        ps.setString(2, order.getBankAccount().getIban());
         ps.setString(3, order.getAsset().getAbbreviation());
         return ps;
     }
@@ -59,7 +59,7 @@ public class JdbcPortfolioDao implements PortfolioDao {
         // TODO: 25-8-2021 aantal in bezit ophalen via customer.portfolio en dan uit de map halen
         double storedAssetAmount = portfolio.getAssetMap().get(order.getAsset());
         ps.setDouble(1, order.getAssetAmount() - storedAssetAmount);
-        ps.setString(2, order.getCustomer().getBankAccount().getIban());
+        ps.setString(2, order.getBankAccount().getIban());
         ps.setString(3, order.getAsset().getAbbreviation());
         return ps;
     }
@@ -69,7 +69,7 @@ public class JdbcPortfolioDao implements PortfolioDao {
         PreparedStatement ps = connection.prepareStatement(
                 "DELETE FROM ownedasset_table WHERE iban = ?"
         );
-        ps.setString(1, order.getCustomer().getBankAccount().getIban());
+        ps.setString(1, order.getBankAccount().getIban());
         return ps;
     }
 

@@ -119,4 +119,8 @@ public class RootRepository {
     public void insertTokenByCustomerUsername(String username, String token) {
         customerDAO.insertTokenByCustomerUsername(username, token);
     }
+
+    public Order placeOrder(Order orderPlaced) {
+        return null;
+    }
 } // end of class RootRepository
