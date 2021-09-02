@@ -80,12 +80,16 @@ public class RootRepository {
     }
 
     public Customer save(Customer customer) {
+        bankAccountDao.save(customer.getBankAccount());
         Customer customerToSave = customerDAO.save(customer);
         return customerToSave;
     }
 
     public Customer findCustomerByUsername(String username) {
         Customer customer = customerDAO.findByUsername(username);
+        if(customer != null) {
+            customer.getBankAccount().setBalance(getBalanceByIban(customer.getBankAccount().getIban()));
+        }
         return customer;
     }
 
@@ -115,5 +119,4 @@ public class RootRepository {
     public void insertTokenByCustomerUsername(String username, String token) {
         customerDAO.insertTokenByCustomerUsername(username, token);
     }
-
 } // end of class RootRepository

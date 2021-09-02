@@ -11,4 +11,5 @@ public interface BankAccountDao {
     boolean checkIbanExists(String iban);
 
 
+    void save(BankAccount bankAccount);
 }

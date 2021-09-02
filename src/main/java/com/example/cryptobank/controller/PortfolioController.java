@@ -5,6 +5,7 @@ import com.example.cryptobank.database.PortfolioDao;
 import com.example.cryptobank.database.RootRepository;
 import com.example.cryptobank.domain.Asset;
 import com.example.cryptobank.domain.Portfolio;
+import com.example.cryptobank.dto.PortfolioDto;
 import com.example.cryptobank.service.PortfolioService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,4 +33,10 @@ public class PortfolioController {
     public Portfolio getPortfolio (@RequestParam String iban){
         return portfolioService.getPortfolio(iban);
     }
+
+    @GetMapping("/getdto")
+    public PortfolioDto getDto (@RequestParam String token){
+        return portfolioService.showPortfolioDto(token);
+    }
+
 }

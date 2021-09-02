@@ -36,6 +36,7 @@ UNLOCK TABLES;
 --
 
 LOCK TABLES bankaccount WRITE;
+INSERT INTO bankaccount VALUES ('NL24COKI3309054260',500000); -- LET OP: dit is het account van de bank
 INSERT INTO bankaccount VALUES ('NL69COKI5000000003',0),('NL13COKI8974196092',0),('NL87COKI9583557878',0),('NL49COKI7517641892',0);
 UNLOCK TABLES;
 
@@ -52,7 +53,7 @@ UNLOCK TABLES;
 --
 
 LOCK TABLES customer WRITE;
-INSERT INTO customer VALUES ('sarah','4a31a7bf19a029ac766d1e9486216c579495022c7b12e41509a92ba7e245bc72','b1b63d09','sarah','van Norgaerde','1992-08-22',123456789,'cryptostreet','1234KB',12,'bis','NL69COKI5000000003', 'Vlaardingen','firstToken');
+INSERT INTO customer VALUES ('sarah','4a31a7bf19a029ac766d1e9486216c579495022c7b12e41509a92ba7e245bc72','b1b63d09','sarah','van Norgaerde','1992-08-22',123456789,'cryptostreet','1234KB',12,'bis','NL69COKI5000000003', 'Vlaardingen','firstToken', 'sarahjayne@gmail.com');
 UNLOCK TABLES;
 
 --
@@ -60,6 +61,29 @@ UNLOCK TABLES;
 --
 
 LOCK TABLES ownedasset WRITE;
+INSERT INTO cryptobank.ownedasset (IBAN, abbreviation, aantalEenheden) VALUES ('NL69COKI5000000003', 'ADA', 35);
+INSERT INTO cryptobank.ownedasset (IBAN, abbreviation, aantalEenheden) VALUES ('NL69COKI5000000003', 'BCH', 6);
+INSERT INTO cryptobank.ownedasset (IBAN, abbreviation, aantalEenheden) VALUES ('NL69COKI5000000003', 'BTC', 2);
+INSERT INTO cryptobank.ownedasset (IBAN, abbreviation, aantalEenheden) VALUES ('NL69COKI5000000003', 'HEX', 500);
+UNLOCK TABLES;
+
+--
+-- Dumping data for table `transaction`
+--
+
+LOCK TABLES transaction WRITE;
+INSERT INTO cryptobank.transaction (transactionId, abbreviation, assetAmount, assetPrice, ibanBuyer, ibanSeller, transactioncost, datetimeprocessed) VALUES (1, 'BTC', 2, 46123.25, 'NL69COKI5000000003', 'NL24COKI3309054260', 5.25, '2021-09-01 10:47:08');
+INSERT INTO cryptobank.transaction (transactionId, abbreviation, assetAmount, assetPrice, ibanBuyer, ibanSeller, transactioncost, datetimeprocessed) VALUES (2, 'CAKE', 25, 19.75, 'NL69COKI5000000003', 'NL24COKI3309054260', 8.3, '2021-08-31 09:15:36');
+INSERT INTO cryptobank.transaction (transactionId, abbreviation, assetAmount, assetPrice, ibanBuyer, ibanSeller, transactioncost, datetimeprocessed) VALUES (3, 'DOGE', 12500, 0.20, 'NL69COKI5000000003', 'NL24COKI3309054260', 9.95, '2021-09-02 16:47:51');
+UNLOCK TABLES;
+
+--
+-- Dumping data for table `order`
+--
+
+LOCK TABLES `order` WRITE;
+INSERT INTO cryptobank.`order` (orderId, abbreviation, assetAmount, desiredPrice, iban, datetimecreated) VALUES (1, 'DOGE', 1234, 0, 'NL69COKI5000000003', '2021-09-02 17:07:08');
+INSERT INTO cryptobank.`order` (orderId, abbreviation, assetAmount, desiredPrice, iban, datetimecreated) VALUES (2, 'ETH', 2, 125, 'NL69COKI5000000003', '2021-09-02 17:05:16');
 UNLOCK TABLES;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
