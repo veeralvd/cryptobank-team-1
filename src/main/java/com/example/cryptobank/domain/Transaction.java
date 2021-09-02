@@ -3,11 +3,10 @@ package com.example.cryptobank.domain;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-public class Purchase {
-    private final Logger logger = LoggerFactory.getLogger(Purchase.class);
+public class Transaction {
+    private final Logger logger = LoggerFactory.getLogger(Transaction.class);
 
     private Customer customer;
     private LocalDateTime localDateTime;
@@ -15,7 +14,7 @@ public class Purchase {
     private double amount;
     private Integer transactionNumber;
 
-    public Purchase(Customer customer, LocalDateTime localDateTime, Asset asset, double amount, int transactionNumber) {
+    public Transaction(Customer customer, LocalDateTime localDateTime, Asset asset, double amount, int transactionNumber) {
         this.customer = customer;
         this.localDateTime = localDateTime;
         this.asset = asset;
@@ -24,7 +23,7 @@ public class Purchase {
         logger.info("New Purchase");
     }
 
-    public Purchase(Customer customer, LocalDateTime localDateTime, Asset asset, double amount) {
+    public Transaction(Customer customer, LocalDateTime localDateTime, Asset asset, double amount) {
         this(customer, localDateTime, asset, amount, 0);
     }
 
@@ -33,11 +32,11 @@ public class Purchase {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Purchase purchase = (Purchase) o;
+        Transaction transaction = (Transaction) o;
 
-        if (Double.compare(purchase.amount, amount) != 0) return false;
-        if (!localDateTime.equals(purchase.localDateTime)) return false;
-        return asset.equals(purchase.asset);
+        if (Double.compare(transaction.amount, amount) != 0) return false;
+        if (!localDateTime.equals(transaction.localDateTime)) return false;
+        return asset.equals(transaction.asset);
     }
 
     @Override

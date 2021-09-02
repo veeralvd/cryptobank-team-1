@@ -2,7 +2,7 @@ package com.example.cryptobank.database;
 
 
 import com.example.cryptobank.domain.Customer;
-import com.example.cryptobank.domain.Purchase;
+import com.example.cryptobank.domain.Transaction;
 
 import java.util.ArrayList;
 
@@ -11,10 +11,10 @@ import java.util.ArrayList;
  * Dit is de DAO interface voor het object 'Purchase', waarin wordt aangegeven welke methoden een
  * PurchaseDao moet implementeren.
  */
-public interface PurchaseDao {
+public interface TransactionDao {
 
-    Purchase save (Purchase purchase);
-    Purchase findByTransactionNumber (Integer transactionNumber);
-    ArrayList<Purchase> getAllByCustomer (Customer customer);
+    Transaction save (Transaction transaction);
+    Transaction findByTransactionNumber (Integer transactionNumber);
+    ArrayList<Transaction> getAllByCustomer (Customer customer);
 
 }

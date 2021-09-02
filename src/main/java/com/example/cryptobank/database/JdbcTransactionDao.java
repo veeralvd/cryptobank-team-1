@@ -1,9 +1,7 @@
 package com.example.cryptobank.database;
 
-import com.example.cryptobank.domain.Asset;
-import com.example.cryptobank.domain.CryptoCurrencyRate;
 import com.example.cryptobank.domain.Customer;
-import com.example.cryptobank.domain.Purchase;
+import com.example.cryptobank.domain.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,51 +22,51 @@ import java.time.LocalDateTime;
  * en getAllByCustomer uit de PurchaseDao Interface.
  */
 @Repository
-public class JdbcPurchaseDao implements PurchaseDao {
-    private final Logger logger = LoggerFactory.getLogger(JdbcPurchaseDao.class);
+public class JdbcTransactionDao implements TransactionDao {
+    private final Logger logger = LoggerFactory.getLogger(JdbcTransactionDao.class);
     private JdbcTemplate jdbcTemplate;
 
     @Autowired
-    public JdbcPurchaseDao(JdbcTemplate jdbcTemplate) {
+    public JdbcTransactionDao(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
-        logger.info("New JdbcPurchaseDao");
+        logger.info("New JdbcTransactionDao");
     }
 
-    private PreparedStatement insertPurchaseStatement(Purchase purchase, Connection connection) throws SQLException {
+    private PreparedStatement insertTransactionStatement(Transaction transaction, Connection connection) throws SQLException {
         PreparedStatement preparedStatement = connection.prepareStatement("insert into purchase (cusomerUsername, dateTime, " +
                 "assetAbbr, amount, transactionNumber) values (?, ?, ?, ?, ?)");
-        preparedStatement.setString(1, purchase.getCustomer().getUsername());
-        preparedStatement.setString(2, String.valueOf(purchase.getLocalDateTime()));
-        preparedStatement.setString(3, purchase.getAsset().getAbbreviation());
-        preparedStatement.setDouble(4, purchase.getAmount());
-        preparedStatement.setInt(5, purchase.getTransactionNumber());
+        preparedStatement.setString(1, transaction.getCustomer().getUsername());
+        preparedStatement.setString(2, String.valueOf(transaction.getLocalDateTime()));
+        preparedStatement.setString(3, transaction.getAsset().getAbbreviation());
+        preparedStatement.setDouble(4, transaction.getAmount());
+        preparedStatement.setInt(5, transaction.getTransactionNumber());
         return preparedStatement;
     }
 
     @Override
-    public Purchase save(Purchase purchase) {
-        logger.info("purchaseDao.save aangeroepen");
-        jdbcTemplate.update(connection -> insertPurchaseStatement(purchase, connection));
-        return purchase;
+    public Transaction save(Transaction transaction) {
+        logger.info("transactionDao.save aangeroepen");
+        jdbcTemplate.update(connection -> insertTransactionStatement(transaction, connection));
+        return transaction;
     }
 
 
-    private static class PurchaseRowMapper implements RowMapper<Purchase> {
+    private static class TransactionRowMapper implements RowMapper<Transaction> {
 
         private JdbcCustomerDAO jdbcCustomerDAO;
 
         @Override
-        public Purchase mapRow(ResultSet resultSet, int i) throws SQLException {
+        public Transaction mapRow(ResultSet resultSet, int i) throws SQLException {
             String customerUsername = resultSet.getString("customerUsername");
             LocalDateTime dateTime = resultSet.getTimestamp("dateTime").toLocalDateTime();
             String assetAbbr = resultSet.getString("assetAbbr");
             double amount = resultSet.getDouble("amount");
             int transactionNumber = resultSet.getInt("transactionNumber");
             Customer customer = jdbcCustomerDAO.findByUsername(customerUsername);
-            Purchase purchase = new Purchase(customer, dateTime, assetAbbr, amount, transactionNumber);
-            return purchase;
+            Transaction transaction = new Transaction(customer, dateTime, asset, amount, transactionNumber);
+            return transaction;
         }
 
     } // end of nested class AssetRowMapper
 
-} // end of class JdbcPurchaseDao
+} // end of class JdbcTransactionDao
