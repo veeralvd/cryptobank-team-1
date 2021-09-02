@@ -19,10 +19,13 @@ public class RootRepository {
     private BankAccountDao bankAccountDao;
     private CryptoCurrencyRateDAO cryptoCurrencyRateDAO;
     private PortfolioDao portfolioDao;
+    private OrderDao orderDao;
+    private TransactionDao transactionDao;
 
     @Autowired
     public RootRepository(AdminDAO adminDAO, AssetDao assetDao, CustomerDAO customerDAO, BankAccountDao bankAccountDao,
-                          CryptoCurrencyRateDAO cryptoCurrencyRateDAO, PortfolioDao portfolioDao) {
+                          CryptoCurrencyRateDAO cryptoCurrencyRateDAO, PortfolioDao portfolioDao, OrderDao orderDao,
+                          TransactionDao transactionDao) {
         logger.info("New RootRepository");
         this.adminDAO = adminDAO;
         this.assetDao = assetDao;
@@ -30,6 +33,8 @@ public class RootRepository {
         this.bankAccountDao = bankAccountDao;
         this.cryptoCurrencyRateDAO = cryptoCurrencyRateDAO;
         this.portfolioDao = portfolioDao;
+        this.orderDao = orderDao;
+        this.transactionDao = transactionDao;
     }
 
     public Admin findAdminByUsername(String username) {
@@ -120,7 +125,24 @@ public class RootRepository {
         customerDAO.insertTokenByCustomerUsername(username, token);
     }
 
-    public Order placeOrder(Order orderPlaced) {
-        return null;
+    public Order placeOrder(Order order) {
+        return orderDao.save(order);
     }
+
+    public Order findByOrderId(int orderId) {
+        Order order = orderDao.findByOrderId(orderId);
+        return order;
+    }
+
+    public ArrayList<Order> getAllOrdersByIban(String iban) {
+        return orderDao.getAllByIban(iban);
+    }
+
+    public Transaction findByTransactionId(int transactionId) {
+        return transactionDao.findByTransactionId(transactionId);
+    }
+
+    /*public ArrayList<Transaction> getAllTransactionsByIban(String iban) {
+        return transactionDao.getAllTransactionsByIban(iban);
+    }*/
 } // end of class RootRepository

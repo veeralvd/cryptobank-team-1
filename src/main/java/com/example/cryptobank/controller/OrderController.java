@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+
 @RestController
 public class OrderController {
 
@@ -28,7 +30,7 @@ public class OrderController {
      * worden.
      * @return boolean status (voor nu, zie demo restfullwebserver voor ResponseEntity)
      */
-    @PostMapping("/buyAsset")
+    @PostMapping("/buyasset")
     // public int buyAsset(@RequestParam String ibanBuyer, String ibanSeller, Asset asset, double amount) {
     public int buyAsset(@RequestBody Order order) {
         Order orderToSave = orderService.placeOrder(order);
@@ -39,10 +41,21 @@ public class OrderController {
         }
     }
 
+    // TODO geeft foutmelding 'MissingServletRequestParameterException: Required request parameter 'orderId' for method parameter type int is not present'
+    /*@GetMapping("/orders")
+    public Order findByOrderId(@RequestParam int orderId) {
+        return orderService.findByOrderId(orderId);
+    }*/
 
-    @GetMapping("/orders") // /{iban}
-    Order FindOrdersByIban(@RequestParam String iban) {
-        return null;
+    @GetMapping("/orders/{orderid}")
+    public Order findByOrderId(@PathVariable("orderid") int orderId) {
+        return orderService.findByOrderId(orderId);
     }
+
+    @GetMapping("/orders/iban")
+    public ArrayList<Order> getAllByIban(@RequestParam String iban) {
+        return orderService.getAllByIban(iban);
+    }
+
 
 }
