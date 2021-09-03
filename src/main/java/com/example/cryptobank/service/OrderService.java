@@ -24,9 +24,9 @@ public class OrderService {
      * Methode placeOrder
      * @return boolean status (voor nu, straks order teruggeven)
      */
-    public Order placeOrder(Order orderPlaced) {
-        return rootRepository.placeOrder(orderPlaced);
-    }
+//    public Order placeOrder(Order orderPlaced) {
+//        return rootRepository.placeOrder(orderPlaced);
+//    }
 
     /**
      * TODO nu gaan we uit van prijs per eenheid
