@@ -16,7 +16,6 @@ public class Order {
     private double desiredPrice; // per unit
 
 
-
     public Order(int orderId, BankAccount bankAccount, LocalDateTime dateTimeCreated,
                  Asset asset, double assetAmount, double desiredPrice) {
         this.orderId = orderId;
@@ -57,6 +56,7 @@ public class Order {
         result = 31 * result + (int) (temp ^ (temp >>> 32));
         return result;
     }
+
 
     public int getOrderId() {
         return orderId;
@@ -117,4 +117,6 @@ public class Order {
                 ", desiredPrice=" + desiredPrice +
                 '}';
     }
-} // end of class Transaction
+
+} // end of class Order
+

@@ -7,8 +7,8 @@ import java.util.ArrayList;
 
 /**
  * @author Sarah-Jayne Nogarede
- * Dit is de DAO interface voor het object 'Transaction', waarin wordt aangegeven welke methoden een
- * TransactionDao moet implementeren.
+ * Dit is de DAO interface voor het object 'Order', waarin wordt aangegeven welke methoden een
+ * OrderDao moet implementeren.
  */
 public interface OrderDao {
 

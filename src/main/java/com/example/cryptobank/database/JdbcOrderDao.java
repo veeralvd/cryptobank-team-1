@@ -21,8 +21,8 @@ import java.util.List;
 
 /**
  * @author Sarah-Jayne Nogarede
- * Dit is de JDBC DAO voor het object 'Transaction'. Deze DAO implementeert de methoden save, findByTransactionNumber
- * en getAllByIban uit de TransactionDao Interface.
+ * Dit is de JDBC DAO voor het object 'Order'. Deze DAO implementeert de methoden save, findByOrderId
+ * en getAllByIban uit de OrderDao Interface.
  */
 @Repository
 public class JdbcOrderDao implements OrderDao {
@@ -32,12 +32,12 @@ public class JdbcOrderDao implements OrderDao {
     @Autowired
     public JdbcOrderDao(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
-        logger.info("New JdbcTransactionDao");
+        logger.info("New JdbcOrderDao");
     }
 
-    private PreparedStatement insertTransactionStatement(Order order, Connection connection) throws SQLException {
-        PreparedStatement preparedStatement = connection.prepareStatement("insert into transaction (transactionNumber, buyerAccount, " +
-                "sellerAccount, dateTime, assetAbbr, amount, sellingPrice) values (?, ?, ?, ?, ?, ?");
+    private PreparedStatement insertOrderStatement(Order order, Connection connection) throws SQLException {
+        PreparedStatement preparedStatement = connection.prepareStatement("insert into transaction (orderId, bankAccount, " +
+                "dateTimeCreated, asset, assetAmount, desiredPrice) values (?, ?, ?, ?, ?, ?)");
         preparedStatement.setInt(1, order.getOrderId());
         preparedStatement.setString(2, order.getBankAccount().getIban());
         preparedStatement.setString(2, String.valueOf(order.getDateTimeCreated()));
@@ -50,7 +50,7 @@ public class JdbcOrderDao implements OrderDao {
     @Override
     public Order save(Order order) {
         logger.info("orderDao.save aangeroepen");
-        jdbcTemplate.update(connection -> insertTransactionStatement(order, connection));
+        jdbcTemplate.update(connection -> insertOrderStatement(order, connection));
         return order;
     }
 
@@ -69,19 +69,20 @@ public class JdbcOrderDao implements OrderDao {
             return order;
         }
 
-    } // end of nested class AssetRowMapper
+    } // end of nested class OrderRowMapper
+
 
     @Override
     public Order findByOrderId(int orderId) {
         String sql = "SELECT * from order where orderId = ?";
-        List<Order> orderToFind = jdbcTemplate.query(sql, new JdbcOrderDao.OrderRowMapper(), orderId);
+        List<Order> orderToFind = jdbcTemplate.query(sql, new OrderRowMapper(), orderId);
         if (orderToFind.size() == 1) {
             return orderToFind.get(0);
         }
         return null;
     }
 
-    //TODO nu 'vind alle transacties met deze iban', niet gesplitst in koper of verkoper. Goed of splitsen?
+
     @Override
     public ArrayList<Order> getAllByIban (String iban) {
         String sql = "SELECT * from order where iban = ?";
@@ -89,4 +90,5 @@ public class JdbcOrderDao implements OrderDao {
         return (ArrayList<Order>) allOrders;
     }
 
-} // end of class JdbcTransactionDao
+} // end of class JdbcOrderDao
+
