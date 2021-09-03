@@ -9,7 +9,7 @@ public interface BankAccountDao {
     double withdraw(String iban, double amount);
     double deposit(String iban, double amount);
     boolean checkIbanExists(String iban);
-
+    public BankAccount findAccountByIban (String iban);
 
     void save(BankAccount bankAccount);
 }

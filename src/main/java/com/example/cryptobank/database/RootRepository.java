@@ -8,7 +8,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.HashMap;
 import java.util.Map;
 
 @Repository
@@ -20,10 +19,13 @@ public class RootRepository {
     private BankAccountDao bankAccountDao;
     private CryptoCurrencyRateDAO cryptoCurrencyRateDAO;
     private PortfolioDao portfolioDao;
+    private OrderDao orderDao;
+    private TransactionDao transactionDao;
 
     @Autowired
     public RootRepository(AdminDAO adminDAO, AssetDao assetDao, CustomerDAO customerDAO, BankAccountDao bankAccountDao,
-                          CryptoCurrencyRateDAO cryptoCurrencyRateDAO, PortfolioDao portfolioDao) {
+                          CryptoCurrencyRateDAO cryptoCurrencyRateDAO, PortfolioDao portfolioDao, OrderDao orderDao,
+                          TransactionDao transactionDao) {
         logger.info("New RootRepository");
         this.adminDAO = adminDAO;
         this.assetDao = assetDao;
@@ -31,6 +33,8 @@ public class RootRepository {
         this.bankAccountDao = bankAccountDao;
         this.cryptoCurrencyRateDAO = cryptoCurrencyRateDAO;
         this.portfolioDao = portfolioDao;
+        this.orderDao = orderDao;
+        this.transactionDao = transactionDao;
     }
 
     public Admin findAdminByUsername(String username) {
@@ -121,5 +125,31 @@ public class RootRepository {
         customerDAO.insertTokenByCustomerUsername(username, token);
     }
 
+    public Order save(Order order) {
+        return orderDao.save(order);
+    }
+
+    public Order findByOrderId(int orderId) {
+        Order order = orderDao.findByOrderId(orderId);
+        String iban = orderDao.getIbanFromOrderId(orderId);
+        BankAccount bankAccount = bankAccountDao.findAccountByIban(iban);
+        String assetAbbreviation = orderDao.getAssetAbbrFromOrderId(orderId);
+        Asset asset = assetDao.findByAbbreviation(assetAbbreviation);
+        order.setBankAccount(bankAccount);
+        order.setAsset(asset);
+        return order;
+    }
+
+    public ArrayList<Order> getAllByIban (String iban) {
+        return orderDao.getAllByIban(iban);
+    }
+
+    public Transaction findByTransactionId(int transactionId) {
+        return transactionDao.findByTransactionId(transactionId);
+    }
+
+    public Transaction save(Transaction transaction) {
+        return transactionDao.save(transaction);
+    }
 
 } // end of class RootRepository
