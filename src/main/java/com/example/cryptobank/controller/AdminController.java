@@ -26,19 +26,7 @@ public class AdminController {
         this.adminService = adminService;
         logger.info("New AdminController");
     }
-//
-//    @PutMapping("/admin/login")
-//    ResponseEntity<?> login(@RequestParam String username, String password) {
-//        logger.info("login admin aangeroepen");
-//
-//
-//        Admin adminToLogin = adminService.login(username, password);
-//        if (adminToLogin.getSalt() != null) {
-//            return ResponseEntity.ok(adminToLogin.toString());
-//        } else {
-//            return ResponseEntity.ok(HttpStatus.UNAUTHORIZED);
-//        }
-//    }
+
 
     @PutMapping("/admin/register")
     public ResponseEntity<?> register(@RequestParam String username, String password) {
@@ -54,7 +42,7 @@ public class AdminController {
         }
     }
 
-    @GetMapping("/admin")''
+    @GetMapping("/admin")
     public ResponseEntity<String> getAdmin(
             @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String token) {
 
