@@ -30,10 +30,10 @@ public class OrderService {
     /*public Order placeOrder(Order orderPlaced) {
         return rootRepository.placeOrder(orderPlaced);
     }*/
-    public Order placeOrder(Order order)
-    {
+    public Order placeOrder(Order order) {
         return rootRepository.save(order);
     }
+
     /**
      * TODO nu gaan we uit van prijs per eenheid
      * Hulpmethode om bedrag asset koerwwaarde * aantal te berekenen
@@ -56,6 +56,6 @@ public class OrderService {
     }
 
     public ArrayList<Order> getAllByIban(String iban) {
-        return rootRepository.getAllByIban(iban);
+        return rootRepository.getAllOrdersByIban(iban);
     }
 }

@@ -126,7 +126,7 @@ public class RootRepository {
     }
 
     // TODO placeOrder / saveOrder
-    public Order placeOrder(Order order) {
+    public Order save(Order order) {
         return orderDao.save(order);
     }
 
@@ -141,15 +141,14 @@ public class RootRepository {
         return order;
     }
 
-    public ArrayList<Order> getAllByIban (String iban) {
-        ArrayList<Order> allOrdersFromCustomer = orderDao.getAllByIban(iban);
-        return allOrdersFromCustomer;
-    }
-
-    // Nog dubbelop
     public ArrayList<Order> getAllOrdersByIban(String iban) {
         return orderDao.getAllByIban(iban);
     }
+
+    // Nog dubbelop
+    /*public ArrayList<Order> getAllOrdersByIban(String iban) {
+        return orderDao.getAllByIban(iban);
+    }*/
 
     // TODO getBankAccountByIban fixen
     public Transaction findByTransactionId(int transactionId) {
