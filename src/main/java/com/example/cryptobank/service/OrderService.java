@@ -8,6 +8,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 public class OrderService {
 
@@ -17,6 +19,7 @@ public class OrderService {
 
     @Autowired
     public OrderService(RootRepository rootRepository) {
+        this.rootRepository = rootRepository;
         logger.info("New OrderService");
     }
 
@@ -45,4 +48,11 @@ public class OrderService {
         return assetCost * 0.03;
     }
 
+    public Order findByOrderId(int orderId) {
+        return rootRepository.findByOrderId(orderId);
+    }
+
+    public ArrayList<Order> getAllByIban(String iban) {
+        return rootRepository.getAllOrdersByIban(iban);
+    }
 }
