@@ -27,13 +27,13 @@ public class JdbcBankAccountDao implements BankAccountDao {
         logger.info("New JdbcBankAccountDao");
     }
 
-    // TODO staat nog dubbel, hier en in JdbcCustomerDao
-    /*private PreparedStatement insertBankAccount(BankAccount bankAccount, Connection connection) throws SQLException {
+
+    private PreparedStatement insertBankAccount(BankAccount bankAccount, Connection connection) throws SQLException {
         PreparedStatement ps = connection.prepareStatement(INSERT_QUERY);
         ps.setString(1, bankAccount.getIban());
         ps.setDouble(2, bankAccount.getBalance());
         return ps;
-    }*/
+    }
 
     private PreparedStatement updateBankAccount(String iban, double updatedBalance, Connection connection) throws SQLException {
         PreparedStatement ps = connection.prepareStatement(UPDATE_QUERY);
@@ -42,12 +42,11 @@ public class JdbcBankAccountDao implements BankAccountDao {
         return ps;
     }
 
-    // TODO Save Bankaccount koppelen aan save Customer in Rootrepository
-    /*@Override
-    public BankAccount save(BankAccount bankAccount) {
+
+    @Override
+    public void save(BankAccount bankAccount) {
         jdbcTemplate.update(connection -> insertBankAccount(bankAccount, connection));
-        return bankAccount;
-    }*/
+    }
 
     @Override
     public double getBalanceByIban(String iban) {

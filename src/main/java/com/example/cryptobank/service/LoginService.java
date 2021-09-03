@@ -59,6 +59,7 @@ public class LoginService {
             if (authenticate(customerInDatabase.getPassword(), hashedPassword)) {
                 token = UUID.randomUUID().toString();
                 rootRepository.insertTokenByCustomerUsername(username, token);
+                customerInDatabase.setToken(token);
                 return customerInDatabase;
             }
         }

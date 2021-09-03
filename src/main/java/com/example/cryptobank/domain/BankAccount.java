@@ -11,7 +11,11 @@ public class BankAccount {
     private double balance;
 
     public BankAccount() {
-        this.iban = IbanGenerator.generate();
+        logger.info("empty bankaccount aangemaakt");
+    }
+
+    public BankAccount(String iban) {
+        this.iban = iban;
         this.balance = BonusAmount.getAmountBonus();
         logger.info("New BankAccount created met iban:" + iban);
     }

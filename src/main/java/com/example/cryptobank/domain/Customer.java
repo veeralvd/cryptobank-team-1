@@ -16,6 +16,7 @@ public class Customer extends User{
     private Address address;
     private BankAccount bankAccount;
     private Portfolio portfolio;
+    private String email;
 
 
     /**
@@ -23,7 +24,7 @@ public class Customer extends User{
      */
     public Customer(String username, String password, String salt,
                     String firstName, String lastName, LocalDate dateOfBirth, int socialSecurityNumber,
-                    String street, String zipcode, int housenumber, String addition, String city, String token) {
+                    String street, String zipcode, int housenumber, String addition, String city, String token, String email) {
         super(username, password, salt, token);
         this.firstName = firstName;
         this.lastName = lastName;
@@ -32,12 +33,13 @@ public class Customer extends User{
         setAddress(street, zipcode, housenumber, addition, city);
         this.portfolio = new Portfolio();
         this.bankAccount = new BankAccount();
+        this.email = email;
     }
 
 
     public Customer(String username, String password, String salt,
                     String firstName, String lastName, LocalDate dateOfBirth, int socialSecurityNumber,
-                    Address address, String token) {
+                    Address address, String token, String email) {
         super(username, password, salt, token);
         this.firstName = firstName;
         this.lastName = lastName;
@@ -46,6 +48,7 @@ public class Customer extends User{
         this.address = address;
         this.portfolio = new Portfolio();
         this.bankAccount = new BankAccount();
+        this.email = email;
     }
 
     public Customer(String username, String password) {
@@ -126,5 +129,11 @@ public class Customer extends User{
         this.portfolio = portfolio;
     }
 
+    public String getEmail() {
+        return email;
+    }
 
+    public void setEmail(String email) {
+        this.email = email;
+    }
 }
