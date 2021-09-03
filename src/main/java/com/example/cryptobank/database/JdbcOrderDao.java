@@ -8,12 +8,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,10 +35,9 @@ public class JdbcOrderDao implements OrderDao {
     }
 
     private PreparedStatement insertOrderStatement(Order order, Connection connection) throws SQLException {
-        PreparedStatement preparedStatement = connection.prepareStatement("insert into transaction (orderId, bankAccount, " +
-                "dateTimeCreated, asset, assetAmount, desiredPrice) values (?, ?, ?, ?, ?, ?)");
-        preparedStatement.setInt(1, order.getOrderId());
-        preparedStatement.setString(2, order.getBankAccount().getIban());
+        PreparedStatement preparedStatement = connection.prepareStatement("insert into transaction (bankAccount, " +
+                "dateTimeCreated, asset, assetAmount, desiredPrice) values (?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+        preparedStatement.setString(1, order.getBankAccount().getIban());
         preparedStatement.setString(2, String.valueOf(order.getDateTimeCreated()));
         preparedStatement.setString(3, order.getAsset().getAbbreviation());
         preparedStatement.setDouble(4, order.getAssetAmount());
@@ -50,7 +48,10 @@ public class JdbcOrderDao implements OrderDao {
     @Override
     public Order save(Order order) {
         logger.info("orderDao.save aangeroepen");
-        jdbcTemplate.update(connection -> insertOrderStatement(order, connection));
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        jdbcTemplate.update(connection -> insertOrderStatement(order, connection), keyHolder);
+        int newKey = keyHolder.getKey().intValue();
+        order.setOrderId(newKey);
         return order;
     }
 
