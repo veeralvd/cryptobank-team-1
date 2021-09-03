@@ -139,8 +139,7 @@ public class RootRepository {
     }
 
     public ArrayList<Order> getAllByIban (String iban) {
-        ArrayList<Order> allOrdersFromCustomer = orderDao.getAllByIban(iban);
-        return allOrdersFromCustomer;
+        return orderDao.getAllByIban(iban);
     }
 
     public Transaction findByTransactionId(int transactionId) {
