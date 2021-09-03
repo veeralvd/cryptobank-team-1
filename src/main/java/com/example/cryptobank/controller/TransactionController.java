@@ -32,7 +32,7 @@ public class TransactionController {
         return transactionService.findByTransactionId(transactionId);
     }*/
 
-   /* @GetMapping("/orders/iban")
+   /* @GetMapping("/transactions/iban")
     public ArrayList<Transaction> getAllByIban(@RequestParam String iban) {
         return transactionService.getAllByIban(iban);
     }*/

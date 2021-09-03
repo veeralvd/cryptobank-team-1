@@ -125,7 +125,8 @@ public class RootRepository {
         customerDAO.insertTokenByCustomerUsername(username, token);
     }
 
-    public Order save(Order order) {
+    // TODO placeOrder / saveOrder
+    public Order placeOrder(Order order) {
         return orderDao.save(order);
     }
 
@@ -141,11 +142,32 @@ public class RootRepository {
     }
 
     public ArrayList<Order> getAllByIban (String iban) {
+        ArrayList<Order> allOrdersFromCustomer = orderDao.getAllByIban(iban);
+        return allOrdersFromCustomer;
+    }
+
+    // Nog dubbelop
+    public ArrayList<Order> getAllOrdersByIban(String iban) {
         return orderDao.getAllByIban(iban);
     }
 
+    // TODO getBankAccountByIban fixen
     public Transaction findByTransactionId(int transactionId) {
-        return transactionDao.findByTransactionId(transactionId);
+        Transaction transaction = transactionDao.findByTransactionId(transactionId);
+
+        String assetAbbr = transactionDao.findAssetForTransaction(transactionId);
+        Asset asset = assetDao.findByAbbreviation(assetAbbr);
+
+        String ibanBuyer = transactionDao.findBuyerAccountForTransaction(transactionId);
+        BankAccount buyerAccount = bankAccountDao.findAccountByIban(ibanBuyer);
+
+        String ibanSeller = transactionDao.findSellerAccountForTransaction(transactionId);
+        BankAccount sellerAccount = bankAccountDao.findAccountByIban(ibanSeller);
+
+        transaction.setAsset(asset);
+        transaction.setBuyerAccount(buyerAccount);
+        transaction.setSellerAccount(sellerAccount);
+        return transaction;
     }
 
     public Transaction save(Transaction transaction) {

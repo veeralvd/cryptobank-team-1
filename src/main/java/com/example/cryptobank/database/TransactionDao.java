@@ -10,4 +10,9 @@ public interface TransactionDao {
     Transaction findByTransactionId(int transactionId);
     //ArrayList<Transaction> getAllTransactionsByIban(String iban);
 
+    String findAssetForTransaction(int transactionId);
+
+    String findBuyerAccountForTransaction(int transactionId);
+
+    String findSellerAccountForTransaction(int transactionId);
 }
