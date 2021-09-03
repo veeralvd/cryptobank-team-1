@@ -10,19 +10,18 @@ import java.util.Map;
 
 public class Portfolio {
     private final Logger logger = LoggerFactory.getLogger(Portfolio.class);
-    private Map<Asset, Double> assetMap;
+    private Map<String, Double> assetMap;
 
     public Portfolio() {
         this.assetMap = new HashMap<>();
         logger.info("New Portfolio");
     }
 
-    public Map<Asset, Double> getAssetMap() {
+    public Map<String, Double> getAssetMap() {
         return assetMap;
     }
 
-    public void setAssetMap(Map<Asset, Double> assetMap) {
+    public void setAssetMap(Map<String, Double> assetMap) {
         this.assetMap = assetMap;
     }
-
 }

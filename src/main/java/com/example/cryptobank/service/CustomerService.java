@@ -33,17 +33,8 @@ public class CustomerService {
     }
 
 
-
-    public Customer register(String username, String password,
-                             String firstName, String lastName, LocalDate dateOfBirth, int socialSecurityNumber,
-                             String street, String zipcode, int houseNumber, String addition, String city) {
-        Customer customerToRegister = registrationService.registerCustomer(username, password, firstName, lastName,
-                dateOfBirth, socialSecurityNumber, street, zipcode, houseNumber, addition, city);
-        return customerToRegister;
-    }
-
-    public Customer registerTwee(Customer customerToRegister) {
-        return registrationService.registerTwee(customerToRegister);
+    public Customer register(Customer customerToRegister) {
+        return registrationService.register(customerToRegister);
     }
 
     public Customer login(String username, String password) {
