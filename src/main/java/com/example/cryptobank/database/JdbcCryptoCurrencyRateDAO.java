@@ -10,7 +10,9 @@ import java.sql.*;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public class JdbcCryptoCurrencyRateDAO implements CryptoCurrencyRateDAO{
@@ -68,6 +70,17 @@ public class JdbcCryptoCurrencyRateDAO implements CryptoCurrencyRateDAO{
                 "select * from crypto_currency_rate where abbreviation = ?",
                 new CryptoCurrencyRateRowMapper(), abbreviation);
         return (ArrayList<CryptoCurrencyRate>) allCurrencies;
+    }
+
+    @Override
+    public Map<String, Double> getAllCurrentRates (){
+        String sql = "SELECT * FROM Current_Rate";
+        Map<String, Double> results = new HashMap<>();
+        jdbcTemplate.query(sql, (ResultSet rs) -> {
+            results.put(rs.getString("abbreviation"),
+                    rs.getDouble("value"));
+        });
+        return results;
     }
 
 }

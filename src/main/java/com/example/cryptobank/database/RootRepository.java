@@ -174,4 +174,9 @@ public class RootRepository {
         return transactionDao.save(transaction);
     }
 
+    public Map<String, Double> getAllCurrentRates() {
+       return cryptoCurrencyRateDAO.getAllCurrentRates();
+    }
+
+
 } // end of class RootRepository
