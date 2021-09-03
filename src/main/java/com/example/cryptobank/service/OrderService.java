@@ -56,6 +56,6 @@ public class OrderService {
     }
 
     public ArrayList<Order> getAllByIban(String iban) {
-        return rootRepository.getAllOrdersByIban(iban);
+        return rootRepository.getAllByIban(iban);
     }
 }

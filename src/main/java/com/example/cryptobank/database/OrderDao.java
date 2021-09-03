@@ -15,5 +15,7 @@ public interface OrderDao {
     Order save (Order order);
     Order findByOrderId (int orderId);
     ArrayList<Order> getAllByIban (String iban);
+    String getAssetAbbrFromOrderId(int orderId);
+    String getIbanFromOrderId(int orderId);
 
 }

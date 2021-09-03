@@ -131,8 +131,10 @@ public class RootRepository {
 
     public Order findByOrderId(int orderId) {
         Order order = orderDao.findByOrderId(orderId);
-        BankAccount bankAccount = bankAccountDao.findAccountByIban(order.getBankAccount().getIban());
-        Asset asset = assetDao.findByAbbreviation(order.getAsset().getAbbreviation());
+        String iban = orderDao.getIbanFromOrderId(orderId);
+        BankAccount bankAccount = bankAccountDao.findAccountByIban(iban);
+        String assetAbbreviation = orderDao.getAssetAbbrFromOrderId(orderId);
+        Asset asset = assetDao.findByAbbreviation(assetAbbreviation);
         order.setBankAccount(bankAccount);
         order.setAsset(asset);
         return order;

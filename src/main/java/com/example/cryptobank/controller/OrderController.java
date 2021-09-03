@@ -42,15 +42,15 @@ public class OrderController {
     }
 
     // TODO geeft foutmelding 'MissingServletRequestParameterException: Required request parameter 'orderId' for method parameter type int is not present'
-    /*@GetMapping("/orders")
+    @GetMapping("/orders")
     public Order findByOrderId(@RequestParam int orderId) {
         return orderService.findByOrderId(orderId);
-    }*/
+    }
 
-    @GetMapping("/orders/{orderid}")
+   /* @GetMapping("/orders/{orderid}")
     public Order findByOrderId(@PathVariable("orderid") int orderId) {
         return orderService.findByOrderId(orderId);
-    }
+    }*/
 
     @GetMapping("/orders/iban")
     public ArrayList<Order> getAllByIban(@RequestParam String iban) {

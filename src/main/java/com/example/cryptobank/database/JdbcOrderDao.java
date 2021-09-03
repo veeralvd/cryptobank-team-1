@@ -75,7 +75,7 @@ public class JdbcOrderDao implements OrderDao {
 
     @Override
     public Order findByOrderId(int orderId) {
-        String sql = "SELECT * from order where orderId = ?";
+        String sql = "SELECT * from cryptobank.order where orderId = ?";
         List<Order> orderToFind = jdbcTemplate.query(sql, new OrderRowMapper(), orderId);
         if (orderToFind.size() == 1) {
             return orderToFind.get(0);
@@ -83,12 +83,24 @@ public class JdbcOrderDao implements OrderDao {
         return null;
     }
 
-
     @Override
     public ArrayList<Order> getAllByIban (String iban) {
         String sql = "SELECT * from order where iban = ?";
         List<Order> allOrders = jdbcTemplate.query(sql, new OrderRowMapper());
         return (ArrayList<Order>) allOrders;
+    }
+
+    @Override
+    public String getAssetAbbrFromOrderId(int orderId) {
+        String sql = "select abbreviation from cryptobank.order where orderId = ?";
+        String assetAbbreviation = jdbcTemplate.queryForObject(sql, String.class, orderId);
+        return assetAbbreviation;
+    }
+
+    public String getIbanFromOrderId(int orderId) {
+        String sql = "select iban from cryptobank.order where orderId = ?";
+        String iban = jdbcTemplate.queryForObject(sql, String.class, orderId);
+        return iban;
     }
 
 } // end of class JdbcOrderDao
