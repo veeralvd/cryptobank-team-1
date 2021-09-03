@@ -84,4 +84,24 @@ public class JdbcTransactionDao implements TransactionDao {
         return null;
     }
 
+    @Override
+    public String findAssetForTransaction(int transactionId) {
+        String sql = "SELECT abbreviation FROM transaction where transactionId = ?";
+        String assetAbbr = jdbcTemplate.queryForObject(sql, String.class, transactionId);
+        return assetAbbr;
+    }
+
+    @Override
+    public String findBuyerAccountForTransaction(int transactionId) {
+        String sql = "SELECT ibanBuyer FROM transaction where transactionId = ?";
+        String ibanBuyer = jdbcTemplate.queryForObject(sql, String.class, transactionId);
+        return ibanBuyer;
+    }
+
+    @Override
+    public String findSellerAccountForTransaction(int transactionId) {
+        String sql = "SELECT ibanSeller FROM transaction where transactionId = ?";
+        String ibanSeller = jdbcTemplate.queryForObject(sql, String.class, transactionId);
+        return ibanSeller;
+    }
 }
