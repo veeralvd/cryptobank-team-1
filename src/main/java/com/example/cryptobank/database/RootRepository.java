@@ -122,4 +122,9 @@ public class RootRepository {
     }
 
 
+    public Map<String, Double> getAllCurrentRates() {
+       return cryptoCurrencyRateDAO.getAllCurrentRates();
+    }
+
+
 } // end of class RootRepository
