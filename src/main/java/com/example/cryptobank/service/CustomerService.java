@@ -5,6 +5,7 @@ import com.example.cryptobank.database.RootRepository;
 import com.example.cryptobank.domain.Address;
 import com.example.cryptobank.domain.BankAccount;
 import com.example.cryptobank.domain.Customer;
+import com.example.cryptobank.dto.CustomerDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,8 +38,18 @@ public class CustomerService {
         return registrationService.register(customerToRegister);
     }
 
-    public Customer login(String username, String password) {
-        Customer attemptToLogin = loginService.loginCustomer(username, password);
-        return attemptToLogin;
+//    public Customer registerCustomer(Customer customerToRegister) {
+//        return registrationService.registerCustomer(customerToRegister.getUsername(), customerToRegister.getPassword(),
+//                customerToRegister.getFirstName(), customerToRegister.getLastName(), customerToRegister.getDateOfBirth(),
+//                customerToRegister.getSocialSecurityNumber(), customerToRegister.g);
+//    }
+
+//    public Customer login(String username, String password) {
+//        Customer attemptToLogin = loginService.loginCustomer(username, password);
+//        return attemptToLogin;
+//    }
+
+    public CustomerDto login(CustomerDto customerDto) {
+        return loginService.loginCustomer(customerDto);
     }
 }
