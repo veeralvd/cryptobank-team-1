@@ -34,29 +34,20 @@ public class AdminController {
             Admin adminToRegister = adminService.register(username, password);
             HttpHeaders httpHeaders = new HttpHeaders();
             httpHeaders.set(HttpHeaders.AUTHORIZATION, adminToRegister.getToken());
-            return new ResponseEntity<>(adminToRegister.getToken(),httpHeaders, HttpStatus.CREATED);
+            return new ResponseEntity<>(adminToRegister.getUsername(),httpHeaders, HttpStatus.CREATED);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
-            return new ResponseEntity<>(e.toString(), HttpStatus.INTERNAL_SERVER_ERROR);
+            logger.info(e.toString());
+            String responseBody = null;
+            if (e.toString().contains("Duplicate")) {
+                responseBody = "username bestaat al";
+            } else {
+                responseBody = "";
+            }
+            return new ResponseEntity<>( responseBody
+            , HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    @GetMapping("/admin")
-    public ResponseEntity<String> getAdmin(
-            @RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String token) {
-
-        System.out.println(token);
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.setLocation(URI.create("poep"));
-        responseHeaders.set(HttpHeaders.AUTHORIZATION, token);
-
-        Admin testAdmin = new Admin("stankie", "passwordje");
-        if (token == null) {
-            return new ResponseEntity<String>(testAdmin.toString(), HttpStatus.UNAUTHORIZED);
-        }
-
-        return new ResponseEntity<String>(testAdmin.toString(), responseHeaders, HttpStatus.OK);
-    }
 
     @PutMapping("/admin/login")
     ResponseEntity<?> login(@RequestParam String username, String password) {
@@ -65,9 +56,11 @@ public class AdminController {
 
         Admin adminToLogin = adminService.login(username, password);
         if (adminToLogin.getSalt() != null) {
-            return ResponseEntity.ok(adminToLogin.toString());
+            HttpHeaders responseHeader = new HttpHeaders();
+            responseHeader.set(HttpHeaders.AUTHORIZATION, adminToLogin.getToken());
+            return new ResponseEntity<String>(adminToLogin.getUsername(), responseHeader, HttpStatus.OK);
         } else {
-            return ResponseEntity.ok(HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<String>(HttpStatus.UNAUTHORIZED);
         }
     }
 }
