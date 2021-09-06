@@ -126,7 +126,7 @@ public class RootRepository {
     }
 
     // TODO placeOrder / saveOrder
-    public Order save(Order order) {
+    public Order placeOrder(Order order) {
         return orderDao.save(order);
     }
 
@@ -172,5 +172,10 @@ public class RootRepository {
     public Transaction save(Transaction transaction) {
         return transactionDao.save(transaction);
     }
+
+    public Map<String, Double> getAllCurrentRates() {
+       return cryptoCurrencyRateDAO.getAllCurrentRates();
+    }
+
 
 } // end of class RootRepository

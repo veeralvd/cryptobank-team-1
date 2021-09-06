@@ -27,11 +27,9 @@ public class OrderService {
      * Methode placeOrder
      * @return boolean status (voor nu, straks order teruggeven) -> kan je niet gewoon de save methode gebruiken? Ik heb het alvast even gedaan, je oude boolean is uitgecomment.
      */
-    /*public Order placeOrder(Order orderPlaced) {
+
+    public Order placeOrder(Order orderPlaced) {
         return rootRepository.placeOrder(orderPlaced);
-    }*/
-    public Order placeOrder(Order order) {
-        return rootRepository.save(order);
     }
 
     /**
