@@ -25,7 +25,7 @@ public class Customer extends User{
     public Customer(String username, String password, String salt,
                     String firstName, String lastName, LocalDate dateOfBirth, int socialSecurityNumber,
                     String street, String zipcode, int housenumber, String addition, String city, String token, String email) {
-        super(username, password, salt, token);
+        super(username, password, null, token);
         this.firstName = firstName;
         this.lastName = lastName;
         this.dateOfBirth = dateOfBirth;
@@ -37,15 +37,29 @@ public class Customer extends User{
     }
 
 
-    public Customer(String username, String password, String salt,
+    public Customer(String username, String password,
                     String firstName, String lastName, LocalDate dateOfBirth, int socialSecurityNumber,
                     Address address, String token, String email) {
-        super(username, password, salt, token);
+        super(username, password, null, token);
         this.firstName = firstName;
         this.lastName = lastName;
         this.dateOfBirth = dateOfBirth;
         this.socialSecurityNumber = socialSecurityNumber;
         this.address = address;
+        this.portfolio = new Portfolio();
+        this.bankAccount = new BankAccount();
+        this.email = email;
+    }
+
+    public Customer(String username, String password,
+                    String firstName, String lastName, LocalDate dateOfBirth, int socialSecurityNumber,
+                    String street, String zipcode, int housenumber, String addition, String city, String email) {
+        super(username, password, null, null);
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.dateOfBirth = dateOfBirth;
+        this.socialSecurityNumber = socialSecurityNumber;
+        setAddress(street, zipcode, housenumber, addition, city);
         this.portfolio = new Portfolio();
         this.bankAccount = new BankAccount();
         this.email = email;
@@ -135,5 +149,19 @@ public class Customer extends User{
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    @Override
+    public String toString() {
+        return "Customer{" +
+                "firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", dateOfBirth=" + dateOfBirth +
+                ", socialSecurityNumber=" + socialSecurityNumber +
+                ", address=" + address +
+                ", bankAccount=" + bankAccount +
+                ", portfolio=" + portfolio +
+                ", email='" + email + '\'' +
+                '}';
     }
 }

@@ -38,27 +38,27 @@ public class RegistrationService {
         return attemptToRegister;
     }
 
-//    public Customer registerCustomer(String username, String password,
-//                             String firstName, String lastName, LocalDate dateOfBirth, int socialSecurityNumber,
-//                             String street, String zipcode, int houseNumber, String addition, String city) {
-//        Customer customerToRegister = new Customer(username, password);
-//        if (checkIfCustomerCanBeRegistered(username) && checkIfSocialSecurityNumberExists(socialSecurityNumber)) {
-//            String salt = new Saltmaker().generateSalt();
-//            String token = UUID.randomUUID().toString();
-//            customerToRegister.setPassword(HashHelper.hash(password, salt, PepperService.getPepper()));
-//            customerToRegister.setSalt(salt);
-//            customerToRegister.setFirstName(firstName);
-//            customerToRegister.setLastName(lastName);
-//            customerToRegister.setDateOfBirth(dateOfBirth);
-//            customerToRegister.setSocialSecurityNumber(socialSecurityNumber);
-//            customerToRegister.setAddress(new Address(street, zipcode, houseNumber, addition, city));
-//            customerToRegister.setBankAccount(new BankAccount());
-//            customerToRegister.setToken(token);
-//            Customer customerRegistered = rootRepository.save(customerToRegister);
-//            return customerRegistered;
-//        }
-//        return customerToRegister;
-//    }
+    public Customer registerCustomer(String username, String password,
+                             String firstName, String lastName, LocalDate dateOfBirth, int socialSecurityNumber,
+                             String street, String zipcode, int houseNumber, String addition, String city) {
+        Customer customerToRegister = new Customer(username, password);
+        if (checkIfCustomerCanBeRegistered(username) && checkIfSocialSecurityNumberExists(socialSecurityNumber)) {
+            String salt = new Saltmaker().generateSalt();
+            String token = UUID.randomUUID().toString();
+            customerToRegister.setPassword(HashHelper.hash(password, salt, PepperService.getPepper()));
+            customerToRegister.setSalt(salt);
+            customerToRegister.setFirstName(firstName);
+            customerToRegister.setLastName(lastName);
+            customerToRegister.setDateOfBirth(dateOfBirth);
+            customerToRegister.setSocialSecurityNumber(socialSecurityNumber);
+            customerToRegister.setAddress(new Address(street, zipcode, houseNumber, addition, city));
+            customerToRegister.setBankAccount(new BankAccount());
+            customerToRegister.setToken(token);
+            Customer customerRegistered = rootRepository.save(customerToRegister);
+            return customerRegistered;
+        }
+        return customerToRegister;
+    }
 
     public Customer register(Customer customerToRegister) {
         String salt = new Saltmaker().generateSalt();

@@ -1,10 +1,12 @@
 package com.example.cryptobank.controller;
 
 import com.example.cryptobank.domain.Customer;
+import com.example.cryptobank.dto.CustomerDto;
 import com.example.cryptobank.service.CustomerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -37,11 +39,25 @@ public class CustomerController {
         }
     }
 
+//    @PutMapping("/login")
+//    public Customer login(@RequestParam String username, String password) {
+//        Customer customerToLogin = customerService.login(username, password);
+//        logger.info("login customer aangeroepen");
+//        return customerToLogin;
+//    }
+
     @PutMapping("/login")
-    public Customer login(@RequestParam String username, String password) {
-        Customer customerToLogin = customerService.login(username, password);
+    public ResponseEntity<?> login(@RequestBody CustomerDto customerDto) {
         logger.info("login customer aangeroepen");
-        return customerToLogin;
+        CustomerDto customerToLogin = customerService.login(customerDto);
+
+        if (customerToLogin.getToken() == null) {
+            return new ResponseEntity<>("username/password incorrect", HttpStatus.UNAUTHORIZED);
+        } else {
+            HttpHeaders responseHeaders = new HttpHeaders();
+            responseHeaders.set(HttpHeaders.AUTHORIZATION, customerToLogin.getToken());
+            return new ResponseEntity<>(customerToLogin.toString(), responseHeaders, HttpStatus.CREATED);
+        }
     }
 
 }

@@ -3,6 +3,7 @@ package com.example.cryptobank.service;
 import com.example.cryptobank.database.RootRepository;
 import com.example.cryptobank.domain.Admin;
 import com.example.cryptobank.domain.Customer;
+import com.example.cryptobank.dto.CustomerDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -47,10 +48,12 @@ public class LoginService {
         return hashInDatabase.equals(hashedPassword);
     }
 
-    public Customer loginCustomer(String username, String password) {
-        Customer attemptToLogin = new Customer(username, password);
-        Customer customerInDatabase = rootRepository.findCustomerByUsername(username);
+    public CustomerDto loginCustomer(CustomerDto customerDto) {
         String token = null;
+        CustomerDto attemptToLogin = new CustomerDto(customerDto.getUsername(), customerDto.getPassword());
+        attemptToLogin.setToken(token);
+
+        Customer customerInDatabase = rootRepository.findCustomerByUsername(customerDto.getUsername());
 
         if (customerInDatabase != null && attemptToLogin.getUsername().equals(customerInDatabase.getUsername())) {
             String salt = customerInDatabase.getSalt();
@@ -58,9 +61,11 @@ public class LoginService {
 
             if (authenticate(customerInDatabase.getPassword(), hashedPassword)) {
                 token = UUID.randomUUID().toString();
-                rootRepository.insertTokenByCustomerUsername(username, token);
-                customerInDatabase.setToken(token);
-                return customerInDatabase;
+                rootRepository.insertTokenByCustomerUsername(customerDto.getUsername(), token);
+                attemptToLogin.setToken(token);
+                attemptToLogin.setFirstName(customerDto.getFirstName());
+                attemptToLogin.setIban(customerInDatabase.getBankAccount().getIban());
+                return attemptToLogin;
             }
         }
         return attemptToLogin;

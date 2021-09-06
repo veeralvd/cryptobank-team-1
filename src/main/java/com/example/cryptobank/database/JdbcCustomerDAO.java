@@ -54,6 +54,7 @@ public class JdbcCustomerDAO implements CustomerDAO{
 
     @Override
     public Customer save(Customer customer) {
+        logger.info(customer.toString());
         logger.info("customer.save aangeroepen");
         jdbcTemplate.update(connection -> insertCustomer(customer, connection));
         return customer;
