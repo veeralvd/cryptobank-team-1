@@ -30,6 +30,10 @@ public class Transaction {
         logger.info("New Transaction");
     }
 
+    public Transaction() {
+        logger.info("Empty transaction");
+    }
+
     public int getTransactionId() {
         return transactionId;
     }
