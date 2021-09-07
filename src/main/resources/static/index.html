@@ -1,29 +1,29 @@
 <!DOCTYPE html>
 <html lang="nl">
-    <head>
-        <meta charset="UTF-8">
+<head>
+    <meta charset="UTF-8">
 
-        <title>Mijn CryptoKnights inlog</title>
+    <link href="crypto.css" rel="stylesheet">
+    <title>Mijn CryptoKnights inlog</title>
 
-        <link href="crypto.css" rel="stylesheet">
 
-    </head>
+
+</head>
     <body>
-        <div>
-            <h1 id="inlogheader">Inloggen op Mijn CryptoKnight</h1>
-                <form id="loginform" onsubmit="login()" method="post">
+            <div>
+                <h1 id="inlogheader">Inloggen op Mijn CryptoKnight</h1>
+                <form id="loginform" action="http://localhost:8080/admin/login" method="post">
 
-                            <label ><b>Username</b>
-                            <input id="username" type="text" placeholder="Enter Username" name="username" required>
-                            </label><br>
-                            <label ><b>Password</b>
-                            <input id="password" type="password" placeholder="Enter Password" name="password" required>
-                            </label><br>
-                    <button id="submit" type="submit" >Login</button>
-
-
+                    <label ><b>Username</b>
+                        <input type="text" placeholder="Enter Username" name="username" required>
+                    </label><br>
+                    <label ><b>Password</b>
+                        <input type="password" placeholder="Enter Password" name="password" required>
+                    </label><br><br>
+                    <button id="submitButton" type="submit" onsubmit="logSubmit()">Login</button>
                 </form>
-        </div>
-        <script> src="login.js" </script>
+                <p id="log"></p>
+            </div>
+        <script src='login.js'>  </script>
     </body>
 </html>
