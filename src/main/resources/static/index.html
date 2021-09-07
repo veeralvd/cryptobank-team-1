@@ -9,18 +9,19 @@
 
     </head>
     <body>
-        <div class="container-fluid">
+        <div>
             <h1 id="inlogheader">Inloggen op Mijn CryptoKnight</h1>
-                <form action="account.html" method="POST">
+                <form id="loginform" onsubmit="login()" method="post">
 
-                            <label ><b>Username</b></label>
+                            <label ><b>Username</b>
                             <input id="username" type="text" placeholder="Enter Username" name="username" required>
-
-                            <label ><b>Password</b></label>
+                            </label><br>
+                            <label ><b>Password</b>
                             <input id="password" type="password" placeholder="Enter Password" name="password" required>
+                            </label><br>
                     <button id="submit" type="submit" >Login</button>
-                    <input type="checkbox" checked="checked" name="remember"> Remember me
-                    </label>
+
+
                 </form>
         </div>
         <script> src="login.js" </script>
