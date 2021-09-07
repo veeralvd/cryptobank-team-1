@@ -64,21 +64,15 @@ public class TransactionService {
         bankAccountService.withdraw(buyerAccount.getIban(), totalCost);
         bankAccountService.deposit(sellerAccount.getIban(), totalCost);
 
+        // rootRepository.updateAssetAmountNegative(transactionToComplete);
+        // rootRepository.updateAssetAmountPositive(transactionToComplete);
 
-
-        // JdbcPortfolioDao:
-        // updatePortfolioStatementPositive (Portfolio portfolio, Customer customer, Order order, Connection connection)
-        // updatePortfolioStatementNegative (Portfolio portfolio, Customer customer, Order order, Connection connection)
-        // transaction.getBuyerAccount().getIban()
-        // hele customer voor nodig?
-        // Transaction ipv order
-
-        return null;
+        return transactionToComplete;
     }
 
-    /*private double calculateAssetCost(double assetPrice, double assetAmount) {
+    private double calculateAssetCost(double assetPrice, double assetAmount) {
         return assetPrice * assetAmount;
-    }*/
+    }
 
     private double calculateTransactionCost(double assetCost) {
         return assetCost * TRANSACTION_RATE;
