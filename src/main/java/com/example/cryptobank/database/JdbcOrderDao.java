@@ -35,8 +35,8 @@ public class JdbcOrderDao implements OrderDao {
     }
 
     private PreparedStatement insertOrderStatement(Order order, Connection connection) throws SQLException {
-        PreparedStatement preparedStatement = connection.prepareStatement("insert into cryptobank.order (bankAccount, " +
-                "dateTimeCreated, asset, assetAmount, desiredPrice) values (?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+        PreparedStatement preparedStatement = connection.prepareStatement("insert into cryptobank.order (iban, " +
+                "dateTimeCreated, abbreviation, assetAmount, desiredPrice) values (?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
         preparedStatement.setString(1, order.getBankAccount().getIban());
         preparedStatement.setString(2, String.valueOf(order.getDateTimeCreated()));
         preparedStatement.setString(3, order.getAsset().getAbbreviation());

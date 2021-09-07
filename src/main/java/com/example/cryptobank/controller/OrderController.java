@@ -63,7 +63,7 @@ public class OrderController {
         if (orderToSave == null) {
             return new ResponseEntity<>("Failed", HttpStatus.BAD_REQUEST);
         } else {
-            return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>(orderToSave.toString(), HttpStatus.OK);
         }
     }
 
