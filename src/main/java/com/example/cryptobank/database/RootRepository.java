@@ -152,7 +152,6 @@ public class RootRepository {
         return orderDao.getAllByIban(iban);
     }*/
 
-    // TODO getBankAccountByIban fixen
     public Transaction findByTransactionId(int transactionId) {
         Transaction transaction = transactionDao.findByTransactionId(transactionId);
 
@@ -160,6 +159,7 @@ public class RootRepository {
         Asset asset = assetDao.findByAbbreviation(assetAbbr);
 
         String ibanBuyer = transactionDao.findBuyerAccountForTransaction(transactionId);
+        logger.info("findBuyerIbanByTransactionId: " + ibanBuyer);
         BankAccount buyerAccount = bankAccountDao.findAccountByIban(ibanBuyer);
 
         String ibanSeller = transactionDao.findSellerAccountForTransaction(transactionId);
@@ -179,5 +179,16 @@ public class RootRepository {
        return cryptoCurrencyRateDAO.getAllCurrentRates();
     }
 
+    public double updateOwnedAssetAmountPositive(double transactionAmount, Customer customer, Transaction transaction){
+        return portfolioDao.updateAssetAmountPositive(transactionAmount, customer, transaction);
+    }
 
+    double updateAssetAmountNegative(double transactionAssetAmount, Customer customer, Transaction transaction){
+        return portfolioDao.updateAssetAmountNegative(transactionAssetAmount, customer, transaction);
+    }
+
+
+    public BankAccount getBankAccountByIban(String iban) {
+        return bankAccountDao.findAccountByIban(iban);
+    }
 } // end of class RootRepository

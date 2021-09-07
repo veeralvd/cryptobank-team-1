@@ -1,7 +1,6 @@
 package com.example.cryptobank.database;
 
-import com.example.cryptobank.domain.Order;
-import com.example.cryptobank.domain.Portfolio;
+import com.example.cryptobank.domain.*;
 import com.example.cryptobank.domain.Order;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +17,7 @@ public class JdbcPortfolioDao implements PortfolioDao {
     private final Logger logger = LoggerFactory.getLogger(JdbcPortfolioDao.class);
 
     private JdbcTemplate jdbcTemplate;
+    private final String UPDATE_QUERY = "UPDATE ownedasset SET aantalEenheden = ? WHERE iban=? AND abbreviation=?";
 
     @Autowired
     public JdbcPortfolioDao(JdbcTemplate jdbcTemplate) {
@@ -37,31 +37,59 @@ public class JdbcPortfolioDao implements PortfolioDao {
         return ps;
     }
 
-    private PreparedStatement updatePortfolioStatementPositive (Portfolio portfolio,
-                                                                Order order, Connection connection) throws SQLException {
-        PreparedStatement ps = connection.prepareStatement(
-                "UPDATE ownedasset_table SET aantalEenheden = ? WHERE iban=? AND abbreviation=?"
-        );
-        // TODO: 25-8-2021 aantal in bezit ophalen via customer.portfolio en dan uit de map halen
-        double storedAssetAmount = portfolio.getAssetMap().get(order.getAsset());
-        ps.setDouble(1, order.getAssetAmount() + storedAssetAmount);
-        ps.setString(2, order.getBankAccount().getIban());
-        ps.setString(3, order.getAsset().getAbbreviation());
+/*    private PreparedStatement updatePortfolioStatementPositive (Customer customer, Transaction transaction,
+                                                                Connection connection) throws SQLException {
+        PreparedStatement ps = connection.prepareStatement(UPDATE_QUERY);
+        // double storedAssetAmount = customer.getPortfolio().getAssetMap().get(transaction.getAsset());
+        ps.setDouble(1, transaction.getAssetAmount());
+        ps.setString(2, transaction.getBuyerAccount().getIban());
+        ps.setString(3, transaction.getAsset().getAbbreviation());
+        return ps;
+    }*/
+
+    private PreparedStatement updatePortfolioStatementPositive (double updatedAmount, Transaction transaction,
+                                                                Connection connection) throws SQLException {
+        PreparedStatement ps = connection.prepareStatement(UPDATE_QUERY);
+        ps.setDouble(1, updatedAmount);
+        ps.setString(2, transaction.getBuyerAccount().getIban());
+        ps.setString(3, transaction.getAsset().getAbbreviation());
         return ps;
     }
 
+    @Override
+    public double updateAssetAmountPositive(double transactionAssetAmount, Customer customer, Transaction transaction) {
+
+        double currentAmount = customer.getPortfolio().getAssetMap().get(transaction.getAsset());
+        double updatedAmount = currentAmount + transactionAssetAmount;
+        int status = jdbcTemplate.update(connection -> updatePortfolioStatementPositive(updatedAmount, transaction, connection));
+        if (status == 1) {
+            return updatedAmount;
+        } else {
+            return currentAmount;
+        }
+    }
+
     // Bij verkoop van een deel van opgeslagen asset wordt de hoeveelheid verminderd
-    private PreparedStatement updatePortfolioStatementNegative (Portfolio portfolio,
-                                                                Order order, Connection connection) throws SQLException {
-        PreparedStatement ps = connection.prepareStatement(
-                "UPDATE ownedasset_table SET aantalEenheden = ? WHERE iban=? AND abbreviation=?"
-        );
-        // TODO: 25-8-2021 aantal in bezit ophalen via customer.portfolio en dan uit de map halen
-        double storedAssetAmount = portfolio.getAssetMap().get(order.getAsset());
-        ps.setDouble(1, order.getAssetAmount() - storedAssetAmount);
-        ps.setString(2, order.getBankAccount().getIban());
-        ps.setString(3, order.getAsset().getAbbreviation());
+    private PreparedStatement updatePortfolioStatementNegative (double updatedAmount, Transaction transaction,
+                                                                Connection connection) throws SQLException {
+        PreparedStatement ps = connection.prepareStatement(UPDATE_QUERY);
+        ps.setDouble(1, updatedAmount);
+        ps.setString(2, transaction.getSellerAccount().getIban());
+        ps.setString(3, transaction.getAsset().getAbbreviation());
         return ps;
+    }
+
+    @Override
+    public double updateAssetAmountNegative(double transactionAssetAmount, Customer customer, Transaction transaction) {
+
+        double currentAmount = customer.getPortfolio().getAssetMap().get(transaction.getAsset());
+        double updatedAmount = currentAmount - transactionAssetAmount;
+        int status = jdbcTemplate.update(connection -> updatePortfolioStatementPositive(updatedAmount, transaction, connection));
+        if (status == 1) {
+            return updatedAmount;
+        } else {
+            return currentAmount;
+        }
     }
 
     private PreparedStatement deletePortfolioStatement (Order order, Connection connection)
@@ -83,4 +111,6 @@ public class JdbcPortfolioDao implements PortfolioDao {
         }, iban);
         return results;
     }
+
+
 }

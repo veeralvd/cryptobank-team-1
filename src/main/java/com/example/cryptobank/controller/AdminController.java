@@ -44,7 +44,7 @@ public class AdminController {
                 responseBody = "";
             }
             return new ResponseEntity<>( responseBody
-            , HttpStatus.INTERNAL_SERVER_ERROR);
+            , HttpStatus.CONFLICT);
         }
     }
 
