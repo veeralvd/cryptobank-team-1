@@ -35,7 +35,7 @@ public class JdbcOrderDao implements OrderDao {
     }
 
     private PreparedStatement insertOrderStatement(Order order, Connection connection) throws SQLException {
-        PreparedStatement preparedStatement = connection.prepareStatement("insert into transaction (bankAccount, " +
+        PreparedStatement preparedStatement = connection.prepareStatement("insert into cryptobank.order (bankAccount, " +
                 "dateTimeCreated, asset, assetAmount, desiredPrice) values (?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
         preparedStatement.setString(1, order.getBankAccount().getIban());
         preparedStatement.setString(2, String.valueOf(order.getDateTimeCreated()));
@@ -85,7 +85,7 @@ public class JdbcOrderDao implements OrderDao {
 
     @Override
     public ArrayList<Order> getAllByIban (String iban) {
-        String sql = "SELECT * from order where iban = ?";
+        String sql = "SELECT * from cryptobank.order where iban = ?";
         List<Order> allOrders = jdbcTemplate.query(sql, new OrderRowMapper());
         return (ArrayList<Order>) allOrders;
     }

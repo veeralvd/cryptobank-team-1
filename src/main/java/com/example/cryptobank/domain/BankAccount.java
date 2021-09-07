@@ -20,6 +20,13 @@ public class BankAccount {
         logger.info("New BankAccount created met iban:" + iban);
     }
 
+    @Override
+    public String toString() {
+        return "BankAccount{" +
+                "iban='" + iban + '\'' +
+                ", balance=" + balance +
+                '}';
+    }
 
     public String getIban() {
         return iban;

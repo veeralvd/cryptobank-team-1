@@ -32,6 +32,9 @@ public class Order {
         this(0, bankAccount, dateTimeCreated, asset, assetAmount, desiredPrice);
     }
 
+    public Order() {
+    }
+
     //TODO klopt equals method nog wel na aanpassen attributen?
     @Override
     public boolean equals(Object o) {
