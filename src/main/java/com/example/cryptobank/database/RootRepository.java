@@ -151,7 +151,6 @@ public class RootRepository {
         return orderDao.getAllByIban(iban);
     }
 
-    // TODO getBankAccountByIban fixen
     public Transaction findByTransactionId(int transactionId) {
         Transaction transaction = transactionDao.findByTransactionId(transactionId);
 

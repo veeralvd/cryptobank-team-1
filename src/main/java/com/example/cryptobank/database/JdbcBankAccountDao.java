@@ -31,7 +31,6 @@ public class JdbcBankAccountDao implements BankAccountDao {
         logger.info("New JdbcBankAccountDao");
     }
 
-
     private PreparedStatement insertBankAccount(BankAccount bankAccount, Connection connection) throws SQLException {
         PreparedStatement ps = connection.prepareStatement(SQL_INSERT);
         ps.setString(1, bankAccount.getIban());
@@ -45,7 +44,6 @@ public class JdbcBankAccountDao implements BankAccountDao {
         ps.setString(2, iban);
         return ps;
     }
-
 
     @Override
     public void save(BankAccount bankAccount) {
