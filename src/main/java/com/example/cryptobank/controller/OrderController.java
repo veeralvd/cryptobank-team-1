@@ -57,5 +57,14 @@ public class OrderController {
         return orderService.getAllByIban(iban);
     }
 
+    @PutMapping("/orders/save")
+    public int saveOrder(@RequestBody Order order) {
+        Order orderToSave = orderService.placeOrder(order);
+        if (orderToSave == null) {
+            return new ResponseEntity<String>("Failed", HttpStatus.BAD_REQUEST).getStatusCodeValue();
+        } else {
+            return new ResponseEntity<String>(HttpStatus.OK).getStatusCodeValue();
+        }
+    }
 
-}
+} // end of class OrderController
