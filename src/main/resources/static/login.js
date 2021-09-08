@@ -27,7 +27,7 @@ document.querySelector('#submitButton').addEventListener('click',
             })
     })
 
-Object
+
 
 /*async function postFormDataAsJson({url, formData}) {
 
