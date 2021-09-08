@@ -38,16 +38,17 @@ public class TransactionController {
     }*/
 
     /**
-     * Tijdelijk endpoint voor saveTransaction.
+     * Tijdelijk endpoint om saveTransaction te testen.
      * Complete transaction -> vanuit order?
      */
-    @PutMapping("/transactions/save")
-    public int saveTransaction(@RequestBody Transaction transaction) {
+    @PutMapping(value = "/transactions/save", produces = "application/json")
+    public ResponseEntity<?> saveTransaction(@RequestBody Transaction transaction) {
+        logger.info(transaction.toString());
         Transaction transactionToSave = transactionService.saveTransaction(transaction);
         if (transactionToSave == null) {
-            return new ResponseEntity<String>("Failed", HttpStatus.BAD_REQUEST).getStatusCodeValue();
+            return new ResponseEntity<>("Failed", HttpStatus.BAD_REQUEST);
         } else {
-            return new ResponseEntity<String>(HttpStatus.OK).getStatusCodeValue();
+            return new ResponseEntity<>(transactionToSave.toString(), HttpStatus.OK);
         }
     }
 
