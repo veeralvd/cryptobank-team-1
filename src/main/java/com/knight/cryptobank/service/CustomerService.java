@@ -17,15 +17,19 @@ public class CustomerService {
     private CustomerDAO customerDAO;
     private RootRepository rootRepository;
     private RegistrationService registrationService;
+    private AuthenticationService authenticationService;
 
     private final Logger logger = LoggerFactory.getLogger(CustomerService.class);
 
     @Autowired
-    public CustomerService(LoginService loginService, CustomerDAO customerDAO, RootRepository rootRepository, RegistrationService registrationService) {
+    public CustomerService(LoginService loginService, CustomerDAO customerDAO,
+                           RootRepository rootRepository, RegistrationService registrationService,
+                           AuthenticationService authenticationService) {
         this.loginService = loginService;
         this.customerDAO = customerDAO;
         this.rootRepository = rootRepository;
         this.registrationService = registrationService;
+        this.authenticationService = authenticationService;
         logger.info("New CustomerService");
     }
 
@@ -47,5 +51,13 @@ public class CustomerService {
 
     public CustomerDto login(String username, String password) {
         return loginService.loginCustomer(username, password);
+    }
+
+    public CustomerDto authenticate(String token) {
+        return authenticationService.authenticateCustomerToken(token);
+    }
+
+    public void refresh(CustomerDto customerToRefreshToken) {
+        authenticationService.refreshCustomerToken(customerToRefreshToken);
     }
 }

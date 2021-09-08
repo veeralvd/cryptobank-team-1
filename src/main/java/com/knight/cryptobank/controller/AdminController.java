@@ -67,7 +67,8 @@ public class AdminController {
         Admin adminToLogin = adminService.authenticate(token);
 
         if (adminToLogin != null) {
-            return new ResponseEntity<String>(adminToLogin.toString(), HttpStatus.OK);
+            return new ResponseEntity<String>(adminToLogin.toString() + " " +
+                    adminToLogin.getAccessToken(), HttpStatus.OK);
         } else {
             return new ResponseEntity<String>("optyfen gauw", HttpStatus.FORBIDDEN);
         }

@@ -1,7 +1,9 @@
 package com.knight.cryptobank.controller;
 
 import com.knight.cryptobank.domain.Admin;
+import com.knight.cryptobank.dto.CustomerDto;
 import com.knight.cryptobank.service.AdminService;
+import com.knight.cryptobank.service.CustomerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,10 +19,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class RefreshController {
     private final Logger logger = LoggerFactory.getLogger(RefreshController.class);
     private AdminService adminService;
+    private CustomerService customerService;
 
     @Autowired
-    public RefreshController(AdminService adminService) {
+    public RefreshController(AdminService adminService, CustomerService customerService) {
         this.adminService = adminService;
+        this.customerService = customerService;
         logger.info("New RefreshController");
     }
 
@@ -38,6 +42,24 @@ public class RefreshController {
         else {
             return new ResponseEntity<String>("optyfen gauw, nu echt.", HttpStatus.FORBIDDEN);
         }
+    }
+
+    @GetMapping("/refresh")
+    public ResponseEntity<?> refreshCustomerToken(@RequestHeader("Authorization") String token) {
+        logger.info("customer refresh token aangeroepen");
+        CustomerDto customerToRefreshToken = customerService.authenticate(token);
+        if (customerToRefreshToken != null) {
+            customerService.refresh(customerToRefreshToken);
+            HttpHeaders responseHeader = new HttpHeaders();
+            responseHeader.set(HttpHeaders.AUTHORIZATION, customerToRefreshToken.getAccessToken());
+            responseHeader.set("refresh_token", customerToRefreshToken.getRefreshToken());
+            return new ResponseEntity<String>(customerToRefreshToken.getAccessToken(), responseHeader, HttpStatus.OK);
+        }
+
+        else {
+            return new ResponseEntity<String>("optyfen gauw, nu echt.", HttpStatus.FORBIDDEN);
+        }
+
     }
 
 }

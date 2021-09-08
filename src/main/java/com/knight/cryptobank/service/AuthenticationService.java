@@ -37,7 +37,6 @@ public class AuthenticationService {
 
     public Admin authenticateAdminToken(String accessToken) {
         if (accessToken.startsWith("Bearer ")) {
-            System.out.println(accessToken);
             try {
                 String token = accessToken.substring("Bearer ".length());
                 Algorithm algorithm = Algorithm.HMAC256(TokenKeyService.getAdminKey().getBytes());
@@ -54,34 +53,26 @@ public class AuthenticationService {
     }
 
     // TODO: 08/09/2021 Afmaken die hap
-//    public CustomerDto authenticateCustomerToken(String accessToken) {
-//        if (accessToken.startsWith("Bearer ")) {
-//            System.out.println(accessToken);
-//            try {
-//                String token = accessToken.substring("Bearer ".length());
-//                Algorithm algorithm = Algorithm.HMAC256(TokenKeyService.getCustomerKey().getBytes());
-//                JWTVerifier verifier = JWT.require(algorithm).build();
-//                DecodedJWT decodedJWT = verifier.verify(token);
-//                Customer customer = rootRepository.findCustomerByUsername(decodedJWT.getSubject());
-//                return customer;
-//            } catch (Exception exception) {
-//                logger.info(exception.getMessage());
-//                return null;
-//            }
-//        } else
-//            return null;
-//    }
+    public CustomerDto authenticateCustomerToken(String accessToken) {
+        if (accessToken.startsWith("Bearer ")) {
+            try {
+                String token = accessToken.substring("Bearer ".length());
+                Algorithm algorithm = Algorithm.HMAC256(TokenKeyService.getCustomerKey().getBytes());
+                JWTVerifier verifier = JWT.require(algorithm).build();
+                DecodedJWT decodedJWT = verifier.verify(token);
+                Customer customer = rootRepository.findCustomerByUsername(decodedJWT.getSubject());
+                CustomerDto customerDto = new CustomerDto(customer.getUsername(), customer.getAccessToken(),
+                        customer.getFirstName(), customer.getBankAccount().getIban());
+                return customerDto;
+            } catch (Exception exception) {
+                logger.info(exception.getMessage());
+                return null;
+            }
+        } else
+            return null;
+    }
 
-//    public boolean authenticateCustomerToken(String token) {
-//        // optioneel UUID format controle
-//        if(!token.matches(REGEX_UUID)){
-//            return false;
-//        }
-//
-//        String username = rootRepository.findCustomerUsernameByToken(token);
-//        // als er een user gevonden wordt is er natuurlijk ook een token
-//        return username != null; // tis nie mooi
-//    }
+
 
     public void refreshAdminToken(Admin adminToRefreshToken) {
         adminToRefreshToken.setAccessToken(createToken.createAccessToken(
