@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 @Service
@@ -14,7 +15,7 @@ public class TransactionService {
 
     private RootRepository rootRepository;
     private BankAccountService bankAccountService;
-    private Bank bank;
+    private Bank bank = Bank.getInstance();
     private final double TRANSACTION_RATE = 0.03;   // TODO transaction rate instelbaar maken
 
     private final Logger logger = LoggerFactory.getLogger(TransactionService.class);
@@ -41,6 +42,7 @@ public class TransactionService {
     public Transaction completeTransactionFromBank(Order orderToProcess) {
 
         Transaction transactionToComplete = new Transaction();
+        transactionToComplete.setDateTimeTransaction(LocalDateTime.now());
         transactionToComplete.setAsset(orderToProcess.getAsset());
 
         double assetAmount = orderToProcess.getAssetAmount();
@@ -61,11 +63,13 @@ public class TransactionService {
 
         validateCreditLimit(buyerAccount, totalCost);
 
-        bankAccountService.withdraw(buyerAccount.getIban(), totalCost);
-        bankAccountService.deposit(sellerAccount.getIban(), totalCost);
+        rootRepository.withdraw(buyerAccount.getIban(), totalCost);
+        rootRepository.deposit(sellerAccount.getIban(), totalCost);
 
-        // rootRepository.updateAssetAmountNegative(transactionToComplete);
-        // rootRepository.updateAssetAmountPositive(transactionToComplete);
+        rootRepository.updateAssetAmountNegative(transactionToComplete);
+        rootRepository.updateAssetAmountPositive(transactionToComplete);
+
+        rootRepository.save(transactionToComplete);
 
         return transactionToComplete;
     }

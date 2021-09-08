@@ -24,7 +24,8 @@ public class BankTest {
      */
     @Test
     void createBank(){
-        Bank bank = new Bank();
+        // Bank bank = new Bank();
+        Bank bank = Bank.getInstance();
         String iban = bank.getBankAccount().getIban();
         String expected = Bank.getBankIban();
         assertThat(iban).isEqualTo(expected);

@@ -5,6 +5,7 @@ import com.example.cryptobank.domain.Order;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -90,7 +91,7 @@ public class JdbcPortfolioDao implements PortfolioDao {
         double currentAmount = getAssetAmountByIbanAndAbbr(iban, abbr);
 //        double currentAmount = customer.getPortfolio().getAssetMap().get(transaction.getAsset());
         double updatedAmount = currentAmount - transactionAssetAmount;
-        int status = jdbcTemplate.update(connection -> updatePortfolioStatementPositive(updatedAmount, transaction, connection));
+        int status = jdbcTemplate.update(connection -> updatePortfolioStatementNegative(updatedAmount, transaction, connection));
         if (status == 1) {
             return updatedAmount;
         } else {
@@ -119,8 +120,14 @@ public class JdbcPortfolioDao implements PortfolioDao {
     }
 
     public double getAssetAmountByIbanAndAbbr (String iban, String abbr){
-        String sql = "SELECT aantalEenheden FROM ownedasset WHERE iban=? AND abbreviation=?";
-        return jdbcTemplate.queryForObject(sql, double.class, new Object[]{iban, abbr});
+        String sql = "SELECT aantalEenheden FROM ownedasset WHERE IBAN = ? AND abbreviation = ?";
+        try {
+            return jdbcTemplate.queryForObject(sql, double.class, iban, abbr);
+        } catch (EmptyResultDataAccessException exception) {
+            logger.debug("Empty result");
+            // TODO Empty result afvangen
+            return -1.0;
+        }
     }
 
 
