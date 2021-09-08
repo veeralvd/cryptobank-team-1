@@ -39,4 +39,9 @@ public class PortfolioController {
         return portfolioService.showPortfolioDto(token);
     }
 
+    @GetMapping("/getportfoliovalue")
+    public double getPortfolioValue (@RequestParam String iban){
+        return portfolioService.getTotalValuePortfolio(iban);
+    }
+
 }
