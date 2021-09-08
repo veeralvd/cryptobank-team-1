@@ -49,8 +49,8 @@ public class AdminController {
     }
 
 
-    @PutMapping("/admin/login")
-    ResponseEntity<?> login(@RequestParam String username, String password) {
+    @PostMapping("/admin/login")
+    ResponseEntity<?> login(@RequestParam String username, @RequestParam String password) {
         logger.info("login admin aangeroepen");
 
 
@@ -58,9 +58,9 @@ public class AdminController {
         if (adminToLogin.getSalt() != null) {
             HttpHeaders responseHeader = new HttpHeaders();
             responseHeader.set(HttpHeaders.AUTHORIZATION, adminToLogin.getToken());
-            return new ResponseEntity<String>(adminToLogin.getUsername(), responseHeader, HttpStatus.OK);
+            return new ResponseEntity<String>(adminToLogin.getToken(), responseHeader, HttpStatus.OK);
         } else {
-            return new ResponseEntity<String>(HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<String>("optyfen gauw", HttpStatus.UNAUTHORIZED);
         }
     }
 }
