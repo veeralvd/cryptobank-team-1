@@ -1,15 +1,13 @@
 package com.example.cryptobank.service;
 
 import com.example.cryptobank.database.RootRepository;
-import com.example.cryptobank.domain.Asset;
-import com.example.cryptobank.domain.Bank;
-import com.example.cryptobank.domain.BankAccount;
-import com.example.cryptobank.domain.Transaction;
+import com.example.cryptobank.domain.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 @Service
@@ -17,6 +15,8 @@ public class TransactionService {
 
     private RootRepository rootRepository;
     private BankAccountService bankAccountService;
+    private Bank bank = Bank.getInstance();
+    private final double TRANSACTION_RATE = 0.03;   // TODO transaction rate instelbaar maken
 
     private final Logger logger = LoggerFactory.getLogger(TransactionService.class);
 
@@ -36,48 +36,50 @@ public class TransactionService {
     }
 
     /**
-     *  Opzet methode completeTransaction. Moet nog opgesplitst worden.
+     *  Opzet methode completeTransaction voor koop van platform. Moet nog opgesplitst worden.
+     *  Hier vanuit een doorgegeven Order geredeneerd.
      */
-    public void completeTransaction(Transaction transaction) {
+    public Transaction completeTransactionFromBank(Order orderToProcess) {
 
-        double amountToPay;
-        double amountToReceive;
-        double assetCost = calculateAssetCost(transaction.getAssetPrice(), transaction.getAssetAmount());
-        double transactionCost;
+        Transaction transactionToComplete = new Transaction();
+        transactionToComplete.setDateTimeTransaction(LocalDateTime.now());
+        transactionToComplete.setAsset(orderToProcess.getAsset());
 
-        if (transaction.getBuyerAccount().getIban().equals(Bank.getBankIban())) {
-            // als het om een aankoop van de bank gaat:
-            transactionCost = calculateTransactionCost(assetCost, transaction.getTransactionCost());
-            amountToPay = assetCost + transactionCost;
-            amountToReceive = amountToPay;
-        } else {
-            // als het om een koop tussen klanten gaat:
-            transactionCost = calculateTransactionCostSplit(assetCost, transaction.getTransactionCost());
-            amountToPay = assetCost + transactionCost;
-            amountToReceive = assetCost - transactionCost;
-            bankAccountService.deposit(Bank.getBankIban(), (transactionCost * 2));
-        }
+        double assetAmount = orderToProcess.getAssetAmount();
+        double assetPrice = orderToProcess.getDesiredPrice(); // voor nu even, getCurrentAssetPrice nodig
+        transactionToComplete.setAssetAmount(assetAmount);
+        transactionToComplete.setAssetPrice(assetPrice);
 
-        validateCreditLimit(transaction.getBuyerAccount(), amountToPay);
+        BankAccount buyerAccount = orderToProcess.getBankAccount();
+        BankAccount sellerAccount = bank.getBankAccount();
+        transactionToComplete.setBuyerAccount(buyerAccount);
+        transactionToComplete.setSellerAccount(sellerAccount);
 
-        bankAccountService.withdraw(transaction.getBuyerAccount().getIban(), amountToPay);
-        bankAccountService.deposit(transaction.getSellerAccount().getIban(), amountToReceive);
+        double assetCost = assetPrice * assetAmount;
+        double transactionCost = assetCost * TRANSACTION_RATE;  // Voor nu, instelbare transaction rate nodig
+        transactionToComplete.setTransactionCost(transactionCost);
 
-        // JdbcPortfolioDao:
-        // updatePortfolioStatementPositive (Portfolio portfolio, Customer customer, Order order, Connection connection)
-        // updatePortfolioStatementNegative (Portfolio portfolio, Customer customer, Order order, Connection connection)
-        // transaction.getBuyerAccount().getIban()
-        // hele customer voor nodig?
-        // Transaction ipv order
+        double totalCost = assetCost + transactionCost;
 
+        validateCreditLimit(buyerAccount, totalCost);
+
+        rootRepository.withdraw(buyerAccount.getIban(), totalCost);
+        rootRepository.deposit(sellerAccount.getIban(), totalCost);
+
+        rootRepository.updateAssetAmountNegative(transactionToComplete);
+        rootRepository.updateAssetAmountPositive(transactionToComplete);
+
+        rootRepository.save(transactionToComplete);
+
+        return transactionToComplete;
     }
 
     private double calculateAssetCost(double assetPrice, double assetAmount) {
         return assetPrice * assetAmount;
     }
 
-    private double calculateTransactionCost(double assetCost, double transactionRate) {
-        return assetCost * transactionRate;
+    private double calculateTransactionCost(double assetCost) {
+        return assetCost * TRANSACTION_RATE;
     }
 
     private double calculateTransactionCostSplit(double assetCost, double transactionRate) {

@@ -1,5 +1,6 @@
 package com.example.cryptobank.controller;
 
+import com.example.cryptobank.domain.Order;
 import com.example.cryptobank.domain.Transaction;
 import com.example.cryptobank.service.TransactionService;
 import org.slf4j.Logger;
@@ -49,6 +50,26 @@ public class TransactionController {
             return new ResponseEntity<>("Failed", HttpStatus.BAD_REQUEST);
         } else {
             return new ResponseEntity<>(transactionToSave.toString(), HttpStatus.OK);
+        }
+    }
+
+    /*@PutMapping("/transactions/complete")
+    public ResponseEntity<?> completeTransactionToBank(@Requestbody Order orderToProcess) {
+        Transaction transactionToComplete = transactionService.completeTransactionFromBank(orderToProcess);
+        if (transactionToComplete == null) {
+            return new ResponseEntity<>("Failed", HttpStatus.BAD_REQUEST);
+        } else {
+            return new ResponseEntity<>(transactionToComplete.toString(), HttpStatus.OK);
+        }
+    }*/
+
+    @PutMapping(value = "/transactions/complete", produces = "application/json")
+    public ResponseEntity<?> completeTransactionFromBank(@RequestBody Order orderToProcess) {
+        Transaction transactionToComplete = transactionService.completeTransactionFromBank(orderToProcess);
+        if (transactionToComplete == null) {
+            return new ResponseEntity<>("Failed", HttpStatus.BAD_REQUEST);
+        } else {
+            return new ResponseEntity<>(transactionToComplete.toString(), HttpStatus.OK);
         }
     }
 

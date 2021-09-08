@@ -33,6 +33,7 @@ public class Order {
     }
 
     public Order() {
+        logger.info("Empty Order");
     }
 
     //TODO klopt equals method nog wel na aanpassen attributen?

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,5 +39,10 @@ public class PortfolioController {
     public PortfolioDto getDto (@RequestParam String token){
         return portfolioService.showPortfolioDto(token);
     }
+
+    /*@GetMapping("/getlist")
+    public List<String> abbrlist (@RequestParam String iban){
+        return portfolioService.testlist(iban);
+    }*/
 
 }
