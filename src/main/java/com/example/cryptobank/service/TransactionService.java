@@ -59,6 +59,10 @@ public class TransactionService {
         double transactionCost = assetCost * TRANSACTION_RATE;  // Voor nu, instelbare transaction rate nodig
         transactionToComplete.setTransactionCost(transactionCost);
 
+        //double transactionCostBuyer = buyerAccount==bank?0.0:transactionCost;
+        //double  transactionCostSeller = sellerAccount == bank?0.0:transactionCost;
+
+
         double totalCost = assetCost + transactionCost;
 
         validateCreditLimit(buyerAccount, totalCost);
