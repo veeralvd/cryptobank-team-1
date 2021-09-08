@@ -1,15 +1,43 @@
 
 
+document.querySelector('#submitButton').addEventListener('click',
+    function (event){
+        event.preventDefault() // anders wordt de gebruiker naar andere pagina geleidt
+        // // selecteer inputs en zet waarden omde normale submit functie uitgevoerd
+        let username = String(document.querySelector('#username').value)
+        let password = String(document.querySelector('#password').value)
 
+        // Stuurt username en password naar de server
+        let data = '?username=' + username + '&password=' + password
+        const url = `http://localhost:8080/admin/login` + data;
+        const options = {
+            method: `POST`,
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }
+        // Token komt terug als username & password erkent wordt
+        fetch(url,options)
+            .then(response => response.text())
+            .then(json=>{
+                console.log(json);
+                localStorage.setItem("token", json)})
+            .catch((error) => {
+                console.error('Error ' + error);
+            })
+    })
 
+Object
 
-async function postFormDataAsJson({url, formData}) {
+/*async function postFormDataAsJson({url, formData}) {
 
     const plainFormData = Object.fromEntries(formData.entries());
     const formDataJsonString = JSON.stringify(plainFormData);
 
+    console.log(formDataJsonString);
+
     const fetchOptions = {
-        method: 'PUT',
+        method: 'POST',
         headers: {
             "Content-Type": "application/json",
         },
@@ -45,7 +73,7 @@ async function handleFormSubmit(event) {
 
 const loginform = document.getElementById('loginform')
 
-loginform.addEventListener('submit', handleFormSubmit);
+loginform.addEventListener('submit', handleFormSubmit);*/
 
 
 
