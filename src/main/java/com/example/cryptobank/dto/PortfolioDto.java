@@ -9,10 +9,12 @@ public class PortfolioDto {
     private String customerName;
     private List<OwnedAssetDto> list;
     private final Logger logger = LoggerFactory.getLogger(PortfolioDto.class);
+    private double totalPortfolioValue;
 
-    public PortfolioDto(String customerName, List<OwnedAssetDto> list) {
+    public PortfolioDto(String customerName, List<OwnedAssetDto> list, double totalPortfolioValue) {
         this.customerName = customerName;
         this.list = list;
+        this.totalPortfolioValue = totalPortfolioValue;
     }
 
     public PortfolioDto() {
@@ -35,11 +37,28 @@ public class PortfolioDto {
         this.list = list;
     }
 
+    public double getTotalPortfolioValue() {
+        return totalPortfolioValue;
+    }
+
+    public void setTotalPortfolioValue(double totalPortfolioValue) {
+        this.totalPortfolioValue = totalPortfolioValue;
+    }
+
+    /*    @Override
+    public String toString() {
+        return "PortfolioDto{" +
+                "customerName='" + customerName + '\'' +
+                ", list=" + list +
+                '}';
+    }*/
+
     @Override
     public String toString() {
         return "PortfolioDto{" +
                 "customerName='" + customerName + '\'' +
                 ", list=" + list +
+                ", totalPortfolioValue=" + totalPortfolioValue +
                 '}';
     }
 }
