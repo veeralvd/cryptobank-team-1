@@ -5,6 +5,7 @@ import com.knight.cryptobank.domain.Address;
 import com.knight.cryptobank.domain.Admin;
 import com.knight.cryptobank.domain.BankAccount;
 import com.knight.cryptobank.domain.Customer;
+import com.knight.cryptobank.security.PepperService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -31,7 +32,7 @@ public class RegistrationService {
             String salt = new Saltmaker().generateSalt();attemptToRegister.setPassword(HashHelper.hash(password, salt, PepperService.getPepper()));
             String token = UUID.randomUUID().toString();
             attemptToRegister.setSalt(salt);
-            attemptToRegister.setToken(token);
+            attemptToRegister.setAccessToken(token);
             Admin registeredAdmin = rootRepository.save(attemptToRegister);
             return registeredAdmin;
         }
@@ -53,7 +54,7 @@ public class RegistrationService {
             customerToRegister.setSocialSecurityNumber(socialSecurityNumber);
             customerToRegister.setAddress(new Address(street, zipcode, houseNumber, addition, city));
             customerToRegister.setBankAccount(new BankAccount());
-            customerToRegister.setToken(token);
+            customerToRegister.setAccessToken(token);
             Customer customerRegistered = rootRepository.save(customerToRegister);
             return customerRegistered;
         }
@@ -70,7 +71,7 @@ public class RegistrationService {
             customerToRegister.setSalt(salt);
             String iban = IbanGenerator.generate();
             customerToRegister.setBankAccount(new BankAccount(iban));
-            customerToRegister.setToken(token);
+            customerToRegister.setAccessToken(token);
             Customer customerRegistered = rootRepository.save(customerToRegister);
             return customerRegistered;
         }

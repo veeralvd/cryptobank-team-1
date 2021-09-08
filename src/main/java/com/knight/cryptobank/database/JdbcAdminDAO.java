@@ -33,7 +33,7 @@ public class JdbcAdminDAO implements AdminDAO {
         preparedStatement.setString(1, admin.getUsername());
         preparedStatement.setString(2, admin.getPassword());
         preparedStatement.setString(3, admin.getSalt());
-        preparedStatement.setString(4, admin.getToken());
+        preparedStatement.setString(4, admin.getAccessToken());
         return preparedStatement;
     }
 
@@ -70,7 +70,7 @@ public class JdbcAdminDAO implements AdminDAO {
     @Override
     public String findAdminUsernameByToken(String token) {
         String sql = "SELECT * from admin where token = ?";
-        String tokenFromDatabase = jdbcTemplate.query(sql, new AdminRowMapper(), token).get(0).getToken();
+        String tokenFromDatabase = jdbcTemplate.query(sql, new AdminRowMapper(), token).get(0).getAccessToken();
         return tokenFromDatabase;
     }
 

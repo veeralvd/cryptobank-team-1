@@ -45,7 +45,7 @@ public class CustomerService {
 //        return attemptToLogin;
 //    }
 
-    public CustomerDto login(CustomerDto customerDto) {
-        return loginService.loginCustomer(customerDto);
+    public CustomerDto login(String username, String password) {
+        return loginService.loginCustomer(username, password);
     }
 }

@@ -43,16 +43,17 @@ public class CustomerController {
 //        return customerToLogin;
 //    }
 
-    @PutMapping("/login")
-    public ResponseEntity<?> login(@RequestBody CustomerDto customerDto) {
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestParam String username, @RequestParam String password) {
         logger.info("login customer aangeroepen");
-        CustomerDto customerToLogin = customerService.login(customerDto);
 
-        if (customerToLogin.getToken() == null) {
+        CustomerDto customerToLogin = customerService.login(username, password);
+
+        if (customerToLogin.getAccessToken() == null) {
             return new ResponseEntity<>("username/password incorrect", HttpStatus.UNAUTHORIZED);
         } else {
             HttpHeaders responseHeaders = new HttpHeaders();
-            responseHeaders.set(HttpHeaders.AUTHORIZATION, customerToLogin.getToken());
+            responseHeaders.set(HttpHeaders.AUTHORIZATION, customerToLogin.getAccessToken());
             return new ResponseEntity<>(customerToLogin.toString(), responseHeaders, HttpStatus.CREATED);
         }
     }

@@ -4,20 +4,24 @@ import com.knight.cryptobank.database.RootRepository;
 import com.knight.cryptobank.domain.Admin;
 import com.knight.cryptobank.domain.Customer;
 import com.knight.cryptobank.dto.CustomerDto;
+import com.knight.cryptobank.security.CreateToken;
+import com.knight.cryptobank.security.CreateTokenImplementation;
+import com.knight.cryptobank.security.PepperService;
+import com.knight.cryptobank.security.TokenKeyService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-
-import java.util.UUID;
 
 @Service
 public class LoginService {
 
     private RootRepository rootRepository;
+    private CreateToken createToken;
     private final Logger logger = LoggerFactory.getLogger(LoginService.class);
 
-    public LoginService(RootRepository rootRepository) {
+    public LoginService(RootRepository rootRepository, CreateTokenImplementation createTokenImplementation) {
         this.rootRepository = rootRepository;
+        this.createToken = createTokenImplementation;
         logger.info("New LoginService");
     }
 
@@ -33,10 +37,13 @@ public class LoginService {
             if(authenticate(adminInDatabase.getPassword(), hashedPassword)) {
                 attemptToLogin.setPassword(hashedPassword);
                 attemptToLogin.setSalt(salt);
-                token = UUID.randomUUID().toString();
-                rootRepository.insertTokenByAdminUsername(username, token);
+//                token = UUID.randomUUID().toString();
+//                rootRepository.insertTokenByAdminUsername(username, token);
 
-                attemptToLogin.setToken(token);
+                attemptToLogin.setAccessToken(createToken.createAccessToken(
+                        username, TokenKeyService.getAdminKey()));
+                attemptToLogin.setRefreshToken(createToken.createRefreshToken(
+                        username, TokenKeyService.getAdminKey()));
 
                 return attemptToLogin;
             }
@@ -48,26 +55,29 @@ public class LoginService {
         return hashInDatabase.equals(hashedPassword);
     }
 
-    public CustomerDto loginCustomer(CustomerDto customerDto) {
+    public CustomerDto loginCustomer(String username, String password) {
         String token = null;
-        CustomerDto attemptToLogin = new CustomerDto(customerDto.getUsername(), customerDto.getPassword());
-        attemptToLogin.setToken(token);
+        CustomerDto user = new CustomerDto(username, password);
+        // waarom stond dit hier uberhaubt?
+        // user.setAccessToken(token);
+        Customer customerInDatabase = rootRepository.findCustomerByUsername(username);
 
-        Customer customerInDatabase = rootRepository.findCustomerByUsername(customerDto.getUsername());
-
-        if (customerInDatabase != null && attemptToLogin.getUsername().equals(customerInDatabase.getUsername())) {
+        if (customerInDatabase != null && user.getUsername().equals(customerInDatabase.getUsername())) {
             String salt = customerInDatabase.getSalt();
-            String hashedPassword = HashHelper.hash(attemptToLogin.getPassword(), salt, PepperService.getPepper());
+            String hashedPassword = HashHelper.hash(user.getPassword(), salt, PepperService.getPepper());
 
             if (authenticate(customerInDatabase.getPassword(), hashedPassword)) {
-                token = UUID.randomUUID().toString();
-                rootRepository.insertTokenByCustomerUsername(customerDto.getUsername(), token);
-                attemptToLogin.setToken(token);
-                attemptToLogin.setFirstName(customerDto.getFirstName());
-                attemptToLogin.setIban(customerInDatabase.getBankAccount().getIban());
-                return attemptToLogin;
+//                token = UUID.randomUUID().toString();
+//                rootRepository.insertTokenByCustomerUsername(customerDto.getUsername(), token);
+                user.setAccessToken(createToken.createAccessToken(
+                        user.getUsername(), TokenKeyService.getCustomerKey()));
+                user.setRefreshToken(createToken.createRefreshToken(
+                        user.getRefreshToken(), TokenKeyService.getCustomerKey()));
+                user.setFirstName(customerInDatabase.getFirstName());
+                user.setIban(customerInDatabase.getBankAccount().getIban());
+                return user;
             }
         }
-        return attemptToLogin;
+        return user;
     }
 }

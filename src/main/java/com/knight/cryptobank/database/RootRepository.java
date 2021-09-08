@@ -1,6 +1,6 @@
 package com.knight.cryptobank.database;
 
-import com.example.cryptobank.domain.*;
+
 import com.knight.cryptobank.domain.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

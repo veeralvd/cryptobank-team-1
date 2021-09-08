@@ -1,4 +1,4 @@
-package com.knight.cryptobank.service;
+package com.knight.cryptobank.security;
 
 public class PepperService {
 

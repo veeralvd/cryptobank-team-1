@@ -44,7 +44,7 @@ public class JdbcCustomerDAO implements CustomerDAO{
         preparedStatement.setString(11, customer.getAddress().getAddition());
         preparedStatement.setString(12, customer.getBankAccount().getIban());
         preparedStatement.setString(13, customer.getAddress().getCity());
-        preparedStatement.setString(14, customer.getToken());
+        preparedStatement.setString(14, customer.getAccessToken());
         preparedStatement.setString(15, customer.getEmail());
         return preparedStatement;
     }
