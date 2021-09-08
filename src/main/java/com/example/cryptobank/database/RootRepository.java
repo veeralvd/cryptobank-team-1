@@ -178,12 +178,12 @@ public class RootRepository {
        return cryptoCurrencyRateDAO.getAllCurrentRates();
     }
 
-    public double updateOwnedAssetAmountPositive(double transactionAmount, Customer customer, Transaction transaction){
-        return portfolioDao.updateAssetAmountPositive(transactionAmount, customer, transaction);
+    public double updateOwnedAssetAmountPositive(Transaction transaction){
+        return portfolioDao.updateAssetAmountPositive(transaction);
     }
 
-    double updateAssetAmountNegative(double transactionAssetAmount, Customer customer, Transaction transaction){
-        return portfolioDao.updateAssetAmountNegative(transactionAssetAmount, customer, transaction);
+    double updateAssetAmountNegative(Transaction transaction){
+        return portfolioDao.updateAssetAmountNegative(transaction);
     }
 
 

@@ -9,7 +9,7 @@ public interface PortfolioDao {
 
     Map<String, Double> getAssetmapByIban (String iban);
 
-    double updateAssetAmountPositive(double transactionAssetAmount, Customer customer, Transaction transaction);
+    double updateAssetAmountPositive(Transaction transaction);
 
-    double updateAssetAmountNegative(double transactionAssetAmount, Customer customer, Transaction transaction);
+    double updateAssetAmountNegative(Transaction transaction);
 }

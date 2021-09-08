@@ -57,9 +57,12 @@ public class JdbcPortfolioDao implements PortfolioDao {
     }
 
     @Override
-    public double updateAssetAmountPositive(double transactionAssetAmount, Customer customer, Transaction transaction) {
-
-        double currentAmount = customer.getPortfolio().getAssetMap().get(transaction.getAsset());
+    public double updateAssetAmountPositive(Transaction transaction) {
+        String iban = transaction.getBuyerAccount().getIban();
+        String abbr = transaction.getAsset().getAbbreviation();
+        double transactionAssetAmount = transaction.getAssetAmount();
+        double currentAmount = getAssetAmountByIbanAndAbbr(iban, abbr);
+//        double currentAmount = customer.getPortfolio().getAssetMap().get(transaction.getAsset());
         double updatedAmount = currentAmount + transactionAssetAmount;
         int status = jdbcTemplate.update(connection -> updatePortfolioStatementPositive(updatedAmount, transaction, connection));
         if (status == 1) {
@@ -80,9 +83,12 @@ public class JdbcPortfolioDao implements PortfolioDao {
     }
 
     @Override
-    public double updateAssetAmountNegative(double transactionAssetAmount, Customer customer, Transaction transaction) {
-
-        double currentAmount = customer.getPortfolio().getAssetMap().get(transaction.getAsset());
+    public double updateAssetAmountNegative(Transaction transaction) {
+        String iban = transaction.getSellerAccount().getIban();
+        String abbr = transaction.getAsset().getAbbreviation();
+        double transactionAssetAmount = transaction.getAssetAmount();
+        double currentAmount = getAssetAmountByIbanAndAbbr(iban, abbr);
+//        double currentAmount = customer.getPortfolio().getAssetMap().get(transaction.getAsset());
         double updatedAmount = currentAmount - transactionAssetAmount;
         int status = jdbcTemplate.update(connection -> updatePortfolioStatementPositive(updatedAmount, transaction, connection));
         if (status == 1) {
@@ -110,6 +116,11 @@ public class JdbcPortfolioDao implements PortfolioDao {
                         rs.getDouble("aantalEenheden"));
         }, iban);
         return results;
+    }
+
+    public double getAssetAmountByIbanAndAbbr (String iban, String abbr){
+        String sql = "SELECT aantalEenheden FROM ownedasset WHERE iban=? AND abbreviation=?";
+        return jdbcTemplate.queryForObject(sql, double.class, new Object[]{iban, abbr});
     }
 
 
