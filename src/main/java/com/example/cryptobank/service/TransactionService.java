@@ -37,7 +37,7 @@ public class TransactionService {
 
     /**
      *  Opzet methode completeTransaction voor koop van platform. Moet nog opgesplitst worden.
-     *  Hier vanuit een doorgegeven Order te redeneren.
+     *  Hier vanuit een doorgegeven Order geredeneerd.
      */
     public Transaction completeTransactionFromBank(Order orderToProcess) {
 

@@ -186,6 +186,10 @@ public class RootRepository {
         return portfolioDao.updateAssetAmountNegative(transaction);
     }
 
+    public List<String> getAbbreviationsByIban(String iban){
+        return portfolioDao.getAbbreviationsByIban(iban);
+    }
+
 
     public BankAccount getBankAccountByIban(String iban) {
         return bankAccountDao.findAccountByIban(iban);

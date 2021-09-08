@@ -51,4 +51,8 @@ public class PortfolioService {
         }
         return list;
     }
+
+    public List<String> testlist (String iban){
+        return rootRepository.getAbbreviationsByIban(iban);
+    }
 }
