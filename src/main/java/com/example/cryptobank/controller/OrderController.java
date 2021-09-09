@@ -34,6 +34,8 @@ public class OrderController {
      * @return boolean status (voor nu, zie demo restfullwebserver voor ResponseEntity)
      */
     @PostMapping("/buyasset")
+
+
     // public int buyAsset(@RequestParam String ibanBuyer, String ibanSeller, Asset asset, double amount) {
     public ResponseEntity<?> buyAsset(@RequestBody Order order, @RequestHeader("Authorization") String accessToken) {
         CustomerDto customer = customerService.authenticate(accessToken);
