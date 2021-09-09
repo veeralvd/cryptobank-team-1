@@ -178,5 +178,13 @@ public class RootRepository {
        return cryptoCurrencyRateDAO.getAllCurrentRates();
     }
 
+    public CryptoCurrencyRate save(CryptoCurrencyRate cryptoCurrencyRate) {
+        return cryptoCurrencyRateDAO.save(cryptoCurrencyRate);
+    }
+
+    public void updateCryptoCurrencyRates(CryptoCurrencyRate cryptoCurrencyRate) {
+        cryptoCurrencyRateDAO.update(cryptoCurrencyRate);
+    }
+
 
 } // end of class RootRepository

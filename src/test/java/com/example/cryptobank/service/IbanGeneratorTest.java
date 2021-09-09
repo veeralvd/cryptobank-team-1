@@ -11,7 +11,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 import static org.assertj.core.api.Assertions.*;
 
-@SpringBootTest
+
 @ActiveProfiles("test")
 public class IbanGeneratorTest {
     private final Logger logger = LoggerFactory.getLogger(IbanGeneratorTest.class);
