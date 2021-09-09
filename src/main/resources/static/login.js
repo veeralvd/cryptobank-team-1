@@ -17,14 +17,23 @@ document.querySelector('#submitButton').addEventListener('click',
             }
         }
         // Token komt terug als username & password erkent wordt
-        fetch(url,options)
-            .then(response => response.text())
-            .then(json=>{
-                console.log(json);
-                localStorage.setItem("token", json)})
+       fetch(url,options)
+            .then(response => {
+                if (response.ok){
+                response.text();
+                let accessToken = response.headers.get('Authorization');
+                let refreshToken = response.headers.get('refresh_token');
+                console.log(accessToken + "hallo access");
+                console.log(refreshToken + "hallo refresh");
+                localStorage.setItem('Authorization', accessToken);
+                localStorage.setItem('refresh_token', refreshToken);
+            }else if (!response.ok) {
+                    console.log('username and/or password are incorrect')
+                }})
             .catch((error) => {
                 console.error('Error ' + error);
             })
+
     })
 
 
