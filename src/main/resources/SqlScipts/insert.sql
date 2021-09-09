@@ -64,14 +64,17 @@ LOCK TABLES ownedasset WRITE;
 INSERT INTO cryptobank.ownedasset (IBAN, abbreviation, aantalEenheden) VALUES ('NL69COKI5000000003', 'ADA', 35);
 INSERT INTO cryptobank.ownedasset (IBAN, abbreviation, aantalEenheden) VALUES ('NL69COKI5000000003', 'BCH', 6);
 INSERT INTO cryptobank.ownedasset (IBAN, abbreviation, aantalEenheden) VALUES ('NL69COKI5000000003', 'BTC', 2);
-INSERT INTO cryptobank.ownedasset (IBAN, abbreviation, aantalEenheden) VALUES ('NL69COKI5000000003', 'HEX', 500);
-INSERT INTO cryptobank.ownedasset(IBAN, abbreviation, aantalEenheden) VALUES ('NL24COKI3309054260', 'DOGE', 4000); -- LET OP: dit is het portfolio van de bank
-INSERT INTO cryptobank.ownedasset(IBAN, abbreviation, aantalEenheden) VALUES ('NL24COKI3309054260', 'CAKE', 4000);
-INSERT INTO cryptobank.ownedasset(IBAN, abbreviation, aantalEenheden) VALUES ('NL24COKI3309054260', 'ADA', 4000);
+INSERT INTO cryptobank.ownedasset (IBAN, abbreviation, aantalEenheden) VALUES ('NL69COKI5000000003', 'DOGE', 200);
+INSERT INTO cryptobank.ownedasset (IBAN, abbreviation, aantalEenheden) VALUES ('NL69COKI5000000003', 'ETH', 5);
+INSERT INTO cryptobank.ownedasset (IBAN, abbreviation, aantalEenheden) VALUES ('NL13COKI8974196092', 'ETH', 1);
+INSERT INTO cryptobank.ownedasset(IBAN, abbreviation, aantalEenheden) VALUES ('NL24COKI3309054260', 'ADA', 4000); -- LET OP: dit is het portfolio van de bank
 INSERT INTO cryptobank.ownedasset(IBAN, abbreviation, aantalEenheden) VALUES ('NL24COKI3309054260', 'BCH', 4000);
 INSERT INTO cryptobank.ownedasset(IBAN, abbreviation, aantalEenheden) VALUES ('NL24COKI3309054260', 'BTC', 4000);
-INSERT INTO cryptobank.ownedasset(IBAN, abbreviation, aantalEenheden) VALUES ('NL24COKI3309054260', 'HEX', 4000);
+INSERT INTO cryptobank.ownedasset(IBAN, abbreviation, aantalEenheden) VALUES ('NL24COKI3309054260', 'CAKE', 4000);
+INSERT INTO cryptobank.ownedasset(IBAN, abbreviation, aantalEenheden) VALUES ('NL24COKI3309054260', 'DOGE', 4000);
 INSERT INTO cryptobank.ownedasset(IBAN, abbreviation, aantalEenheden) VALUES ('NL24COKI3309054260', 'ETH', 4000);
+INSERT INTO cryptobank.ownedasset(IBAN, abbreviation, aantalEenheden) VALUES ('NL24COKI3309054260', 'HEX', 4000);
+
 UNLOCK TABLES;
 
 --
@@ -89,9 +92,10 @@ UNLOCK TABLES;
 --
 
 LOCK TABLES `order` WRITE;
-INSERT INTO cryptobank.`order` (orderId, abbreviation, assetAmount, desiredPrice, iban, datetimecreated) VALUES (1, 'ADA', 1234, 0, 'NL69COKI5000000003', '2021-09-02 17:07:08');
-INSERT INTO cryptobank.`order` (orderId, abbreviation, assetAmount, desiredPrice, iban, datetimecreated) VALUES (2, 'ETH', 2, 125, 'NL69COKI5000000003', '2021-09-02 17:05:16');
-INSERT INTO cryptobank.`order` (orderId, abbreviation, assetAmount, desiredPrice, iban, datetimecreated) VALUES (3, 'HEX', 3, 250, 'NL69COKI5000000003', '2021-09-08 19:05:22');
+INSERT INTO cryptobank.`order` (orderId, abbreviation, assetAmount, desiredPrice, iban, datetimecreated) VALUES (1, 'ADA', 1234, 2.65, 'NL69COKI5000000003', '2021-09-02 17:07:08');
+INSERT INTO cryptobank.`order` (orderId, abbreviation, assetAmount, desiredPrice, iban, datetimecreated) VALUES (2, 'CAKE', 10, 24.44, 'NL69COKI5000000003', '2021-09-02 17:05:16');
+INSERT INTO cryptobank.`order` (orderId, abbreviation, assetAmount, desiredPrice, iban, datetimecreated) VALUES (3, 'ETH', 1.6, 3130, 'NL69COKI5000000003', '2021-09-08 19:05:22');
+INSERT INTO cryptobank.`order` (orderId, abbreviation, assetAmount, desiredPrice, iban, datetimecreated) VALUES (4, 'ETH', 16, 3130, 'NL13COKI8974196092', '2021-09-09 21:11:12');
 UNLOCK TABLES;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
