@@ -31,14 +31,14 @@ public abstract class TransactionAbstractClass {
 
 
 
-        isBuyingOrder(orderToProcess);
+       /* isBuyingOrder(orderToProcess);
         if (isBuyingOrder(orderToProcess)) {
             buyerAccount = orderToProcess.getBankAccount();
             sellerAccount = BANK_ACCOUNT;
         } else {
             buyerAccount = BANK_ACCOUNT;
             sellerAccount = orderToProcess.getBankAccount();
-        }
+        }*/
 
         calculateAssetCost(orderToProcess);
         calculateTransactionCost(orderToProcess);
@@ -48,7 +48,9 @@ public abstract class TransactionAbstractClass {
 //        validatePortfolioContainsAsset(orderToProcess);
 //        validateAssetAmountSeller(orderToProcess);
 
-        if (validateCreditLimitBuyer(orderToProcess) && validatePortfolioContainsAsset(orderToProcess) && validateAssetAmountSeller(orderToProcess)) {
+        // && validateAssetAmountSeller(orderToProcess)
+
+        if (validateCreditLimitBuyer(orderToProcess) && validatePortfolioContainsAsset(orderToProcess) ) {
             updateBankAccount();
             updatePortfolio();
             assembleNewTransaction(orderToProcess);
@@ -56,13 +58,13 @@ public abstract class TransactionAbstractClass {
         }
     }
 
-    boolean isBuyingOrder(Order orderToProcess) {
+   /* boolean isBuyingOrder(Order orderToProcess) {
         logger.info("Check of het om een kooporder gaat (alleen aankoop van bank voor nu)");
         if (orderToProcess.isBuyingOrder()) {
             return true;
         }
         return false;
-    };
+    };*/
 
     double calculateAssetCost(Order orderToProcess) {
         double assetCost = orderToProcess.getDesiredPrice() * orderToProcess.getAssetAmount();
@@ -120,7 +122,7 @@ public abstract class TransactionAbstractClass {
         return false;
     }
 
-    boolean validateAssetAmountSeller(Order orderToProcess) {
+  /*  boolean validateAssetAmountSeller(Order orderToProcess) {
         logger.info("Check if seller has sufficient assets");
         double amountToRemove = orderToProcess.getAssetAmount();
         String assetAbbr = orderToProcess.getAsset().getAbbreviation(); // dubbele code
@@ -130,7 +132,7 @@ public abstract class TransactionAbstractClass {
             return true;
         }
         return false;
-    }
+    }*/
 
     void updateBankAccount() {
         logger.info("Withdraw money from bankaccount buyer / deposit money to bankaccount seller");
