@@ -2,6 +2,7 @@ package com.example.cryptobank.service;
 
 import com.example.cryptobank.database.BankAccountDao;
 import com.example.cryptobank.database.RootRepository;
+import com.example.cryptobank.domain.BankAccount;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,4 +37,7 @@ public class BankAccountService {
         return  updatedBalance;
     }
 
+    public BankAccount getBankAccountByIban(String iban) {
+        return rootRepository.getBankAccountByIban(iban);
+    }
 }

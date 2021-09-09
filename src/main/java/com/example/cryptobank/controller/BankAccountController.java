@@ -1,5 +1,6 @@
 package com.example.cryptobank.controller;
 
+import com.example.cryptobank.domain.BankAccount;
 import com.example.cryptobank.service.BankAccountService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,6 +35,12 @@ public class BankAccountController {
         logger.info("getBalanceByIban aangeroepen");
         return balanceRetrieved;
     }
+
+    @GetMapping("/bankaccounts")
+    public BankAccount getBankAccountByIban(@RequestParam String iban) {
+        return bankAccountService.getBankAccountByIban(iban);
+    }
+
 
     /**
      * Methode deposit vraagt om IBAN en het bij te schrijven bedrag.

@@ -9,10 +9,25 @@ public class Bank {
     private final Logger logger = LoggerFactory.getLogger(Bank.class);
     private final static String BANK_IBAN = "NL24COKI3309054260";
 
-    public Bank() {
+   /* public Bank() {
         this.bankAccount = new BankAccount();
         this.bankAccount.setIban(BANK_IBAN);
         logger.info("New Bank");
+    }*/
+
+    private static Bank uniqueInstance;
+
+    private Bank() {
+        this.bankAccount = new BankAccount();
+        this.bankAccount.setIban(BANK_IBAN);
+        logger.info("New Bank uniqueInstance");
+    }
+
+    public static synchronized Bank getInstance() {
+        if (uniqueInstance == null) {
+            uniqueInstance = new Bank();
+        }
+        return uniqueInstance;
     }
 
     public static String getBankName() {

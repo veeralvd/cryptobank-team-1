@@ -19,6 +19,11 @@ public class BankAccount {
         logger.info("New BankAccount created met iban:" + iban);
     }
 
+    public BankAccount(String iban, double balance) {
+        this.iban = iban;
+        this.balance = balance;
+        logger.info("New BankAccount all-args");
+    }
 
     public String getIban() {
         return iban;
@@ -34,5 +39,13 @@ public class BankAccount {
 
     public void setBalance(double balance) {
         this.balance = balance;
+    }
+
+    @Override
+    public String toString() {
+        return "BankAccount{" +
+                "iban='" + iban + '\'' +
+                ", balance=" + balance +
+                '}';
     }
 }

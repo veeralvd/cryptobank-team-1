@@ -135,8 +135,10 @@ public class RootRepository {
         Order order = orderDao.findByOrderId(orderId);
         String iban = orderDao.getIbanFromOrderId(orderId);
         BankAccount bankAccount = bankAccountDao.findAccountByIban(iban);
+        System.out.println("Bankaccount gemaakt:" + bankAccount);
         String assetAbbreviation = orderDao.getAssetAbbrFromOrderId(orderId);
         Asset asset = assetDao.findByAbbreviation(assetAbbreviation);
+        System.out.println("Asset gemaakt:" + asset);
         order.setBankAccount(bankAccount);
         order.setAsset(asset);
         return order;
@@ -151,7 +153,6 @@ public class RootRepository {
         return orderDao.getAllByIban(iban);
     }*/
 
-    // TODO getBankAccountByIban fixen
     public Transaction findByTransactionId(int transactionId) {
         Transaction transaction = transactionDao.findByTransactionId(transactionId);
 
@@ -159,6 +160,7 @@ public class RootRepository {
         Asset asset = assetDao.findByAbbreviation(assetAbbr);
 
         String ibanBuyer = transactionDao.findBuyerAccountForTransaction(transactionId);
+        logger.info("findBuyerIbanByTransactionId: " + ibanBuyer);
         BankAccount buyerAccount = bankAccountDao.findAccountByIban(ibanBuyer);
 
         String ibanSeller = transactionDao.findSellerAccountForTransaction(transactionId);
@@ -178,13 +180,20 @@ public class RootRepository {
        return cryptoCurrencyRateDAO.getAllCurrentRates();
     }
 
-    public double updateOwnedAssetAmountPositive(double transactionAmount, Customer customer, Transaction transaction){
-        return portfolioDao.updateAssetAmountPositive(transactionAmount, customer, transaction);
+    public double updateAssetAmountPositive(Transaction transaction){
+        return portfolioDao.updateAssetAmountPositive(transaction);
     }
 
-    double updateAssetAmountNegative(double transactionAssetAmount, Customer customer, Transaction transaction){
-        return portfolioDao.updateAssetAmountNegative(transactionAssetAmount, customer, transaction);
+    public double updateAssetAmountNegative(Transaction transaction){
+        return portfolioDao.updateAssetAmountNegative(transaction);
+    }
+
+    public List<String> getAbbreviationsByIban(String iban){
+        return portfolioDao.getAbbreviationsByIban(iban);
     }
 
 
+    public BankAccount getBankAccountByIban(String iban) {
+        return bankAccountDao.findAccountByIban(iban);
+    }
 } // end of class RootRepository
