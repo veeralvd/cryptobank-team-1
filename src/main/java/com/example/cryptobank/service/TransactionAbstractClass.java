@@ -29,8 +29,6 @@ public abstract class TransactionAbstractClass {
 
     final void completeTransaction(Order orderToProcess) {
 
-
-
        /* isBuyingOrder(orderToProcess);
         if (isBuyingOrder(orderToProcess)) {
             buyerAccount = orderToProcess.getBankAccount();
@@ -42,15 +40,10 @@ public abstract class TransactionAbstractClass {
 
         calculateAssetCost(orderToProcess);
         calculateTransactionCost(orderToProcess);
-        calculateTotalCost(orderToProcess);
+        calculateAmountToPay(orderToProcess);
+        calculateAmountToReceive(orderToProcess);
 
-//        validateCreditLimitBuyer(orderToProcess);
-//        validatePortfolioContainsAsset(orderToProcess);
-//        validateAssetAmountSeller(orderToProcess);
-
-        // && validateAssetAmountSeller(orderToProcess)
-
-        if (validateCreditLimitBuyer(orderToProcess) && validatePortfolioContainsAsset(orderToProcess) ) {
+        if (validateCreditLimitBuyer(orderToProcess) && validatePortfolioContainsAsset(orderToProcess) && validateAssetAmountSeller(orderToProcess)) {
             updateBankAccount();
             updatePortfolio(orderToProcess);
             assembleNewTransaction(orderToProcess);
@@ -77,14 +70,12 @@ public abstract class TransactionAbstractClass {
         return transactionCost;
     }
 
-    double calculateTotalCost(Order orderToProcess) {
+    double calculateAmountToPay(Order orderToProcess) {
         String ibanBuyer = buyerAccount.getIban();
         String ibanSeller = sellerAccount.getIban();
         String ibanBank = BANK_ACCOUNT.getIban();
         double transactioncostBuyer = 0.0;
         double transactioncostSeller = 0.0;
-        //double transactionCostBuyer = buyerAccount==bank?0.0:transactionCost;
-        //double  transactionCostSeller = sellerAccount == bank?0.0:transactionCost;
 
         if (ibanBuyer.equals(ibanBank)) {
             transactioncostBuyer = 0.0;
@@ -96,14 +87,9 @@ public abstract class TransactionAbstractClass {
     }
 
 
-
-
-
-
-
     boolean validateCreditLimitBuyer(Order orderToProcess) {
         logger.info("Check if buyer has enough money");
-        double amountToPay = calculateTotalCost(orderToProcess);
+        double amountToPay = calculateAmountToPay(orderToProcess);
         if (amountToPay >= buyerAccount.getBalance()) {
             return false;
         }
@@ -122,7 +108,7 @@ public abstract class TransactionAbstractClass {
         return false;
     }
 
-  /*  boolean validateAssetAmountSeller(Order orderToProcess) {
+    boolean validateAssetAmountSeller(Order orderToProcess) {
         logger.info("Check if seller has sufficient assets");
         double amountToRemove = orderToProcess.getAssetAmount();
         String assetAbbr = orderToProcess.getAsset().getAbbreviation(); // dubbele code
@@ -132,16 +118,19 @@ public abstract class TransactionAbstractClass {
             return true;
         }
         return false;
-    }*/
+    }
 
     void updateBankAccount() {
         logger.info("Withdraw money from bankaccount buyer / deposit money to bankaccount seller");
+        rootRepository.withdraw(buyerAccount.getIban(), );
+        rootRepository.deposit(sellerAccount.getIban(), );
     }
 
     void updatePortfolio(Order orderToProcess) {
         logger.info("Remove assets from portfolio seller / add assets to portfolio buyer");
         Transaction transactionToComplete = assembleNewTransaction(orderToProcess);
         rootRepository.updateAssetAmountNegative(transactionToComplete);
+        rootRepository.updateAssetAmountPositive(transactionToComplete);
     }
 
     Transaction assembleNewTransaction(Order orderToProcess) {

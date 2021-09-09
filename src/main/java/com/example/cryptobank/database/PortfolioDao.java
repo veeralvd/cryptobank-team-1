@@ -15,4 +15,6 @@ public interface PortfolioDao {
     double updateAssetAmountNegative(Transaction transaction);
 
     List<String> getAbbreviationsByIban(String iban);
+
+    double getAssetAmountByIbanAndAbbr(String ibanSeller, String assetAbbr);
 }
