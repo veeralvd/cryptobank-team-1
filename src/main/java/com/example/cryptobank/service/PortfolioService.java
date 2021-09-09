@@ -2,6 +2,7 @@ package com.example.cryptobank.service;
 
 import com.example.cryptobank.database.JdbcPortfolioDao;
 import com.example.cryptobank.database.RootRepository;
+import com.example.cryptobank.domain.Asset;
 import com.example.cryptobank.domain.Customer;
 import com.example.cryptobank.domain.Portfolio;
 import com.example.cryptobank.dto.OwnedAssetDto;
@@ -36,7 +37,8 @@ public class PortfolioService {
         Customer customer = rootRepository.findCustomerByUsername(username);
         Map<String, Double> assetMap = rootRepository.getPortfolioByIban(customer.getBankAccount().getIban()).getAssetMap();
         List<OwnedAssetDto> list = getList(assetMap);
-        return new PortfolioDto(customer.getFirstName(), list);
+        double totalValue = getTotalValuePortfolio(customer.getBankAccount().getIban());
+        return new PortfolioDto(customer.getFirstName(), list, totalValue);
     }
 
     public List<OwnedAssetDto> getList(Map<String, Double> assetMap){
@@ -45,10 +47,26 @@ public class PortfolioService {
             String abbreviation = entry.getKey();
             double ownedAssetAmount = entry.getValue();
             String assetName = rootRepository.getByAbbreviation(abbreviation).getName();
+
             double currentSinglePrice = exchangeService.getCurrentRateByAbbreviation(abbreviation);
             double subTotal = ownedAssetAmount*currentSinglePrice;
             list.add(new OwnedAssetDto(abbreviation, ownedAssetAmount, assetName, currentSinglePrice, subTotal));
         }
         return list;
+    }
+
+    public double getTotalValuePortfolio(String iban){
+        double totalValue = 0;
+        Portfolio portfolio = rootRepository.getPortfolioByIban(iban);
+        Map<String, Double> assetMap = portfolio.getAssetMap();
+        for (Map.Entry<String, Double> map : assetMap.entrySet()){
+            String abbr = map.getKey();
+            Asset asset = rootRepository.getByAbbreviation(abbr);
+            double rate = asset.getRate().getCryptoRate();
+            double assetAmount = map.getValue();
+            double assetValue = rate * assetAmount;
+            totalValue += assetValue;
+        }
+        return totalValue;
     }
 }
