@@ -15,13 +15,6 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-<<<<<<< HEAD
-import java.awt.*;
-import java.util.HashMap;
-import java.util.Map;
-
-=======
->>>>>>> d0db9cfac55244149bbbabbe12c6de9d523a7133
 @RestController
 public class PortfolioController {
     private final Logger logger = LoggerFactory.getLogger(PortfolioController.class);
@@ -57,8 +50,5 @@ public class PortfolioController {
     public double getPortfolioValue (@RequestParam String iban){
         return portfolioService.getTotalValuePortfolio(iban);
     }
-<<<<<<< HEAD
 
-=======
->>>>>>> d0db9cfac55244149bbbabbe12c6de9d523a7133
 }
