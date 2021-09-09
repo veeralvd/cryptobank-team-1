@@ -1,7 +1,7 @@
 package com.example.cryptobank.database;
 
-import com.example.cryptobank.domain.Asset;
 import com.example.cryptobank.domain.BankAccount;
+import com.example.cryptobank.domain.Asset;
 import com.example.cryptobank.domain.Order;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

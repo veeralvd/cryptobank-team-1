@@ -8,7 +8,8 @@ public class CustomerDto {
 
     private String username;
     private String password;
-    private String token;
+    private String accessToken;
+    private String refreshToken;
     private String firstName;
     private String iban;
     private final Logger logger = LoggerFactory.getLogger(CustomerDto.class);
@@ -17,25 +18,24 @@ public class CustomerDto {
         logger.info("New CustomerDto");
     }
 
-    public CustomerDto(String token, String username) {
-        this.token = token;
-        this.username = username;
-    }
-
-    public CustomerDto(String username, String password, String token, String firstName, String iban) {
+    public CustomerDto(String username, String password) {
         this.username = username;
         this.password = password;
-        this.token = token;
+    }
+
+    public CustomerDto(String username, String accessToken, String firstName, String iban) {
+        this.username = username;
+        this.accessToken = accessToken;
         this.firstName = firstName;
         this.iban = iban;
     }
 
-    public String getToken() {
-        return token;
+    public String getAccessToken() {
+        return accessToken;
     }
 
-    public void setToken(String token) {
-        this.token = token;
+    public void setAccessToken(String accessToken) {
+        this.accessToken = accessToken;
     }
 
     public String getUsername() {
@@ -70,11 +70,19 @@ public class CustomerDto {
         this.firstName = firstName;
     }
 
+    public String getRefreshToken() {
+        return refreshToken;
+    }
+
+    public void setRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
+    }
+
     @Override
     public String toString() {
         return "CustomerDto{" +
                 "username='" + username + '\'' +
-                ", token='" + token + '\'' +
+                ", accesstoken='" + accessToken + '\'' +
                 ", firstName='" + firstName + '\'' +
                 '}';
     }

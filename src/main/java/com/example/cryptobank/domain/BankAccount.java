@@ -1,6 +1,5 @@
 package com.example.cryptobank.domain;
 
-import com.example.cryptobank.service.IbanGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
