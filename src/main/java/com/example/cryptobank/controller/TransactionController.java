@@ -2,6 +2,9 @@ package com.example.cryptobank.controller;
 
 import com.example.cryptobank.domain.Order;
 import com.example.cryptobank.domain.Transaction;
+import com.example.cryptobank.dto.CustomerDto;
+import com.example.cryptobank.dto.TransactionDto;
+import com.example.cryptobank.service.CustomerService;
 import com.example.cryptobank.service.TransactionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,63 +17,43 @@ import org.springframework.web.bind.annotation.*;
 public class TransactionController {
 
     private TransactionService transactionService;
+    private CustomerService customerService;
 
     private final Logger logger = LoggerFactory.getLogger(TransactionController.class);
 
     @Autowired
-    public TransactionController(TransactionService transactionService) {
+    public TransactionController(TransactionService transactionService, CustomerService customerService) {
+        this.customerService = customerService;
         this.transactionService = transactionService;
         logger.info("New TransactionController");
     }
 
     @GetMapping("/transactions")
-    public Transaction findByTransactionId(@RequestParam int transactionId) {
-        return transactionService.findByTransactionId(transactionId);
+    public ResponseEntity<?> findByTransactionId(@RequestParam int transactionId, @RequestHeader("Authorization") String accessToken) {
+        CustomerDto customer = customerService.authenticate(accessToken);
+        if (customer == null) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+        TransactionDto transactionDto = transactionService.findByTransactionId(transactionId);
+        return new ResponseEntity<>(transactionDto, HttpStatus.OK);
     }
-
-   /* @GetMapping("/transactions/{transactionid}")
-    public Transaction findByTransactionId(@PathVariable("transactionid") int transactionId) {
-        return transactionService.findByTransactionId(transactionId);
-    }*/
 
    /* @GetMapping("/transactions/iban")
     public ArrayList<Transaction> getAllByIban(@RequestParam String iban) {
         return transactionService.getAllByIban(iban);
     }*/
 
-    /**
-     * Tijdelijk endpoint om saveTransaction te testen.
-     * Complete transaction -> vanuit order?
-     */
-    @PutMapping(value = "/transactions/save", produces = "application/json")
-    public ResponseEntity<?> saveTransaction(@RequestBody Transaction transaction) {
-        logger.info(transaction.toString());
-        Transaction transactionToSave = transactionService.saveTransaction(transaction);
-        if (transactionToSave == null) {
-            return new ResponseEntity<>("Failed", HttpStatus.BAD_REQUEST);
-        } else {
-            return new ResponseEntity<>(transactionToSave.toString(), HttpStatus.OK);
+    @PostMapping(value = "/transactions/complete", produces = "application/json")
+    public ResponseEntity<?> completeTransactionFromBank(@RequestBody Order orderToProcess, @RequestHeader("Authorization") String accessToken) {
+        CustomerDto customer = customerService.authenticate(accessToken);
+        if (customer == null) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
-    }
-
-    /*@PutMapping("/transactions/complete")
-    public ResponseEntity<?> completeTransactionToBank(@Requestbody Order orderToProcess) {
-        Transaction transactionToComplete = transactionService.completeTransactionFromBank(orderToProcess);
-        if (transactionToComplete == null) {
-            return new ResponseEntity<>("Failed", HttpStatus.BAD_REQUEST);
-        } else {
-            return new ResponseEntity<>(transactionToComplete.toString(), HttpStatus.OK);
-        }
-    }*/
-
-    @PutMapping(value = "/transactions/complete", produces = "application/json")
-    public ResponseEntity<?> completeTransactionFromBank(@RequestBody Order orderToProcess) {
-        Transaction transactionToComplete = transactionService.completeTransaction(orderToProcess);
-        if (transactionToComplete == null) {
+        TransactionDto transactionDto = transactionService.completeTransaction(orderToProcess);
+        if (transactionDto == null) {
             return new ResponseEntity<>("Failed to save transaction", HttpStatus.BAD_REQUEST);
-        } else {
-            return new ResponseEntity<>(transactionToComplete.toString(), HttpStatus.OK);
         }
+        return new ResponseEntity<>(transactionDto, HttpStatus.OK);
     }
 
 }

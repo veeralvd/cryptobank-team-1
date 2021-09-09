@@ -5,6 +5,8 @@ import com.example.cryptobank.domain.Bank;
 import com.example.cryptobank.domain.BankAccount;
 import com.example.cryptobank.domain.Transaction;
 import com.example.cryptobank.domain.*;
+import com.example.cryptobank.dto.TransactionDto;
+import org.apache.catalina.mapper.Mapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,7 @@ import java.util.List;
 @Service
 public class TransactionService {
 
+    private Mapper mapper;
     private RootRepository rootRepository;
     private Bank bank = Bank.getInstance();
     private BankAccount buyerAccount;
@@ -29,27 +32,31 @@ public class TransactionService {
         logger.info("New TransactionService");
     }
 
-    public Transaction findByTransactionId(int transactionId) {
-        return rootRepository.findByTransactionId(transactionId);
+    public TransactionDto getTransactionDto(Transaction transaction) {
+        int transactionId = transaction.getTransactionId();
+        String ibanBuyer = transaction.getBuyerAccount().getIban();
+        String ibanSeller = transaction.getSellerAccount().getIban();
+        String assetAbbr = transaction.getAsset().getAbbreviation();
+        double assetAmount = transaction.getAssetAmount();
+        double singleAssetPrice = transaction.getAssetPrice();
+        double transactionCost = transaction.getTransactionCost();
+        LocalDateTime dateTimeProcessed = transaction.getDateTimeTransaction();
+        return new TransactionDto(transactionId, ibanBuyer, ibanSeller, assetAbbr, assetAmount,
+                singleAssetPrice, transactionCost, dateTimeProcessed);
     }
 
-    public Transaction completeTransaction(Order orderToProcess) {
+    public TransactionDto findByTransactionId(int transactionId) {
+        Transaction transaction = rootRepository.findByTransactionId(transactionId);
+        return getTransactionDto(transaction);
+    }
 
-        /*isBuyingOrder(orderToProcess);
+    public TransactionDto completeTransaction(Order orderToProcess) {
 
-        if (isBuyingOrder(orderToProcess)) {
-            buyerAccount = orderToProcess.getBankAccount();
-            sellerAccount = bank.getBankAccount();
-        } else {
-            buyerAccount = bank.getBankAccount();
-            sellerAccount = orderToProcess.getBankAccount();
-        }*/
-
-        // test koop van bank:
+        // koop van bank:
         buyerAccount = orderToProcess.getBankAccount();
         sellerAccount = bank.getBankAccount();
 
-  /*      // test verkoop aan bank
+  /*      // verkoop aan bank
         buyerAccount = bank.getBankAccount();
         sellerAccount = orderToProcess.getBankAccount();*/
 
@@ -63,32 +70,23 @@ public class TransactionService {
             Transaction transactionToComplete = assembleNewTransaction(orderToProcess);
             saveTransaction(transactionToComplete);
             logger.info("Transactie opgeslagen");
-            return transactionToComplete;
+            return getTransactionDto(transactionToComplete);
         }
         logger.info("Transactie NIET opgeslagen");
         return null;
     }
-
-    /* boolean isBuyingOrder(Order orderToProcess) {
-        logger.info("Check of het om een kooporder gaat (alleen aankoop van bank voor nu)");
-        if (orderToProcess.isBuyingOrder()) {
-            return true;
-        }
-        return false;
-    };*/
 
     private double calculateAssetCost(Order orderToProcess) {
         double assetCost = orderToProcess.getDesiredPrice() * orderToProcess.getAssetAmount();
         return assetCost;
     }
 
-    // default gedeeld door twee
     private double calculateTransactionCost(Order orderToProcess) {
-        double transactionCost = (calculateAssetCost(orderToProcess) * TRANSACTION_RATE) / 2;
+        double transactionCost = calculateAssetCost(orderToProcess) * TRANSACTION_RATE;
         return transactionCost;
     }
 
-    // hier voor alleen koop van bank: bedrag te betalen door klant = bedrag te ontvangen door bank
+    // hier nog voor alleen koop van bank: bedrag te betalen door klant = bedrag te ontvangen door bank
     private double calculateAmountToPayReceive(Order orderToProcess) {
         double assetCost = calculateAssetCost(orderToProcess);
         double transactionCost = calculateTransactionCost(orderToProcess);
@@ -139,13 +137,13 @@ public class TransactionService {
         String ibanSeller = sellerAccount.getIban(); // dubbele code
         double amountInPortfolio = rootRepository.getAssetAmountByIbanAndAbbr(ibanSeller, assetAbbr);
         if (amountInPortfolio >= amountToRemove) {
-            logger.info("Not enough Assets to sell !!!");
             return true;
         }
+        logger.info("Not enough Assets to sell !!!");
         return false;
     }
 
-    //Hier alleen voor aankoop van bank
+    //Hier nog alleen voor aankoop van bank
     private void updateBankAccount(Order orderToProcess) {
         logger.info("Withdraw money from bankaccount buyer / deposit money to bankaccount seller");
         double amountToPayRecieve = calculateAmountToPayReceive(orderToProcess);
@@ -181,7 +179,6 @@ public class TransactionService {
         Transaction transactionToSave = assembleNewTransaction(orderToProcess);
         rootRepository.save(transactionToSave);
     }
-
 
     public Transaction saveTransaction(Transaction transaction) {
         return rootRepository.save(transaction);
