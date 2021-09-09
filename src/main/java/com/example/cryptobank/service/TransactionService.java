@@ -116,6 +116,7 @@ public class TransactionService {
         return false;
     }
 
+    // nog dubbel
     private boolean checkIfPortfolioBuyerContainsAsset(Order orderToProcess) {
         String assetAbbr = orderToProcess.getAsset().getAbbreviation();
         String ibanBuyer = buyerAccount.getIban();
