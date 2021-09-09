@@ -11,15 +11,12 @@
 </head>
     <body>
             <div>
-                <h1 id="inlogheader">Inloggen op Mijn CryptoKnight</h1>
-                <form id="loginform" action="http://localhost:8080/admin/login" method="post">
 
-                    <label ><b>Username</b>
-                        <input type="text" id="username" placeholder="Enter Username" name="username" required>
-                    </label><br>
-                    <label ><b>Password</b>
-                        <input type="password" id="password" placeholder="Enter Password" name="password" required>
-                    </label><br><br>
+                <form class="box" action="http://localhost:8080/admin/login" method="post">
+                    <h1 id="header">Mijn CryptoKnights</h1>
+                    <h2 id="inlogheader">Login</h2>
+                    <input type="text" id="username" placeholder="Username" name="username" required>
+                    <input type="password" id="password" placeholder="Password" name="password" required>
                     <button id="submitButton" type="submit" >Login</button>
                 </form>
                 <p id="log"></p>
