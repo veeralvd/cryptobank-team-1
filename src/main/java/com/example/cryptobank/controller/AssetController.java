@@ -5,6 +5,8 @@ import com.example.cryptobank.domain.Asset;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -23,10 +25,10 @@ public class AssetController {
     }
 
     @GetMapping("/assets")
-    public ArrayList<Asset> showAssets() {
+    public ResponseEntity<?> showAssets() {
         ArrayList<Asset> allAssets = assetService.getAssets();
         logger.info("Show assets aangeroepen");
-        return allAssets;
+        return new ResponseEntity<>(allAssets, HttpStatus.OK);
     }
 
     @GetMapping("/assets/{abbreviation}")

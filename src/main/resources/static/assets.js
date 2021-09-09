@@ -1,22 +1,16 @@
 
-document.querySelector('#showAssets').addEventListener('click', function (event) {
+document.getElementById("buy").addEventListener('click',
+    function (event) {
+    event.preventDefault()
     const urlAssets = "http://localhost:8080/assets"
     const options = {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': localStorage.getItem('Authorization')
+            //'Authorization': localStorage.getItem('Authorization')
         }
     }
 
-  /*  async function getAllAssets(url) {
-        const response = await fetch(urlAssets);
-        let data = await response.json();
-        console.log(data);
-        show(data)
-    }
-
-    getAllAssets(urlAssets)*/
 
     fetch(urlAssets, options)
         .then(response => {
@@ -24,7 +18,7 @@ document.querySelector('#showAssets').addEventListener('click', function (event)
                 response.json()
                     .then(json => {
                     let jason = json;
-                        let table = document.querySelector("assetTable");
+                        let table = document.querySelector("table");
                         let data = Object.keys(jason[0]);
                         generateTableHead(table, data);
                         generateTable(table, jason);
@@ -63,6 +57,9 @@ function generateTable(table, data) {
         }
     }
 }
+
+
+
 
 
 

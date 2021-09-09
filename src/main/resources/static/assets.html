@@ -20,7 +20,7 @@
 
     <div>
         <h1 id="doge">Dogecoin</h1>
-        <form id="orderForm" action="http://localhost:8080/assets" method="post">
+        <form id="orderForm" action="http://localhost:8080/assets" method="get">
 
             <label><b>Amount</b>
                 <input type="text" id="amount" placeholder="Enter Amount" name="amount" required>
@@ -28,9 +28,14 @@
             <label><b>Limit</b>
                 <input type="number" id="limitPrice" placeholder="Optional: add limit" name="limit">
             </label><br><br>
-            <button id="buy" type="button" onclick="JS_FUNCIE_TRANSACTIE_VERWERKEN">BUY NOW</button>
+            <button id="buy" type="button"  >BUY NOW</button>
         </form>
     </div>
+
+    <table>
+
+
+    </table>
 
     <script src="assets.js"></script>
 
