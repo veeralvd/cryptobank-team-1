@@ -37,4 +37,8 @@ public class PortfolioController {
         return portfolioService.getTotalValuePortfolio(iban);
     }
 
+    /*@GetMapping("/getlist")
+    public List<String> abbrlist (@RequestParam String iban){
+        return portfolioService.testlist(iban);
+    }*/
 }

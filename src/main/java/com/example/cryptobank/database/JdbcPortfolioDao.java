@@ -5,11 +5,14 @@ import com.example.cryptobank.domain.Order;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Repository
@@ -27,25 +30,19 @@ public class JdbcPortfolioDao implements PortfolioDao {
     }
 
     // gebruik indien asset in kwestie nog niet eerder in de portfolio
-    private PreparedStatement insertAssetInPortfolioStatement (Order order, Connection connection) throws SQLException {
+    private PreparedStatement insertAssetInPortfolioStatement (Transaction transaction, Connection connection) throws SQLException {
         PreparedStatement ps = connection.prepareStatement(
-                "INSERT INTO ownedasset_table (IBAN, abbreviation, aantalEenheden) values (?, ?, ?)"
+                "INSERT INTO ownedasset (IBAN, abbreviation, aantalEenheden) values (?, ?, ?)"
         );
-        ps.setString(1, order.getBankAccount().getIban());
-        ps.setString(2, order.getAsset().getAbbreviation());
-        ps.setDouble(3, order.getAssetAmount());
+        ps.setString(1, transaction.getBuyerAccount().getIban());
+        ps.setString(2, transaction.getAsset().getAbbreviation());
+        ps.setDouble(3, transaction.getAssetAmount());
         return ps;
     }
 
-/*    private PreparedStatement updatePortfolioStatementPositive (Customer customer, Transaction transaction,
-                                                                Connection connection) throws SQLException {
-        PreparedStatement ps = connection.prepareStatement(UPDATE_QUERY);
-        // double storedAssetAmount = customer.getPortfolio().getAssetMap().get(transaction.getAsset());
-        ps.setDouble(1, transaction.getAssetAmount());
-        ps.setString(2, transaction.getBuyerAccount().getIban());
-        ps.setString(3, transaction.getAsset().getAbbreviation());
-        return ps;
-    }*/
+    public void insertAssetIntoPortfolio(Transaction transaction){
+        jdbcTemplate.update(connection -> insertAssetInPortfolioStatement(transaction, connection));
+    }
 
     private PreparedStatement updatePortfolioStatementPositive (double updatedAmount, Transaction transaction,
                                                                 Connection connection) throws SQLException {
@@ -57,9 +54,11 @@ public class JdbcPortfolioDao implements PortfolioDao {
     }
 
     @Override
-    public double updateAssetAmountPositive(double transactionAssetAmount, Customer customer, Transaction transaction) {
-
-        double currentAmount = customer.getPortfolio().getAssetMap().get(transaction.getAsset());
+    public double updateAssetAmountPositive(Transaction transaction) {
+        String iban = transaction.getBuyerAccount().getIban();
+        String abbr = transaction.getAsset().getAbbreviation();
+        double transactionAssetAmount = transaction.getAssetAmount();
+        double currentAmount = getAssetAmountByIbanAndAbbr(iban, abbr);
         double updatedAmount = currentAmount + transactionAssetAmount;
         int status = jdbcTemplate.update(connection -> updatePortfolioStatementPositive(updatedAmount, transaction, connection));
         if (status == 1) {
@@ -80,11 +79,14 @@ public class JdbcPortfolioDao implements PortfolioDao {
     }
 
     @Override
-    public double updateAssetAmountNegative(double transactionAssetAmount, Customer customer, Transaction transaction) {
-
-        double currentAmount = customer.getPortfolio().getAssetMap().get(transaction.getAsset());
+    public double updateAssetAmountNegative(Transaction transaction) {
+        String iban = transaction.getSellerAccount().getIban();
+        String abbr = transaction.getAsset().getAbbreviation();
+        double transactionAssetAmount = transaction.getAssetAmount();
+        double currentAmount = getAssetAmountByIbanAndAbbr(iban, abbr);
+//        double currentAmount = customer.getPortfolio().getAssetMap().get(transaction.getAsset());
         double updatedAmount = currentAmount - transactionAssetAmount;
-        int status = jdbcTemplate.update(connection -> updatePortfolioStatementPositive(updatedAmount, transaction, connection));
+        int status = jdbcTemplate.update(connection -> updatePortfolioStatementNegative(updatedAmount, transaction, connection));
         if (status == 1) {
             return updatedAmount;
         } else {
@@ -110,6 +112,23 @@ public class JdbcPortfolioDao implements PortfolioDao {
                         rs.getDouble("aantalEenheden"));
         }, iban);
         return results;
+    }
+
+    public double getAssetAmountByIbanAndAbbr (String iban, String abbr){
+        String sql = "SELECT aantalEenheden FROM ownedasset WHERE IBAN = ? AND abbreviation = ?";
+        try {
+            return jdbcTemplate.queryForObject(sql, double.class, iban, abbr);
+        } catch (EmptyResultDataAccessException exception) {
+            logger.debug("Empty result");
+            // TODO Empty result afvangen
+            return -1.0;
+        }
+    }
+
+    public List<String> getAbbreviationsByIban(String iban){
+        String sql = "SELECT abbreviation FROM ownedasset WHERE iban = ?";
+        List<String> abbrList = jdbcTemplate.queryForList(sql, String.class, iban);
+        return abbrList;
     }
 
 
