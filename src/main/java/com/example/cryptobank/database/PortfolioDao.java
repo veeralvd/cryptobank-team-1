@@ -19,4 +19,6 @@ public interface PortfolioDao {
     double getAssetAmountByIbanAndAbbr(String iban, String assetAbbr);
 
     void insertAssetIntoPortfolio(Transaction transaction);
+
+    void deleteAssetFromPortfolio(Transaction transaction);
 }

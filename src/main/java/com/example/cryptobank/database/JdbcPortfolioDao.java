@@ -40,6 +40,7 @@ public class JdbcPortfolioDao implements PortfolioDao {
         return ps;
     }
 
+    @Override
     public void insertAssetIntoPortfolio(Transaction transaction){
         jdbcTemplate.update(connection -> insertAssetInPortfolioStatement(transaction, connection));
     }
@@ -94,13 +95,18 @@ public class JdbcPortfolioDao implements PortfolioDao {
         }
     }
 
-    private PreparedStatement deletePortfolioStatement (Order order, Connection connection)
+    private PreparedStatement deletePortfolioStatement (Transaction transaction, Connection connection)
             throws SQLException {
         PreparedStatement ps = connection.prepareStatement(
                 "DELETE FROM ownedasset_table WHERE iban = ?"
         );
-        ps.setString(1, order.getBankAccount().getIban());
+        ps.setString(1, transaction.getSellerAccount().getIban());
         return ps;
+    }
+
+    @Override
+    public void deleteAssetFromPortfolio(Transaction transaction){
+        jdbcTemplate.update(connection -> deletePortfolioStatement(transaction, connection));
     }
 
     @Override

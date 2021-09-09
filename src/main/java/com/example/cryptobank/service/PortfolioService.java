@@ -31,13 +31,11 @@ public class PortfolioService {
         return rootRepository.getPortfolioByIban(iban);
     }
 
-    public PortfolioDto showPortfolioDto (String token){
-        String username = rootRepository.findCustomerUsernameByToken(token);
-        Customer customer = rootRepository.findCustomerByUsername(username);
-        Map<String, Double> assetMap = rootRepository.getPortfolioByIban(customer.getBankAccount().getIban()).getAssetMap();
+    public PortfolioDto showPortfolioDto (String iban, String firstName){
+        Map<String, Double> assetMap = rootRepository.getPortfolioByIban(iban).getAssetMap();
         List<OwnedAssetDto> list = getList(assetMap);
-        double totalValue = getTotalValuePortfolio(customer.getBankAccount().getIban());
-        return new PortfolioDto(customer.getFirstName(), list, totalValue);
+        double totalValue = getTotalValuePortfolio(iban);
+        return new PortfolioDto(firstName, list, totalValue);
     }
 
     public List<OwnedAssetDto> getList(Map<String, Double> assetMap){
@@ -67,9 +65,5 @@ public class PortfolioService {
             totalValue += assetValue;
         }
         return totalValue;
-    }
-
-    public List<String> testlist (String iban){
-        return rootRepository.getAbbreviationsByIban(iban);
     }
 }
