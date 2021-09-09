@@ -1,6 +1,8 @@
 package com.example.cryptobank.controller;
 
 import com.example.cryptobank.domain.Order;
+import com.example.cryptobank.dto.CustomerDto;
+import com.example.cryptobank.service.CustomerService;
 import com.example.cryptobank.service.OrderService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,11 +17,12 @@ import java.util.ArrayList;
 public class OrderController {
 
     private OrderService orderService;
+    private CustomerService customerService;
 
     private final Logger logger = LoggerFactory.getLogger(OrderController.class);
 
     @Autowired
-    public OrderController(OrderService orderService) {
+    public OrderController(OrderService orderService, CustomerService customerService) {
         this.orderService = orderService;
         logger.info("New OrderController");
     }
@@ -32,12 +35,18 @@ public class OrderController {
      */
     @PostMapping("/buyasset")
     // public int buyAsset(@RequestParam String ibanBuyer, String ibanSeller, Asset asset, double amount) {
-    public int buyAsset(@RequestBody Order order) {
-        Order orderToSave = orderService.placeOrder(order);
-        if (orderToSave.getBankAccount().getIban() == null) {
-            return new ResponseEntity<String>("Failed", HttpStatus.BAD_REQUEST).getStatusCodeValue();
+    public ResponseEntity<?> buyAsset(@RequestBody Order order, @RequestHeader("Authorization") String accessToken) {
+        CustomerDto customer = customerService.authenticate(accessToken);
+        if (customer == null) {
+           return new ResponseEntity<String>("wegwezen jij", HttpStatus.FORBIDDEN);
         } else {
-            return new ResponseEntity<String>(HttpStatus.OK).getStatusCodeValue();
+
+            Order orderToSave = orderService.placeOrder(order);
+            if (orderToSave.getBankAccount().getIban() == null) {
+                return new ResponseEntity<String>("Failed", HttpStatus.BAD_REQUEST);
+            } else {
+                return new ResponseEntity<String>(HttpStatus.OK);
+            }
         }
     }
 
