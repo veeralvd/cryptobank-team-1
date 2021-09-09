@@ -1,7 +1,5 @@
 package com.example.cryptobank.database;
 
-import com.example.cryptobank.domain.Address;
-import com.example.cryptobank.domain.Admin;
 import com.example.cryptobank.domain.BankAccount;
 import com.example.cryptobank.domain.Customer;
 import org.slf4j.Logger;
@@ -13,7 +11,6 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -47,7 +44,7 @@ public class JdbcCustomerDAO implements CustomerDAO{
         preparedStatement.setString(11, customer.getAddress().getAddition());
         preparedStatement.setString(12, customer.getBankAccount().getIban());
         preparedStatement.setString(13, customer.getAddress().getCity());
-        preparedStatement.setString(14, customer.getToken());
+        preparedStatement.setString(14, customer.getAccessToken());
         preparedStatement.setString(15, customer.getEmail());
         return preparedStatement;
     }

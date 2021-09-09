@@ -2,16 +2,12 @@ package com.example.cryptobank.service;
 
 import com.example.cryptobank.database.CustomerDAO;
 import com.example.cryptobank.database.RootRepository;
-import com.example.cryptobank.domain.Address;
-import com.example.cryptobank.domain.BankAccount;
 import com.example.cryptobank.domain.Customer;
 import com.example.cryptobank.dto.CustomerDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.time.LocalDate;
-import java.util.List;
 
 @Service
 public class CustomerService {
@@ -21,15 +17,19 @@ public class CustomerService {
     private CustomerDAO customerDAO;
     private RootRepository rootRepository;
     private RegistrationService registrationService;
+    private AuthenticationService authenticationService;
 
     private final Logger logger = LoggerFactory.getLogger(CustomerService.class);
 
     @Autowired
-    public CustomerService(LoginService loginService, CustomerDAO customerDAO, RootRepository rootRepository, RegistrationService registrationService) {
+    public CustomerService(LoginService loginService, CustomerDAO customerDAO,
+                           RootRepository rootRepository, RegistrationService registrationService,
+                           AuthenticationService authenticationService) {
         this.loginService = loginService;
         this.customerDAO = customerDAO;
         this.rootRepository = rootRepository;
         this.registrationService = registrationService;
+        this.authenticationService = authenticationService;
         logger.info("New CustomerService");
     }
 
@@ -49,7 +49,15 @@ public class CustomerService {
 //        return attemptToLogin;
 //    }
 
-    public CustomerDto login(CustomerDto customerDto) {
-        return loginService.loginCustomer(customerDto);
+    public CustomerDto login(String username, String password) {
+        return loginService.loginCustomer(username, password);
+    }
+
+    public CustomerDto authenticate(String token) {
+        return authenticationService.authenticateCustomerToken(token);
+    }
+
+    public void refresh(CustomerDto customerToRefreshToken) {
+        authenticationService.refreshCustomerToken(customerToRefreshToken);
     }
 }

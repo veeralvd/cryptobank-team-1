@@ -5,13 +5,14 @@ public  abstract class User implements Comparable<User>{
     private String username;
     private String password;
     private String salt;
-    private String token;
+    private String accessToken;
+    private String refreshToken;
 
     public User(String username, String password, String salt, String token) {
         this.username = username;
         this.password = password;
         this.salt = salt;
-        this.token = token;
+        this.accessToken = token;
     }
 
     public User(String username, String password) {
@@ -46,22 +47,27 @@ public  abstract class User implements Comparable<User>{
         this.salt = salt;
     }
 
-    public String getToken() {
-        return token;
+    public String getAccessToken() {
+        return accessToken;
     }
 
-    public void setToken(String token) {
-        this.token = token;
+    public void setAccessToken(String token) {
+        this.accessToken = token;
     }
 
+    public String getRefreshToken() {
+        return refreshToken;
+    }
 
+    public void setRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
+    }
 
     @Override
     public String toString() {
         return "User{" +
                 "username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", salt='" + salt + '\'' +
+                ", password='" + password +
                 '}';
     }
 }

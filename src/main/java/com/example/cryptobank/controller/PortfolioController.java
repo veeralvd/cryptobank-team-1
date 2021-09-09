@@ -1,21 +1,14 @@
 package com.example.cryptobank.controller;
 
-import com.example.cryptobank.database.AssetDao;
-import com.example.cryptobank.database.PortfolioDao;
-import com.example.cryptobank.database.RootRepository;
-import com.example.cryptobank.domain.Asset;
+import com.example.cryptobank.service.PortfolioService;
 import com.example.cryptobank.domain.Portfolio;
 import com.example.cryptobank.dto.PortfolioDto;
-import com.example.cryptobank.service.PortfolioService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @RestController
 public class PortfolioController {

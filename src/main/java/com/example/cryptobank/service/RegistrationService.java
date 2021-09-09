@@ -1,10 +1,11 @@
 package com.example.cryptobank.service;
 
-import com.example.cryptobank.database.RootRepository;
 import com.example.cryptobank.domain.Address;
 import com.example.cryptobank.domain.Admin;
 import com.example.cryptobank.domain.BankAccount;
 import com.example.cryptobank.domain.Customer;
+import com.example.cryptobank.security.PepperService;
+import com.example.cryptobank.database.RootRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -31,7 +32,7 @@ public class RegistrationService {
             String salt = new Saltmaker().generateSalt();attemptToRegister.setPassword(HashHelper.hash(password, salt, PepperService.getPepper()));
             String token = UUID.randomUUID().toString();
             attemptToRegister.setSalt(salt);
-            attemptToRegister.setToken(token);
+            attemptToRegister.setAccessToken(token);
             Admin registeredAdmin = rootRepository.save(attemptToRegister);
             return registeredAdmin;
         }
@@ -39,8 +40,8 @@ public class RegistrationService {
     }
 
     public Customer registerCustomer(String username, String password,
-                             String firstName, String lastName, LocalDate dateOfBirth, int socialSecurityNumber,
-                             String street, String zipcode, int houseNumber, String addition, String city) {
+                                     String firstName, String lastName, LocalDate dateOfBirth, int socialSecurityNumber,
+                                     String street, String zipcode, int houseNumber, String addition, String city) {
         Customer customerToRegister = new Customer(username, password);
         if (checkIfCustomerCanBeRegistered(username) && checkIfSocialSecurityNumberExists(socialSecurityNumber)) {
             String salt = new Saltmaker().generateSalt();
@@ -53,7 +54,7 @@ public class RegistrationService {
             customerToRegister.setSocialSecurityNumber(socialSecurityNumber);
             customerToRegister.setAddress(new Address(street, zipcode, houseNumber, addition, city));
             customerToRegister.setBankAccount(new BankAccount());
-            customerToRegister.setToken(token);
+            customerToRegister.setAccessToken(token);
             Customer customerRegistered = rootRepository.save(customerToRegister);
             return customerRegistered;
         }
@@ -70,7 +71,7 @@ public class RegistrationService {
             customerToRegister.setSalt(salt);
             String iban = IbanGenerator.generate();
             customerToRegister.setBankAccount(new BankAccount(iban));
-            customerToRegister.setToken(token);
+            customerToRegister.setAccessToken(token);
             Customer customerRegistered = rootRepository.save(customerToRegister);
             return customerRegistered;
         }

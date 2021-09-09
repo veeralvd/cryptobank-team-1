@@ -14,15 +14,18 @@ public class AdminService {
     private RootRepository rootRepository;
     private LoginService loginService;
     private RegistrationService registrationService;
+    private AuthenticationService authenticationService;
 
 
     private final Logger logger = LoggerFactory.getLogger(AdminService.class);
 
     @Autowired
-    public AdminService(RootRepository rootRepository, LoginService loginService, RegistrationService registrationService) {
+    public AdminService(RootRepository rootRepository, LoginService loginService,
+                        RegistrationService registrationService, AuthenticationService authenticationService) {
         this.rootRepository = rootRepository;
         this.loginService = loginService;
         this.registrationService = registrationService;
+        this.authenticationService = authenticationService;
         logger.info("New AdminService");
     }
 
@@ -35,5 +38,13 @@ public class AdminService {
     public Admin login(String username, String password) {
         Admin adminAttempToLogin = loginService.loginAdmin(username, password);
         return adminAttempToLogin;
+    }
+
+    public Admin authenticate(String token) {
+        return authenticationService.authenticateAdminToken(token);
+    }
+
+    public void refresh(Admin adminToRefreshToken) {
+        authenticationService.refreshAdminToken(adminToRefreshToken);
     }
 }

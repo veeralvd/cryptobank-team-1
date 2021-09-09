@@ -1,7 +1,6 @@
 package com.example.cryptobank.database;
 
 import com.example.cryptobank.domain.Admin;
-import com.example.cryptobank.domain.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +33,7 @@ public class JdbcAdminDAO implements AdminDAO {
         preparedStatement.setString(1, admin.getUsername());
         preparedStatement.setString(2, admin.getPassword());
         preparedStatement.setString(3, admin.getSalt());
-        preparedStatement.setString(4, admin.getToken());
+        preparedStatement.setString(4, admin.getAccessToken());
         return preparedStatement;
     }
 
@@ -71,7 +70,7 @@ public class JdbcAdminDAO implements AdminDAO {
     @Override
     public String findAdminUsernameByToken(String token) {
         String sql = "SELECT * from admin where token = ?";
-        String tokenFromDatabase = jdbcTemplate.query(sql, new AdminRowMapper(), token).get(0).getToken();
+        String tokenFromDatabase = jdbcTemplate.query(sql, new AdminRowMapper(), token).get(0).getAccessToken();
         return tokenFromDatabase;
     }
 

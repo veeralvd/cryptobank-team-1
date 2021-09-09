@@ -1,7 +1,6 @@
 package com.example.cryptobank.service;
 
 import com.example.cryptobank.database.RootRepository;
-import com.example.cryptobank.domain.Asset;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.slf4j.Logger;

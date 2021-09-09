@@ -10,8 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URI;
-
 @RestController
 public class AdminController {
 
@@ -33,7 +31,7 @@ public class AdminController {
         try {
             Admin adminToRegister = adminService.register(username, password);
             HttpHeaders httpHeaders = new HttpHeaders();
-            httpHeaders.set(HttpHeaders.AUTHORIZATION, adminToRegister.getToken());
+            httpHeaders.set(HttpHeaders.AUTHORIZATION, adminToRegister.getAccessToken());
             return new ResponseEntity<>(adminToRegister.getUsername(),httpHeaders, HttpStatus.CREATED);
         } catch (Exception e) {
             logger.info(e.toString());
@@ -52,15 +50,27 @@ public class AdminController {
     @PostMapping("/admin/login")
     ResponseEntity<?> login(@RequestParam String username, @RequestParam String password) {
         logger.info("login admin aangeroepen");
-
-
         Admin adminToLogin = adminService.login(username, password);
         if (adminToLogin.getSalt() != null) {
             HttpHeaders responseHeader = new HttpHeaders();
-            responseHeader.set(HttpHeaders.AUTHORIZATION, adminToLogin.getToken());
-            return new ResponseEntity<String>(adminToLogin.getToken(), responseHeader, HttpStatus.OK);
+            responseHeader.set(HttpHeaders.AUTHORIZATION, adminToLogin.getAccessToken());
+            responseHeader.set("refresh_token", adminToLogin.getRefreshToken());
+            return new ResponseEntity<String>(adminToLogin.getAccessToken(), responseHeader, HttpStatus.OK);
         } else {
-            return new ResponseEntity<String>("optyfen gauw", HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<String>("optyfen gauw", HttpStatus.FORBIDDEN);
+        }
+    }
+
+    @GetMapping("/admin/get")
+    ResponseEntity<?> getAdmin(@RequestHeader ("Authorization") String token) {
+        logger.info("get admin aangeroepen");
+        Admin adminToLogin = adminService.authenticate(token);
+
+        if (adminToLogin != null) {
+            return new ResponseEntity<String>(adminToLogin.toString() + " " +
+                    adminToLogin.getAccessToken(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<String>("optyfen gauw", HttpStatus.FORBIDDEN);
         }
     }
 }

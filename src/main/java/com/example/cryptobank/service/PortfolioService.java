@@ -1,6 +1,5 @@
 package com.example.cryptobank.service;
 
-import com.example.cryptobank.database.JdbcPortfolioDao;
 import com.example.cryptobank.database.RootRepository;
 import com.example.cryptobank.domain.Asset;
 import com.example.cryptobank.domain.Customer;
