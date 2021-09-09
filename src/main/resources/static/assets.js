@@ -1,16 +1,87 @@
 
+document.querySelector('#showAssets').addEventListener('click', function (event) {
+    const urlAssets = "http://localhost:8080/assets"
+    const options = {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': localStorage.getItem('Authorization')
+        }
+    }
+
+  /*  async function getAllAssets(url) {
+        const response = await fetch(urlAssets);
+        let data = await response.json();
+        console.log(data);
+        show(data)
+    }
+
+    getAllAssets(urlAssets)*/
+
+    fetch(urlAssets, options)
+        .then(response => {
+            if (response.ok) {
+                response.json()
+                    .then(json => {
+                    let jason = json;
+                        let table = document.querySelector("assetTable");
+                        let data = Object.keys(jason[0]);
+                        generateTableHead(table, data);
+                        generateTable(table, jason);
+
+                })
+                    .catch((error) => {
+                        console.error('Error' + error);
+                    })
+            } else {
+                console.log('niet gelukt')
+            }
+        })
+    })
+
+function generateTableHead(table, data) {
+    let thead = table.createTHead();
+    let row = thead.insertRow();
+    for (let key of data) {
+        let th = document.createElement("th");
+        let text = document.createTextNode(key);
+        th.appendChild(text);
+        row.appendChild(th);
+    }
+}
+
+function generateTable(table, data) {
+    for (let element of data) {
+        let row = table.insertRow();
+        if (element === null) {
+            element = "-"
+        }
+        for (let key in element) {
+            let cell = row.insertCell();
+            let text = document.createTextNode(element[key]);
+            cell.appendChild(text);
+        }
+    }
+}
+
+
+
+// let table = document.querySelector("assetTable");
+// let data = Object.keys(assetsReturned[0]);
+// generateTableHead(table, data);
+
 /*
 let abbreviation = "?abbreviation" + abbreviation
 let url = "http://localhost:8080/assets/doge"
 */
-let url = new URL(window.location.href)
+/*let url = new URL(window.location.href)
 console.log(url.origin)
 const options = {
     method: "POST",
     headers: {
         "Content-type": "application/json"
     }
-}
+}*/
 
 //relatieve url:
 /*fetch(`${url.origin}/{abbreviation}`)
