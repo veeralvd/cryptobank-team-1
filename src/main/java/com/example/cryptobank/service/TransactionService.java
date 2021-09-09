@@ -17,7 +17,6 @@ import java.util.List;
 @Service
 public class TransactionService {
 
-    private Mapper mapper;
     private RootRepository rootRepository;
     private Bank bank = Bank.getInstance();
     private BankAccount buyerAccount;
@@ -64,7 +63,10 @@ public class TransactionService {
         calculateTransactionCost(orderToProcess);
         calculateAmountToPayReceive(orderToProcess);
 
-        if (validateCreditLimitBuyer(orderToProcess) && validatePortfolioSellerContainsAsset(orderToProcess) && validateAssetAmountSeller(orderToProcess)) {
+        if (validateCreditLimitBuyer(orderToProcess)
+                && validatePortfolioSellerContainsAsset(orderToProcess)
+                && validateAssetAmountSeller(orderToProcess)) {
+
             updateBankAccount(orderToProcess);
             updatePortfolio(orderToProcess);
             Transaction transactionToComplete = assembleNewTransaction(orderToProcess);
@@ -72,6 +74,7 @@ public class TransactionService {
             logger.info("Transactie opgeslagen");
             return getTransactionDto(transactionToComplete);
         }
+
         logger.info("Transactie NIET opgeslagen");
         return null;
     }
@@ -146,9 +149,9 @@ public class TransactionService {
     //Hier nog alleen voor aankoop van bank
     private void updateBankAccount(Order orderToProcess) {
         logger.info("Withdraw money from bankaccount buyer / deposit money to bankaccount seller");
-        double amountToPayRecieve = calculateAmountToPayReceive(orderToProcess);
-        rootRepository.withdraw(buyerAccount.getIban(), amountToPayRecieve);
-        rootRepository.deposit(sellerAccount.getIban(), amountToPayRecieve);
+        double amountToPayReceive = calculateAmountToPayReceive(orderToProcess);
+        rootRepository.withdraw(buyerAccount.getIban(), amountToPayReceive);
+        rootRepository.deposit(sellerAccount.getIban(), amountToPayReceive);
     }
 
     private void updatePortfolio(Order orderToProcess) {
@@ -157,6 +160,7 @@ public class TransactionService {
         boolean portfolioBuyerContainsAsset = checkIfPortfolioBuyerContainsAsset(orderToProcess);
         if (!portfolioBuyerContainsAsset) {
             rootRepository.insertAssetIntoPortfolio(transactionToComplete);
+            logger.info("New asset inserted into ownedAsset table");
         }
         rootRepository.updateAssetAmountNegative(transactionToComplete);
         rootRepository.updateAssetAmountPositive(transactionToComplete);
@@ -172,12 +176,6 @@ public class TransactionService {
         transactionToComplete.setTransactionCost(calculateTransactionCost(orderToProcess));
         transactionToComplete.setDateTimeTransaction(LocalDateTime.now());
         return transactionToComplete;
-    }
-
-    private void saveTransaction(Order orderToProcess) {
-        logger.info("Save transation in transaction table");
-        Transaction transactionToSave = assembleNewTransaction(orderToProcess);
-        rootRepository.save(transactionToSave);
     }
 
     public Transaction saveTransaction(Transaction transaction) {

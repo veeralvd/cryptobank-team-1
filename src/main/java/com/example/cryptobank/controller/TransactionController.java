@@ -38,11 +38,6 @@ public class TransactionController {
         return new ResponseEntity<>(transactionDto, HttpStatus.OK);
     }
 
-   /* @GetMapping("/transactions/iban")
-    public ArrayList<Transaction> getAllByIban(@RequestParam String iban) {
-        return transactionService.getAllByIban(iban);
-    }*/
-
     @PostMapping(value = "/transactions/complete", produces = "application/json")
     public ResponseEntity<?> completeTransactionFromBank(@RequestBody Order orderToProcess, @RequestHeader("Authorization") String accessToken) {
         CustomerDto customer = customerService.authenticate(accessToken);
