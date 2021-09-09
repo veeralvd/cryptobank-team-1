@@ -8,14 +8,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class TransactionService {
 
     private RootRepository rootRepository;
-    private BankAccountService bankAccountService;
     private Bank bank = Bank.getInstance();
+    private BankAccount buyerAccount;
+    private BankAccount sellerAccount;
     private final double TRANSACTION_RATE = 0.03;   // TODO transaction rate instelbaar maken
 
     private final Logger logger = LoggerFactory.getLogger(TransactionService.class);
@@ -26,76 +27,143 @@ public class TransactionService {
         logger.info("New TransactionService");
     }
 
-
     public Transaction findByTransactionId(int transactionId) {
         return rootRepository.findByTransactionId(transactionId);
     }
+
+    public Transaction completeTransaction(Order orderToProcess) {
+
+        /*isBuyingOrder(orderToProcess);
+
+        if (isBuyingOrder(orderToProcess)) {
+            buyerAccount = orderToProcess.getBankAccount();
+            sellerAccount = bank.getBankAccount();
+        } else {
+            buyerAccount = bank.getBankAccount();
+            sellerAccount = orderToProcess.getBankAccount();
+        }*/
+
+        // test koop van bank:
+        buyerAccount = orderToProcess.getBankAccount();
+        sellerAccount = bank.getBankAccount();
+
+        calculateAssetCost(orderToProcess);
+        calculateTransactionCost(orderToProcess);
+        calculateAmountToPayReceive(orderToProcess);
+
+        if (validateCreditLimitBuyer(orderToProcess) && validatePortfolioContainsAsset(orderToProcess) && validateAssetAmountSeller(orderToProcess)) {
+            updateBankAccount(orderToProcess);
+            updatePortfolio(orderToProcess);
+            Transaction transactionToComplete = assembleNewTransaction(orderToProcess);
+            saveTransaction(transactionToComplete);
+            logger.info("Transactie opgeslagen");
+            return transactionToComplete;
+        }
+        logger.info("Transactie NIET opgeslagen");
+        return null;
+    }
+
+    /* boolean isBuyingOrder(Order orderToProcess) {
+        logger.info("Check of het om een kooporder gaat (alleen aankoop van bank voor nu)");
+        if (orderToProcess.isBuyingOrder()) {
+            return true;
+        }
+        return false;
+    };*/
+
+    private double calculateAssetCost(Order orderToProcess) {
+        double assetCost = orderToProcess.getDesiredPrice() * orderToProcess.getAssetAmount();
+        return assetCost;
+    }
+
+    // default gedeeld door twee
+    private double calculateTransactionCost(Order orderToProcess) {
+        double transactionCost = (calculateAssetCost(orderToProcess) * TRANSACTION_RATE) / 2;
+        return transactionCost;
+    }
+
+    // hier voor alleen koop van bank: bedrag te betalen door klant = bedrag te ontvangen door bank
+    private double calculateAmountToPayReceive(Order orderToProcess) {
+        double assetCost = calculateAssetCost(orderToProcess);
+        double transactionCost = calculateTransactionCost(orderToProcess);
+        return assetCost + transactionCost;
+    }
+
+    private boolean validateCreditLimitBuyer(Order orderToProcess) {
+        logger.info("Check if buyer has enough money");
+        double amountToPay = calculateAmountToPayReceive(orderToProcess);
+        if (amountToPay >= buyerAccount.getBalance()) {
+            logger.info("Insufficient funds !!!");
+            return false;
+        }
+        return true;
+    }
+
+    private boolean validatePortfolioContainsAsset(Order orderToProcess) {
+        String assetAbbr = orderToProcess.getAsset().getAbbreviation();
+        String ibanSeller = sellerAccount.getIban();
+        List<String> assetAbbrList = rootRepository.getAbbreviationsByIban(ibanSeller);
+        for (String abbreviation: assetAbbrList) {
+            if (abbreviation.equals(assetAbbr)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean validateAssetAmountSeller(Order orderToProcess) {
+        logger.info("Check if seller has sufficient assets");
+        double amountToRemove = orderToProcess.getAssetAmount();
+        String assetAbbr = orderToProcess.getAsset().getAbbreviation(); // dubbele code
+        String ibanSeller = sellerAccount.getIban(); // dubbele code
+        double amountInPortfolio = rootRepository.getAssetAmountByIbanAndAbbr(ibanSeller, assetAbbr);
+        if (amountInPortfolio >= amountToRemove) {
+            logger.info("Not enough Assets to sell !!!");
+            return true;
+        }
+        return false;
+    }
+
+    //Hier alleen voor aankoop van bank
+    private void updateBankAccount(Order orderToProcess) {
+        logger.info("Withdraw money from bankaccount buyer / deposit money to bankaccount seller");
+        double amountToPayRecieve = calculateAmountToPayReceive(orderToProcess);
+        rootRepository.withdraw(buyerAccount.getIban(), amountToPayRecieve);
+        rootRepository.deposit(sellerAccount.getIban(), amountToPayRecieve);
+    }
+
+    private void updatePortfolio(Order orderToProcess) {
+        logger.info("Remove assets from portfolio seller / add assets to portfolio buyer");
+        Transaction transactionToComplete = assembleNewTransaction(orderToProcess);
+        boolean portfolioContainsAsset = validatePortfolioContainsAsset(orderToProcess);
+        if (!portfolioContainsAsset) {
+            rootRepository.insertAssetIntoPortfolio(transactionToComplete);
+        }
+        rootRepository.updateAssetAmountNegative(transactionToComplete);
+        rootRepository.updateAssetAmountPositive(transactionToComplete);
+    }
+
+    private Transaction assembleNewTransaction(Order orderToProcess) {
+        Transaction transactionToComplete = new Transaction();
+        transactionToComplete.setAsset(orderToProcess.getAsset());
+        transactionToComplete.setAssetAmount(orderToProcess.getAssetAmount());
+        transactionToComplete.setAssetPrice(orderToProcess.getDesiredPrice()); // voor nu, currentPrice nodig
+        transactionToComplete.setBuyerAccount(buyerAccount);
+        transactionToComplete.setSellerAccount(sellerAccount);
+        transactionToComplete.setTransactionCost(calculateTransactionCost(orderToProcess));
+        transactionToComplete.setDateTimeTransaction(LocalDateTime.now());
+        return transactionToComplete;
+    }
+
+    private void saveTransaction(Order orderToProcess) {
+        logger.info("Save transation in transaction table");
+        Transaction transactionToSave = assembleNewTransaction(orderToProcess);
+        rootRepository.save(transactionToSave);
+    }
+
 
     public Transaction saveTransaction(Transaction transaction) {
         return rootRepository.save(transaction);
     }
 
-    /**
-     *  Opzet methode completeTransaction voor koop van platform. Moet nog opgesplitst worden.
-     *  Hier vanuit een doorgegeven Order geredeneerd.
-     */
-    public Transaction completeTransactionFromBank(Order orderToProcess) {
-
-        Transaction transactionToComplete = new Transaction();
-        transactionToComplete.setDateTimeTransaction(LocalDateTime.now());
-        transactionToComplete.setAsset(orderToProcess.getAsset());
-
-        double assetAmount = orderToProcess.getAssetAmount();
-        double assetPrice = orderToProcess.getDesiredPrice(); // voor nu even, getCurrentAssetPrice nodig
-        transactionToComplete.setAssetAmount(assetAmount);
-        transactionToComplete.setAssetPrice(assetPrice);
-
-        BankAccount buyerAccount = orderToProcess.getBankAccount();
-        BankAccount sellerAccount = bank.getBankAccount();
-        transactionToComplete.setBuyerAccount(buyerAccount);
-        transactionToComplete.setSellerAccount(sellerAccount);
-
-        double assetCost = assetPrice * assetAmount;
-        double transactionCost = assetCost * TRANSACTION_RATE;  // Voor nu, instelbare transaction rate nodig
-        transactionToComplete.setTransactionCost(transactionCost);
-
-        //double transactionCostBuyer = buyerAccount==bank?0.0:transactionCost;
-        //double  transactionCostSeller = sellerAccount == bank?0.0:transactionCost;
-
-
-        double totalCost = assetCost + transactionCost;
-
-        validateCreditLimit(buyerAccount, totalCost);
-
-        rootRepository.withdraw(buyerAccount.getIban(), totalCost);
-        rootRepository.deposit(sellerAccount.getIban(), totalCost);
-
-        rootRepository.updateAssetAmountNegative(transactionToComplete);
-        rootRepository.updateAssetAmountPositive(transactionToComplete);
-
-        rootRepository.save(transactionToComplete);
-
-        return transactionToComplete;
-    }
-
-    private double calculateAssetCost(double assetPrice, double assetAmount) {
-        return assetPrice * assetAmount;
-    }
-
-    private double calculateTransactionCost(double assetCost) {
-        return assetCost * TRANSACTION_RATE;
-    }
-
-    private double calculateTransactionCostSplit(double assetCost, double transactionRate) {
-        return assetCost * (transactionRate / 2);
-    }
-
-    private boolean validateCreditLimit(BankAccount bankAccount, double amount) {
-        if (amount > bankAccount.getBalance()) {
-            logger.info("Insufficient funds!");
-            return false;
-        } else {
-            return true;
-        }
-    }
 }
