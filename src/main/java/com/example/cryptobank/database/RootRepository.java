@@ -134,22 +134,23 @@ public class RootRepository {
         Order order = orderDao.findByOrderId(orderId);
         String iban = orderDao.getIbanFromOrderId(orderId);
         BankAccount bankAccount = bankAccountDao.findAccountByIban(iban);
+        System.out.println("Bankaccount gemaakt:" + bankAccount);
         String assetAbbreviation = orderDao.getAssetAbbrFromOrderId(orderId);
         Asset asset = assetDao.findByAbbreviation(assetAbbreviation);
+        System.out.println("Asset gemaakt:" + asset);
         order.setBankAccount(bankAccount);
         order.setAsset(asset);
         return order;
     }
 
-    public ArrayList<Order> getAllByIban (String iban) {
-        ArrayList<Order> allOrdersFromCustomer = orderDao.getAllByIban(iban);
-        return allOrdersFromCustomer;
-    }
-
-    // Nog dubbelop
     public ArrayList<Order> getAllOrdersByIban(String iban) {
         return orderDao.getAllByIban(iban);
     }
+
+    // Nog dubbelop
+    /*public ArrayList<Order> getAllOrdersByIban(String iban) {
+        return orderDao.getAllByIban(iban);
+    }*/
 
     public Transaction findByTransactionId(int transactionId) {
         Transaction transaction = transactionDao.findByTransactionId(transactionId);

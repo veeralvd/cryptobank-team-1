@@ -19,6 +19,9 @@ public class Asset {
         logger.info("New Asset");
     }
 
+    public Asset() {
+    }
+
     public String getAbbreviation() {
         return abbreviation;
     }

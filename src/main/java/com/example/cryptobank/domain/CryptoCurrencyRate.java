@@ -29,6 +29,9 @@ public class CryptoCurrencyRate {
         this(abbreviation, cryptoRate, LocalDateTime.now());
     }
 
+    public CryptoCurrencyRate() {
+    }
+
     public String getAbbreviation() {
         return abbreviation;
     }
