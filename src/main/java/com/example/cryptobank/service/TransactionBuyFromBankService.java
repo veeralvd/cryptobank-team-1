@@ -24,10 +24,5 @@ public class TransactionBuyFromBankService extends TransactionAbstractClass {
         logger.info("New TransactionBuyFromBankService");
     }
 
-    @Override
-    double calculateAmountToPay(Order orderToProcess) {
-        // Hier: totaalbedrag te betalen door koper/klant aan verkoper/bank >> calculate amountToPay
-        double totalCost = super.calculateAssetCost(orderToProcess) + super.calculateTransactionCost(orderToProcess);
-        return totalCost;
-    }
+
 }

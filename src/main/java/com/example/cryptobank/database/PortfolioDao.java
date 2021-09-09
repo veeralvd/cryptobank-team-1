@@ -16,5 +16,7 @@ public interface PortfolioDao {
 
     List<String> getAbbreviationsByIban(String iban);
 
-    double getAssetAmountByIbanAndAbbr(String ibanSeller, String assetAbbr);
+    double getAssetAmountByIbanAndAbbr(String iban, String assetAbbr);
+
+    void insertAssetIntoPortfolio(Transaction transaction);
 }

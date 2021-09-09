@@ -66,7 +66,7 @@ INSERT INTO cryptobank.ownedasset (IBAN, abbreviation, aantalEenheden) VALUES ('
 INSERT INTO cryptobank.ownedasset (IBAN, abbreviation, aantalEenheden) VALUES ('NL69COKI5000000003', 'BTC', 2);
 INSERT INTO cryptobank.ownedasset (IBAN, abbreviation, aantalEenheden) VALUES ('NL69COKI5000000003', 'HEX', 500);
 INSERT INTO cryptobank.ownedasset(IBAN, abbreviation, aantalEenheden) VALUES ('NL24COKI3309054260', 'DOGE', 4000); -- LET OP: dit is het portfolio van de bank
-INSERT INTO cryptobank.ownedasset(IBAN, abbreviation, aantalEenheden) VALUES ('NL24COKI3309054260', 'ADA', 40000);
+INSERT INTO cryptobank.ownedasset(IBAN, abbreviation, aantalEenheden) VALUES ('NL24COKI3309054260', 'ADA', 4000);
 INSERT INTO cryptobank.ownedasset(IBAN, abbreviation, aantalEenheden) VALUES ('NL24COKI3309054260', 'BCH', 4000);
 INSERT INTO cryptobank.ownedasset(IBAN, abbreviation, aantalEenheden) VALUES ('NL24COKI3309054260', 'BTC', 4000);
 INSERT INTO cryptobank.ownedasset(IBAN, abbreviation, aantalEenheden) VALUES ('NL24COKI3309054260', 'HEX', 4000);

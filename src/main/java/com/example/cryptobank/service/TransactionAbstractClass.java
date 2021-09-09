@@ -40,11 +40,10 @@ public abstract class TransactionAbstractClass {
 
         calculateAssetCost(orderToProcess);
         calculateTransactionCost(orderToProcess);
-        calculateAmountToPay(orderToProcess);
-        calculateAmountToReceive(orderToProcess);
+        calculateAmountToPayRecieve(orderToProcess);
 
         if (validateCreditLimitBuyer(orderToProcess) && validatePortfolioContainsAsset(orderToProcess) && validateAssetAmountSeller(orderToProcess)) {
-            updateBankAccount();
+            updateBankAccount(orderToProcess);
             updatePortfolio(orderToProcess);
             assembleNewTransaction(orderToProcess);
             saveTransaction(orderToProcess);
@@ -70,26 +69,17 @@ public abstract class TransactionAbstractClass {
         return transactionCost;
     }
 
-    double calculateAmountToPay(Order orderToProcess) {
-        String ibanBuyer = buyerAccount.getIban();
-        String ibanSeller = sellerAccount.getIban();
-        String ibanBank = BANK_ACCOUNT.getIban();
-        double transactioncostBuyer = 0.0;
-        double transactioncostSeller = 0.0;
-
-        if (ibanBuyer.equals(ibanBank)) {
-            transactioncostBuyer = 0.0;
-        } else if (ibanSeller.equals(ibanBank)) {
-            transactioncostSeller = 0.0;
-        }
-
-        return transactioncostBuyer;
+    // hier voor alleen koop van bank: bedrag te betalen door klant = bedrag te ontvangen door bank
+    double calculateAmountToPayRecieve(Order orderToProcess) {
+        double assetCost = calculateAssetCost(orderToProcess);
+        double transactionCost = calculateTransactionCost(orderToProcess);
+        return assetCost + transactionCost;
     }
 
 
     boolean validateCreditLimitBuyer(Order orderToProcess) {
         logger.info("Check if buyer has enough money");
-        double amountToPay = calculateAmountToPay(orderToProcess);
+        double amountToPay = calculateAmountToPayRecieve(orderToProcess);
         if (amountToPay >= buyerAccount.getBalance()) {
             return false;
         }
@@ -120,15 +110,21 @@ public abstract class TransactionAbstractClass {
         return false;
     }
 
-    void updateBankAccount() {
+    //Hier alleen voor aankoop van bank
+    void updateBankAccount(Order orderToProcess) {
         logger.info("Withdraw money from bankaccount buyer / deposit money to bankaccount seller");
-        rootRepository.withdraw(buyerAccount.getIban(), );
-        rootRepository.deposit(sellerAccount.getIban(), );
+        double amountToPayRecieve = calculateAmountToPayRecieve(orderToProcess);
+        rootRepository.withdraw(buyerAccount.getIban(), amountToPayRecieve);
+        rootRepository.deposit(sellerAccount.getIban(), amountToPayRecieve);
     }
 
     void updatePortfolio(Order orderToProcess) {
         logger.info("Remove assets from portfolio seller / add assets to portfolio buyer");
         Transaction transactionToComplete = assembleNewTransaction(orderToProcess);
+        boolean portfolioContainsAsset = validatePortfolioContainsAsset(orderToProcess);
+        if (!portfolioContainsAsset) {
+            rootRepository.insertAssetIntoPortfolio(transactionToComplete);
+        }
         rootRepository.updateAssetAmountNegative(transactionToComplete);
         rootRepository.updateAssetAmountPositive(transactionToComplete);
     }
