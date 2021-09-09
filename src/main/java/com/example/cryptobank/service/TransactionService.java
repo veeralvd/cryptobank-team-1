@@ -47,11 +47,15 @@ public class TransactionService {
         buyerAccount = orderToProcess.getBankAccount();
         sellerAccount = bank.getBankAccount();
 
+  /*      // test verkoop aan bank
+        buyerAccount = bank.getBankAccount();
+        sellerAccount = orderToProcess.getBankAccount();*/
+
         calculateAssetCost(orderToProcess);
         calculateTransactionCost(orderToProcess);
         calculateAmountToPayReceive(orderToProcess);
 
-        if (validateCreditLimitBuyer(orderToProcess) && validatePortfolioContainsAsset(orderToProcess) && validateAssetAmountSeller(orderToProcess)) {
+        if (validateCreditLimitBuyer(orderToProcess) && validatePortfolioSellerContainsAsset(orderToProcess) && validateAssetAmountSeller(orderToProcess)) {
             updateBankAccount(orderToProcess);
             updatePortfolio(orderToProcess);
             Transaction transactionToComplete = assembleNewTransaction(orderToProcess);
@@ -99,7 +103,7 @@ public class TransactionService {
         return true;
     }
 
-    private boolean validatePortfolioContainsAsset(Order orderToProcess) {
+    private boolean validatePortfolioSellerContainsAsset(Order orderToProcess) {
         String assetAbbr = orderToProcess.getAsset().getAbbreviation();
         String ibanSeller = sellerAccount.getIban();
         List<String> assetAbbrList = rootRepository.getAbbreviationsByIban(ibanSeller);
@@ -108,6 +112,20 @@ public class TransactionService {
                 return true;
             }
         }
+        logger.info("Portfolio seller does not contain asset");
+        return false;
+    }
+
+    private boolean checkIfPortfolioBuyerContainsAsset(Order orderToProcess) {
+        String assetAbbr = orderToProcess.getAsset().getAbbreviation();
+        String ibanBuyer = buyerAccount.getIban();
+        List<String> assetAbbrList = rootRepository.getAbbreviationsByIban(ibanBuyer);
+        for (String abbreviation: assetAbbrList) {
+            if (abbreviation.equals(assetAbbr)) {
+                return true;
+            }
+        }
+        logger.info("Portfolio buyer does not contain asset");
         return false;
     }
 
@@ -135,8 +153,8 @@ public class TransactionService {
     private void updatePortfolio(Order orderToProcess) {
         logger.info("Remove assets from portfolio seller / add assets to portfolio buyer");
         Transaction transactionToComplete = assembleNewTransaction(orderToProcess);
-        boolean portfolioContainsAsset = validatePortfolioContainsAsset(orderToProcess);
-        if (!portfolioContainsAsset) {
+        boolean portfolioBuyerContainsAsset = checkIfPortfolioBuyerContainsAsset(orderToProcess);
+        if (!portfolioBuyerContainsAsset) {
             rootRepository.insertAssetIntoPortfolio(transactionToComplete);
         }
         rootRepository.updateAssetAmountNegative(transactionToComplete);

@@ -32,7 +32,7 @@ public class JdbcPortfolioDao implements PortfolioDao {
     // gebruik indien asset in kwestie nog niet eerder in de portfolio
     private PreparedStatement insertAssetInPortfolioStatement (Transaction transaction, Connection connection) throws SQLException {
         PreparedStatement ps = connection.prepareStatement(
-                "INSERT INTO ownedasset_table (IBAN, abbreviation, aantalEenheden) values (?, ?, ?)"
+                "INSERT INTO ownedasset (IBAN, abbreviation, aantalEenheden) values (?, ?, ?)"
         );
         ps.setString(1, transaction.getBuyerAccount().getIban());
         ps.setString(2, transaction.getAsset().getAbbreviation());
