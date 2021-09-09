@@ -68,7 +68,7 @@ public class OrderController {
         return orderService.getAllByIban(iban);
     }
 
-    @PutMapping("/orders/save")
+    @PostMapping("/orders/save")
     public ResponseEntity<?> placeOrder(@RequestBody Order order) {
         Order orderToSave = orderService.placeOrder(order);
         if (orderToSave == null) {

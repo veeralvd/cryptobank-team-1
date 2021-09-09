@@ -16,6 +16,7 @@ import java.util.List;
 public class TransactionService {
 
     private RootRepository rootRepository;
+    private BankAccountService bankAccountService;
     private Bank bank = Bank.getInstance();
     private BankAccount buyerAccount;
     private BankAccount sellerAccount;
@@ -35,25 +36,15 @@ public class TransactionService {
 
     public Transaction completeTransaction(Order orderToProcess) {
 
-        /*isBuyingOrder(orderToProcess);
-
-        if (isBuyingOrder(orderToProcess)) {
-            buyerAccount = orderToProcess.getBankAccount();
-            sellerAccount = bank.getBankAccount();
-        } else {
-            buyerAccount = bank.getBankAccount();
-            sellerAccount = orderToProcess.getBankAccount();
-        }*/
-
-        // test koop van bank:
+        // koop van bank:
         buyerAccount = orderToProcess.getBankAccount();
         sellerAccount = bank.getBankAccount();
 
-  /*      // test verkoop aan bank
+  /*      // verkoop aan bank
         buyerAccount = bank.getBankAccount();
         sellerAccount = orderToProcess.getBankAccount();*/
 
-        calculateAssetCost(orderToProcess);
+      calculateAssetCost(orderToProcess);
         calculateTransactionCost(orderToProcess);
         calculateAmountToPayReceive(orderToProcess);
 
@@ -69,22 +60,13 @@ public class TransactionService {
         return null;
     }
 
-    /* boolean isBuyingOrder(Order orderToProcess) {
-        logger.info("Check of het om een kooporder gaat (alleen aankoop van bank voor nu)");
-        if (orderToProcess.isBuyingOrder()) {
-            return true;
-        }
-        return false;
-    };*/
-
     private double calculateAssetCost(Order orderToProcess) {
         double assetCost = orderToProcess.getDesiredPrice() * orderToProcess.getAssetAmount();
         return assetCost;
     }
 
-    // default gedeeld door twee
     private double calculateTransactionCost(Order orderToProcess) {
-        double transactionCost = (calculateAssetCost(orderToProcess) * TRANSACTION_RATE) / 2;
+        double transactionCost = calculateAssetCost(orderToProcess) * TRANSACTION_RATE;
         return transactionCost;
     }
 
@@ -139,13 +121,13 @@ public class TransactionService {
         String ibanSeller = sellerAccount.getIban(); // dubbele code
         double amountInPortfolio = rootRepository.getAssetAmountByIbanAndAbbr(ibanSeller, assetAbbr);
         if (amountInPortfolio >= amountToRemove) {
-            logger.info("Not enough Assets to sell !!!");
             return true;
         }
+        logger.info("Not enough Assets to sell !!!");
         return false;
     }
 
-    //Hier alleen voor aankoop van bank
+    //Hier nog alleen voor aankoop van bank
     private void updateBankAccount(Order orderToProcess) {
         logger.info("Withdraw money from bankaccount buyer / deposit money to bankaccount seller");
         double amountToPayRecieve = calculateAmountToPayReceive(orderToProcess);
@@ -175,13 +157,6 @@ public class TransactionService {
         transactionToComplete.setDateTimeTransaction(LocalDateTime.now());
         return transactionToComplete;
     }
-
-    private void saveTransaction(Order orderToProcess) {
-        logger.info("Save transation in transaction table");
-        Transaction transactionToSave = assembleNewTransaction(orderToProcess);
-        rootRepository.save(transactionToSave);
-    }
-
 
     public Transaction saveTransaction(Transaction transaction) {
         return rootRepository.save(transaction);

@@ -52,7 +52,8 @@ public class PortfolioService {
         return list;
     }
 
-    public double getTotalValuePortfolio(String iban) {
+
+    public double getTotalValuePortfolio(String iban){
         double totalValue = 0;
         Portfolio portfolio = rootRepository.getPortfolioByIban(iban);
         Map<String, Double> assetMap = portfolio.getAssetMap();
@@ -65,5 +66,10 @@ public class PortfolioService {
             totalValue += assetValue;
         }
         return totalValue;
+    }
+
+    public List<String> testlist (String iban){
+        return rootRepository.getAbbreviationsByIban(iban);
+
     }
 }

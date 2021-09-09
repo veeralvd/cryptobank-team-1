@@ -50,4 +50,5 @@ public class PortfolioController {
     public double getPortfolioValue (@RequestParam String iban){
         return portfolioService.getTotalValuePortfolio(iban);
     }
+
 }
