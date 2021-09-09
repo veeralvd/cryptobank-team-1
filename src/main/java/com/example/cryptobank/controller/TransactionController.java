@@ -65,9 +65,9 @@ public class TransactionController {
 
     @PutMapping(value = "/transactions/complete", produces = "application/json")
     public ResponseEntity<?> completeTransactionFromBank(@RequestBody Order orderToProcess) {
-        Transaction transactionToComplete = transactionService.completeTransactionFromBank(orderToProcess);
+        Transaction transactionToComplete = transactionService.completeTransaction(orderToProcess);
         if (transactionToComplete == null) {
-            return new ResponseEntity<>("Failed", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Failed to save transaction", HttpStatus.BAD_REQUEST);
         } else {
             return new ResponseEntity<>(transactionToComplete.toString(), HttpStatus.OK);
         }

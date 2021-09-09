@@ -196,4 +196,12 @@ public class RootRepository {
     public BankAccount getBankAccountByIban(String iban) {
         return bankAccountDao.findAccountByIban(iban);
     }
+
+    public double getAssetAmountByIbanAndAbbr(String ibanSeller, String assetAbbr) {
+        return portfolioDao.getAssetAmountByIbanAndAbbr(ibanSeller, assetAbbr);
+    }
+
+    public void insertAssetIntoPortfolio(Transaction transactionToComplete) {
+        portfolioDao.insertAssetIntoPortfolio(transactionToComplete);
+    }
 } // end of class RootRepository

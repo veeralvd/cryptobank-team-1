@@ -45,14 +45,6 @@ public class PortfolioDto {
         this.totalPortfolioValue = totalPortfolioValue;
     }
 
-    /*    @Override
-    public String toString() {
-        return "PortfolioDto{" +
-                "customerName='" + customerName + '\'' +
-                ", list=" + list +
-                '}';
-    }*/
-
     @Override
     public String toString() {
         return "PortfolioDto{" +
