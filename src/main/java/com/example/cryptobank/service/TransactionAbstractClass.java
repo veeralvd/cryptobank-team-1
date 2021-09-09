@@ -52,7 +52,7 @@ public abstract class TransactionAbstractClass {
 
         if (validateCreditLimitBuyer(orderToProcess) && validatePortfolioContainsAsset(orderToProcess) ) {
             updateBankAccount();
-            updatePortfolio();
+            updatePortfolio(orderToProcess);
             assembleNewTransaction(orderToProcess);
             saveTransaction(orderToProcess);
         }
@@ -138,8 +138,10 @@ public abstract class TransactionAbstractClass {
         logger.info("Withdraw money from bankaccount buyer / deposit money to bankaccount seller");
     }
 
-    void updatePortfolio() {
+    void updatePortfolio(Order orderToProcess) {
         logger.info("Remove assets from portfolio seller / add assets to portfolio buyer");
+        Transaction transactionToComplete = assembleNewTransaction(orderToProcess);
+        rootRepository.updateAssetAmountNegative(transactionToComplete);
     }
 
     Transaction assembleNewTransaction(Order orderToProcess) {
