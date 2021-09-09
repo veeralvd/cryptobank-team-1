@@ -31,13 +31,11 @@ public class PortfolioService {
         return rootRepository.getPortfolioByIban(iban);
     }
 
-    public PortfolioDto showPortfolioDto (String token){
-        String username = rootRepository.findCustomerUsernameByToken(token);
-        Customer customer = rootRepository.findCustomerByUsername(username);
-        Map<String, Double> assetMap = rootRepository.getPortfolioByIban(customer.getBankAccount().getIban()).getAssetMap();
+    public PortfolioDto showPortfolioDto (String iban, String firstName){
+        Map<String, Double> assetMap = rootRepository.getPortfolioByIban(iban).getAssetMap();
         List<OwnedAssetDto> list = getList(assetMap);
-        double totalValue = getTotalValuePortfolio(customer.getBankAccount().getIban());
-        return new PortfolioDto(customer.getFirstName(), list, totalValue);
+        double totalValue = getTotalValuePortfolio(iban);
+        return new PortfolioDto(firstName, list, totalValue);
     }
 
     public List<OwnedAssetDto> getList(Map<String, Double> assetMap){
@@ -54,11 +52,11 @@ public class PortfolioService {
         return list;
     }
 
-    public double getTotalValuePortfolio(String iban){
+    public double getTotalValuePortfolio(String iban) {
         double totalValue = 0;
         Portfolio portfolio = rootRepository.getPortfolioByIban(iban);
         Map<String, Double> assetMap = portfolio.getAssetMap();
-        for (Map.Entry<String, Double> map : assetMap.entrySet()){
+        for (Map.Entry<String, Double> map : assetMap.entrySet()) {
             String abbr = map.getKey();
             Asset asset = rootRepository.getByAbbreviation(abbr);
             double rate = asset.getRate().getCryptoRate();

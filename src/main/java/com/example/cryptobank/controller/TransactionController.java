@@ -1,5 +1,6 @@
 package com.example.cryptobank.controller;
 
+import com.example.cryptobank.domain.Order;
 import com.example.cryptobank.domain.Transaction;
 import com.example.cryptobank.service.TransactionService;
 import org.slf4j.Logger;
@@ -38,16 +39,37 @@ public class TransactionController {
     }*/
 
     /**
-     * Tijdelijk endpoint voor saveTransaction.
+     * Tijdelijk endpoint om saveTransaction te testen.
      * Complete transaction -> vanuit order?
      */
-    @PutMapping("/transactions/save")
-    public int saveTransaction(@RequestBody Transaction transaction) {
+    @PutMapping(value = "/transactions/save", produces = "application/json")
+    public ResponseEntity<?> saveTransaction(@RequestBody Transaction transaction) {
+        logger.info(transaction.toString());
         Transaction transactionToSave = transactionService.saveTransaction(transaction);
         if (transactionToSave == null) {
-            return new ResponseEntity<String>("Failed", HttpStatus.BAD_REQUEST).getStatusCodeValue();
+            return new ResponseEntity<>("Failed", HttpStatus.BAD_REQUEST);
         } else {
-            return new ResponseEntity<String>(HttpStatus.OK).getStatusCodeValue();
+            return new ResponseEntity<>(transactionToSave.toString(), HttpStatus.OK);
+        }
+    }
+
+    /*@PutMapping("/transactions/complete")
+    public ResponseEntity<?> completeTransactionToBank(@Requestbody Order orderToProcess) {
+        Transaction transactionToComplete = transactionService.completeTransactionFromBank(orderToProcess);
+        if (transactionToComplete == null) {
+            return new ResponseEntity<>("Failed", HttpStatus.BAD_REQUEST);
+        } else {
+            return new ResponseEntity<>(transactionToComplete.toString(), HttpStatus.OK);
+        }
+    }*/
+
+    @PutMapping(value = "/transactions/complete", produces = "application/json")
+    public ResponseEntity<?> completeTransactionFromBank(@RequestBody Order orderToProcess) {
+        Transaction transactionToComplete = transactionService.completeTransaction(orderToProcess);
+        if (transactionToComplete == null) {
+            return new ResponseEntity<>("Failed to save transaction", HttpStatus.BAD_REQUEST);
+        } else {
+            return new ResponseEntity<>(transactionToComplete.toString(), HttpStatus.OK);
         }
     }
 

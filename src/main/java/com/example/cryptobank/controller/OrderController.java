@@ -52,7 +52,7 @@ public class OrderController {
         }
     }
 
-    // TODO geeft foutmelding 'MissingServletRequestParameterException: Required request parameter 'orderId' for method parameter type int is not present'
+    // TODO geeft voor asset nog steeds lege rate, en geheel leeg bankAccount
     @GetMapping("/orders")
     public Order findByOrderId(@RequestParam int orderId) {
         return orderService.findByOrderId(orderId);
@@ -68,5 +68,14 @@ public class OrderController {
         return orderService.getAllByIban(iban);
     }
 
+    @PutMapping("/orders/save")
+    public ResponseEntity<?> placeOrder(@RequestBody Order order) {
+        Order orderToSave = orderService.placeOrder(order);
+        if (orderToSave == null) {
+            return new ResponseEntity<>("Failed", HttpStatus.BAD_REQUEST);
+        } else {
+            return new ResponseEntity<>(orderToSave.toString(), HttpStatus.OK);
+        }
+    }
 
-}
+} // end of class OrderController
