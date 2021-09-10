@@ -15,6 +15,7 @@ import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -24,7 +25,7 @@ import java.util.concurrent.TimeUnit;
 public class CoinGeckoUpdateService implements CoinApiUpdate {
     private RootRepository rootRepository;
     private ObjectMapper mapper = new ObjectMapper();
-    private ArrayList<CoinDto> newRates = new ArrayList<>();
+    private List<CoinDto> newRates = new ArrayList<>();
 
     private final Logger logger = LoggerFactory.getLogger(CoinGeckoUpdateService.class);
     private static URL URL;
@@ -54,7 +55,7 @@ public class CoinGeckoUpdateService implements CoinApiUpdate {
             //double newRate = checkActualRate(abbreviation);
             for (CoinDto coin: newRates) {
                 if (coin.symbol.equals(abbreviation)) {
-                    rootRepository.updateCryptoCurrencyRates(new CryptoCurrencyRate(abbreviation.toUpperCase(),coin.current_price,
+                    rootRepository.save(new CryptoCurrencyRate(abbreviation.toUpperCase(),coin.current_price,
                             LocalDateTime.ofInstant(coin.last_updated.toInstant(), ZoneId.systemDefault())));
                     break;
                 }
