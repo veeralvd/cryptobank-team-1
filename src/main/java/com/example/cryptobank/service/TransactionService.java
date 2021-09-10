@@ -5,6 +5,8 @@ import com.example.cryptobank.domain.Bank;
 import com.example.cryptobank.domain.BankAccount;
 import com.example.cryptobank.domain.Transaction;
 import com.example.cryptobank.domain.*;
+import com.example.cryptobank.dto.TransactionDto;
+import org.apache.catalina.mapper.Mapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,11 +32,25 @@ public class TransactionService {
         logger.info("New TransactionService");
     }
 
-    public Transaction findByTransactionId(int transactionId) {
-        return rootRepository.findByTransactionId(transactionId);
+    public TransactionDto getTransactionDto(Transaction transaction) {
+        int transactionId = transaction.getTransactionId();
+        String ibanBuyer = transaction.getBuyerAccount().getIban();
+        String ibanSeller = transaction.getSellerAccount().getIban();
+        String assetAbbr = transaction.getAsset().getAbbreviation();
+        double assetAmount = transaction.getAssetAmount();
+        double singleAssetPrice = transaction.getAssetPrice();
+        double transactionCost = transaction.getTransactionCost();
+        LocalDateTime dateTimeProcessed = transaction.getDateTimeTransaction();
+        return new TransactionDto(transactionId, ibanBuyer, ibanSeller, assetAbbr, assetAmount,
+                singleAssetPrice, transactionCost, dateTimeProcessed);
     }
 
-    public Transaction completeTransaction(Order orderToProcess) {
+    public TransactionDto findByTransactionId(int transactionId) {
+        Transaction transaction = rootRepository.findByTransactionId(transactionId);
+        return getTransactionDto(transaction);
+    }
+
+    public TransactionDto completeTransaction(Order orderToProcess) {
 
         // koop van bank:
         buyerAccount = orderToProcess.getBankAccount();
@@ -48,14 +64,18 @@ public class TransactionService {
         calculateTransactionCost(orderToProcess);
         calculateAmountToPayReceive(orderToProcess);
 
-        if (validateCreditLimitBuyer(orderToProcess) && validatePortfolioSellerContainsAsset(orderToProcess) && validateAssetAmountSeller(orderToProcess)) {
+        if (validateCreditLimitBuyer(orderToProcess)
+                && validatePortfolioSellerContainsAsset(orderToProcess)
+                && validateAssetAmountSeller(orderToProcess)) {
+
             updateBankAccount(orderToProcess);
             updatePortfolio(orderToProcess);
             Transaction transactionToComplete = assembleNewTransaction(orderToProcess);
             saveTransaction(transactionToComplete);
             logger.info("Transactie opgeslagen");
-            return transactionToComplete;
+            return getTransactionDto(transactionToComplete);
         }
+
         logger.info("Transactie NIET opgeslagen");
         return null;
     }
@@ -70,7 +90,7 @@ public class TransactionService {
         return transactionCost;
     }
 
-    // hier voor alleen koop van bank: bedrag te betalen door klant = bedrag te ontvangen door bank
+    // hier nog voor alleen koop van bank: bedrag te betalen door klant = bedrag te ontvangen door bank
     private double calculateAmountToPayReceive(Order orderToProcess) {
         double assetCost = calculateAssetCost(orderToProcess);
         double transactionCost = calculateTransactionCost(orderToProcess);
@@ -130,9 +150,9 @@ public class TransactionService {
     //Hier nog alleen voor aankoop van bank
     private void updateBankAccount(Order orderToProcess) {
         logger.info("Withdraw money from bankaccount buyer / deposit money to bankaccount seller");
-        double amountToPayRecieve = calculateAmountToPayReceive(orderToProcess);
-        rootRepository.withdraw(buyerAccount.getIban(), amountToPayRecieve);
-        rootRepository.deposit(sellerAccount.getIban(), amountToPayRecieve);
+        double amountToPayReceive = calculateAmountToPayReceive(orderToProcess);
+        rootRepository.withdraw(buyerAccount.getIban(), amountToPayReceive);
+        rootRepository.deposit(sellerAccount.getIban(), amountToPayReceive);
     }
 
     private void updatePortfolio(Order orderToProcess) {
@@ -141,6 +161,7 @@ public class TransactionService {
         boolean portfolioBuyerContainsAsset = checkIfPortfolioBuyerContainsAsset(orderToProcess);
         if (!portfolioBuyerContainsAsset) {
             rootRepository.insertAssetIntoPortfolio(transactionToComplete);
+            logger.info("New asset inserted into ownedAsset table");
         }
         rootRepository.updateAssetAmountNegative(transactionToComplete);
         rootRepository.updateAssetAmountPositive(transactionToComplete);
