@@ -4,6 +4,9 @@ body {
     font-family: sans-serif;
     background: #2d3436;
 }
+/**
+Bepaalt inhoud en plaatsing van box om alle elementen
+*/
 .box{
     width: 300px;
     padding: 40px;
@@ -21,16 +24,28 @@ body {
 }
 .box h1{
     color: #fbc531;
-    text-align: right;
+    text-align: center;
     left: 50%;
 }
-
+/*
+Bepaalt stijl voor Login header
+*/
 .box h2{
     color: white;
     text-transform: none;
     font-weight: 300;
 }
-.box input[type = "text"],.box input[type = "password"]{
+/*
+h5 valt onder registratieform. Later andere css maken voor regform
+*/
+.box h5{
+    color: white;
+}
+.box input[type = "text"],
+.box input[type = "password"],
+.box input[type = "date"],
+.box input[type = "email"]
+{
     border: 0;
     background: none;
     display: block;
@@ -44,8 +59,13 @@ body {
     border-radius: 10px;
     transition: 0.25s;
 }
-.box input[type = "text"]:focus,.box input[type = "password"]:focus
-input[type = "email"]:focus{
+/*
+Transformeert de stijl van de invulveld als de cursor erop staat
+*/
+.box input[type = "text"]:focus,
+.box input[type = "password"]:focus,
+.box input[type = "email"]:focus,
+.box input[type = "date"]:focus{
     width: 250px;
     border-color: #fbc531;
 }
@@ -68,6 +88,20 @@ input[type = "email"]:focus{
     color: #2d3436;
     border-color: #fbc531;
     transition: 0.25s;
+}
+.box button[type = "button"]{
+    border: 0;
+    background: none;
+    display: block;
+    margin: 10px auto;
+    text-align: center;
+    padding: 10px 8px;
+    width: 100px;
+    outline: none;
+    color: #fbc531;
+}
+.box button[type = "button"]:hover{
+    opacity:1;
 }
 
 .container-fluid #inlogheader {
