@@ -30,13 +30,7 @@ public class PortfolioController {
     }
 
     @GetMapping("/portfolio")
-    public Portfolio getPortfolio (@RequestParam String iban){
-        return portfolioService.getPortfolio(iban);
-    }
-
-
-    @GetMapping("/getdto")
-    public ResponseEntity<?> getDto (@RequestHeader("Authorization") String accessToken){
+    public ResponseEntity<?> getPortfolio (@RequestHeader("Authorization") String accessToken){
         CustomerDto customer = customerService.authenticate(accessToken);
         if (customer != null){
             PortfolioDto portfolioDto = portfolioService.showPortfolioDto(customer.getIban(), customer.getFirstName());

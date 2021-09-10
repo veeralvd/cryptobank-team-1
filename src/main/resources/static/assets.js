@@ -11,7 +11,6 @@ document.getElementById("buy").addEventListener('click',
         }
     }
 
-
     fetch(urlAssets, options)
         .then(response => {
             if (response.ok) {

@@ -54,7 +54,8 @@ public class CustomerController {
         } else {
             HttpHeaders responseHeaders = new HttpHeaders();
             responseHeaders.set(HttpHeaders.AUTHORIZATION, customerToLogin.getAccessToken());
-            return new ResponseEntity<>(customerToLogin.toString(), responseHeaders, HttpStatus.CREATED);
+            responseHeaders.set("refresh_token", customerToLogin.getRefreshToken());
+            return new ResponseEntity<>(customerToLogin.toString(), responseHeaders, HttpStatus.OK);
         }
     }
 
