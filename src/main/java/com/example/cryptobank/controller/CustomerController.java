@@ -25,7 +25,7 @@ public class CustomerController {
     }
 
 
-    @PutMapping(value = "/register", produces = "application/json")
+    @PostMapping(value = "/register", produces = "application/json")
     public int register(@RequestBody Customer customer) {
         logger.info(customer.toString());
         Customer customerToRegister = customerService.register(customer);
