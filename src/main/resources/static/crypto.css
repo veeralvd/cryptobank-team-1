@@ -44,7 +44,8 @@ body {
     border-radius: 10px;
     transition: 0.25s;
 }
-.box input[type = "text"]:focus,.box input[type = "password"]:focus {
+.box input[type = "text"]:focus,.box input[type = "password"]:focus
+input[type = "email"]:focus{
     width: 250px;
     border-color: #fbc531;
 }
