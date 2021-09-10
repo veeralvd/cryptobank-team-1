@@ -1,5 +1,5 @@
 
-document.getElementById("buy").addEventListener('click',
+document.getElementById("showAssets").addEventListener('click',
     function (event) {
     event.preventDefault()
     const urlAssets = "http://localhost:8080/assets"
@@ -10,19 +10,58 @@ document.getElementById("buy").addEventListener('click',
             //'Authorization': localStorage.getItem('Authorization')
         }
     }
+    fetchTable(urlAssets, options);
+    document.getElementById("showAssets").style.display="none"
+    })
 
-    fetch(urlAssets, options)
+
+document.getElementById("showPortfolio").addEventListener('click',
+    function (event) {
+        event.preventDefault()
+        const urlPortfolio = "http://localhost:8080/portfolio"
+        const options = {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': localStorage.getItem('Authorization')
+            }
+        }
+        //fetchTable(urlPortfolio, options);
+        fetch(urlPortfolio, options)
+            .then(response => {
+                if (response.ok) {
+                    response.json()
+                        .then(json => {
+                            let jason = json;
+                            let table = document.querySelector("table");
+                            let data = Object.keys(jason[0]);
+                            generateTableHead(table, data);
+                            generateTable(table, jason);
+
+                        })
+                        .catch((error) => {
+                            console.error('Error' + error);
+                        })
+                } else {
+                    console.log('niet gelukt')
+                }
+            })
+    })
+
+
+function fetchTable(url, options) {
+    fetch(url, options)
         .then(response => {
             if (response.ok) {
                 response.json()
                     .then(json => {
-                    let jason = json;
+                        let jason = json;
                         let table = document.querySelector("table");
                         let data = Object.keys(jason[0]);
                         generateTableHead(table, data);
                         generateTable(table, jason);
 
-                })
+                    })
                     .catch((error) => {
                         console.error('Error' + error);
                     })
@@ -30,7 +69,7 @@ document.getElementById("buy").addEventListener('click',
                 console.log('niet gelukt')
             }
         })
-    })
+}
 
 function generateTableHead(table, data) {
     let thead = table.createTHead();
@@ -56,10 +95,6 @@ function generateTable(table, data) {
         }
     }
 }
-
-
-
-
 
 
 // let table = document.querySelector("assetTable");
