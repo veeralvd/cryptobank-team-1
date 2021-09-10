@@ -37,6 +37,13 @@ document.querySelector('#submitButton').addEventListener('click',
 
     })
 
+/*
+document.querySelector('#signupButton').addEventListener('click',
+    function (event)){
+
+}
+*/
+
 
 document.querySelector('#register').addEventListener('click',
     function (event){
