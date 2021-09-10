@@ -16,6 +16,9 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class CoinGeckoUpdateService implements CoinApiUpdate {
@@ -37,6 +40,7 @@ public class CoinGeckoUpdateService implements CoinApiUpdate {
     public CoinGeckoUpdateService(RootRepository rootRepository) {
         this.rootRepository = rootRepository;
         logger.info("New CurrencyUpdateService");
+        startUpdate();
     }
 
     @Override
@@ -80,6 +84,19 @@ public class CoinGeckoUpdateService implements CoinApiUpdate {
 
 
         return 0;
+    }
+
+    public void startUpdate() {
+        logger.info("startUpdate started");
+        ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
+        service.scheduleAtFixedRate(new Runnable() {
+            @Override
+            public void run() {
+                updateRates();
+            }
+        }, 0, 2, TimeUnit.MINUTES);
+        service.shutdown();
+        logger.info("startUpdate finished");
     }
 
 }
