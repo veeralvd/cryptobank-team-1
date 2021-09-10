@@ -35,6 +35,16 @@ public class JdbcCryptoCurrencyRateDAO implements CryptoCurrencyRateDAO{
         return preparedStatement;
     }
 
+    private PreparedStatement updateCryptoCurrencyStatement(CryptoCurrencyRate cryptoCurrencyRate, Connection connection)
+            throws SQLException {
+        String sql = "UPDATE crypto_currency_rate SET value=?, datetime=? WHERE abbreviation =?";
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        preparedStatement.setDouble(1, cryptoCurrencyRate.getCryptoRate());
+        preparedStatement.setString(2, String.valueOf(cryptoCurrencyRate.getDateTime()));
+        preparedStatement.setString(3, cryptoCurrencyRate.getAbbreviation());
+        return preparedStatement;
+    }
+
 
 
     @Override
@@ -80,6 +90,12 @@ public class JdbcCryptoCurrencyRateDAO implements CryptoCurrencyRateDAO{
                     rs.getDouble("value"));
         });
         return results;
+    }
+
+    @Override
+    public CryptoCurrencyRate update(CryptoCurrencyRate cryptoCurrencyRate) {
+        jdbcTemplate.update(connection -> updateCryptoCurrencyStatement(cryptoCurrencyRate, connection));
+        return cryptoCurrencyRate;
     }
 
 }

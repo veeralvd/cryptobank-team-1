@@ -201,6 +201,15 @@ public class RootRepository {
         return portfolioDao.getAssetAmountByIbanAndAbbr(ibanSeller, assetAbbr);
     }
 
+    public CryptoCurrencyRate save(CryptoCurrencyRate cryptoCurrencyRate) {
+        return cryptoCurrencyRateDAO.save(cryptoCurrencyRate);
+    }
+
+    public void updateCryptoCurrencyRates(CryptoCurrencyRate cryptoCurrencyRate) {
+        cryptoCurrencyRateDAO.update(cryptoCurrencyRate);
+    }
+
+
     public void insertAssetIntoPortfolio(Transaction transactionToComplete) {
         portfolioDao.insertAssetIntoPortfolio(transactionToComplete);
     }

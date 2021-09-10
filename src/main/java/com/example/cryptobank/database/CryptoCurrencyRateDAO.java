@@ -11,6 +11,7 @@ public interface CryptoCurrencyRateDAO {
     public ArrayList<CryptoCurrencyRate> getAll();
     public ArrayList<CryptoCurrencyRate> findByAbbreviation(String abbreviation);
     public Map<String, Double> getAllCurrentRates();
+    public CryptoCurrencyRate update(CryptoCurrencyRate cryptoCurrencyRate);
 
 
 
