@@ -23,7 +23,7 @@ public class AuthenticationService {
     private CreateToken createToken;
 
     private final Logger logger = LoggerFactory.getLogger(AuthenticationService.class);
-    private final static String BEARER = "Bearer ";
+    private final static String BEARER = "Bearer:";
 
     @Autowired
     public AuthenticationService(RootRepository rootRepository, HashHelper hashHelper, CreateToken createToken) {

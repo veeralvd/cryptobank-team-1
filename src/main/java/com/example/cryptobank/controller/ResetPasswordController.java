@@ -62,7 +62,6 @@ public class ResetPasswordController {
     public ModelAndView loadResetPasswordPage(final ModelMap model, @RequestParam String token) {
         logger.info("reset link aangeroepen endpoint aangeroepen");
 
-
         CustomerDto customer = customerService.authenticate(token);
         if (customer != null) {
             String accessToken = customer.getAccessToken();
