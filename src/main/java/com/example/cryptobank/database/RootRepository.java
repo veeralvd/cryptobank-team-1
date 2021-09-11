@@ -2,6 +2,7 @@ package com.example.cryptobank.database;
 
 
 import com.example.cryptobank.domain.*;
+import com.example.cryptobank.dto.CustomerDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -212,5 +213,9 @@ public class RootRepository {
 
     public void insertAssetIntoPortfolio(Transaction transactionToComplete) {
         portfolioDao.insertAssetIntoPortfolio(transactionToComplete);
+    }
+
+    public CustomerDto findCustomerByEmail(String email) {
+        return customerDAO.findCustomerByEmail(email);
     }
 } // end of class RootRepository

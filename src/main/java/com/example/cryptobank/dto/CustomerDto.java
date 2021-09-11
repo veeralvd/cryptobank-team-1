@@ -12,6 +12,7 @@ public class CustomerDto {
     private String refreshToken;
     private String firstName;
     private String iban;
+    private String email;
     private final Logger logger = LoggerFactory.getLogger(CustomerDto.class);
 
     public CustomerDto() {
@@ -23,11 +24,12 @@ public class CustomerDto {
         this.password = password;
     }
 
-    public CustomerDto(String username, String accessToken, String firstName, String iban) {
+    public CustomerDto(String username, String accessToken, String firstName, String iban, String email) {
         this.username = username;
         this.accessToken = accessToken;
         this.firstName = firstName;
         this.iban = iban;
+        this.email = email;
     }
 
     public String getAccessToken() {
@@ -76,6 +78,14 @@ public class CustomerDto {
 
     public void setRefreshToken(String refreshToken) {
         this.refreshToken = refreshToken;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     @Override

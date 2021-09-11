@@ -2,6 +2,7 @@ package com.example.cryptobank.database;
 
 import com.example.cryptobank.domain.BankAccount;
 import com.example.cryptobank.domain.Customer;
+import com.example.cryptobank.dto.CustomerDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -121,5 +122,17 @@ public class JdbcCustomerDAO implements CustomerDAO{
     @Override
     public void insertTokenByCustomerUsername(String username, String token) {
         jdbcTemplate.update(connection -> insertTokenByCustomerUsername(username, token, connection));
+    }
+
+    @Override
+    public CustomerDto findCustomerByEmail(String email) {
+        String sql = "SELECT * FROM customer WHERE email = ?";
+
+        Customer customer = jdbcTemplate.query(sql, new CustomerRowMapper(), email).get(0);
+        if (customer != null) {
+            return new CustomerDto(customer.getUsername(),null,
+                    customer.getFirstName(), customer.getBankAccount().getIban(), customer.getEmail());
+        }
+        return null;
     }
 }

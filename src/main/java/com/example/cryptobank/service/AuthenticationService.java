@@ -61,7 +61,7 @@ public class AuthenticationService {
                 DecodedJWT decodedJWT = verifier.verify(token);
                 Customer customer = rootRepository.findCustomerByUsername(decodedJWT.getSubject());
                 CustomerDto customerDto = new CustomerDto(customer.getUsername(), null,
-                        customer.getFirstName(), customer.getBankAccount().getIban());
+                        customer.getFirstName(), customer.getBankAccount().getIban(), customer.getEmail());
                 customerDto.setAccessToken(accessToken);
                 return customerDto;
             } catch (Exception exception) {
