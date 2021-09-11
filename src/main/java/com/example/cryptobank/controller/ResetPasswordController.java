@@ -62,17 +62,17 @@ public class ResetPasswordController {
     public ModelAndView loadResetPasswordPage(final ModelMap model, @RequestParam String token) {
         logger.info("reset link aangeroepen endpoint aangeroepen");
 
-        token = "Bearer " + token;
+
         CustomerDto customer = customerService.authenticate(token);
         if (customer != null) {
             String accessToken = customer.getAccessToken();
             String refreshToken = customer.getRefreshToken();
-            model.addAttribute("Authorization", accessToken);
-            model.addAttribute("refresh-token", refreshToken);
-            return new ModelAndView("redirect:/reset-password");
+            model.addAttribute("token", accessToken);
+            return new ModelAndView("redirect:/reset-password.html", model);
         } else {
+            logger.info("customer was null");
 
-            return new ModelAndView("redirect:/index");
+            return new ModelAndView("redirect:/index.html", model);
 
         }
     }

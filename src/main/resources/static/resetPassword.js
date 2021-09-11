@@ -1,3 +1,13 @@
+const URL = window.location.href;
+
+window.onload(getToken())
+
+function getToken(){
+    const stringUrl = URL.split(`=`)
+    const token = stringUrl[1];
+    console.log(token);
+    localStorage.setItem('Authorization', token);
+}
 
 document.querySelector('#resetPassword').addEventListener(`click`,
     function (event){

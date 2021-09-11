@@ -115,9 +115,6 @@ public class RootRepository {
         return adminDAO.findAdminUsernameByToken(token);
     }
 
-    public String findCustomerUsernameByToken(String token) {
-        return customerDAO.findCustomerUsernameByToken(token);
-    }
 
     public void insertTokenByAdminUsername(String username, String token) {
         adminDAO.insertTokenByAdminUsername(username, token);

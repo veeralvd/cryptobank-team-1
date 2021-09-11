@@ -5,8 +5,8 @@ document.querySelector('#submitButton').addEventListener(`click`,
         event.preventDefault() // anders wordt de gebruiker naar andere pagina geleidt
         // // selecteer inputs en zet waarden omde normale submit functie uitgevoerd
 
-        let username = String(document.querySelector('#password').value)
-        let password = String(document.querySelector('#passwordConf').value)
+        let username = String(document.querySelector('#username').value)
+        let password = String(document.querySelector('#password').value)
 
         // Stuurt username en password naar de server
         let data = '?username=' + username + '&password=' + password
