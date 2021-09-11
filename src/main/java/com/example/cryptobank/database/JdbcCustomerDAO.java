@@ -104,11 +104,6 @@ public class JdbcCustomerDAO implements CustomerDAO{
         return allCustomers;
     }
 
-    @Override
-    public String findCustomerUsernameByToken(String token) {
-        String sql = "SELECT * FROM customer WHERE token = ?";
-        return jdbcTemplate.query(sql, new CustomerRowMapper(), token).get(0).getUsername();
-    }
 
     private PreparedStatement insertTokenByCustomerUsername(String username, String token, Connection connection)
             throws SQLException {
@@ -128,11 +123,14 @@ public class JdbcCustomerDAO implements CustomerDAO{
     public CustomerDto findCustomerByEmail(String email) {
         String sql = "SELECT * FROM customer WHERE email = ?";
 
-        Customer customer = jdbcTemplate.query(sql, new CustomerRowMapper(), email).get(0);
-        if (customer != null) {
-            return new CustomerDto(customer.getUsername(),null,
+        List<Customer> customerList = jdbcTemplate.query(sql, new CustomerRowMapper(), email);
+        if (customerList.size == 1) {
+            Customer customer = customerList.get(0);
+            return new CustomerDto(customer.getUsername(), null,
                     customer.getFirstName(), customer.getBankAccount().getIban(), customer.getEmail());
+            }
         }
         return null;
     }
+
 }

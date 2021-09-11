@@ -11,9 +11,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
-@RestController
+@Controller
 @RequestMapping("/api/forgot")
 public class ResetPasswordController {
     private final Logger logger = LoggerFactory.getLogger(ResetPasswordController.class);
@@ -56,14 +59,21 @@ public class ResetPasswordController {
     }
 
     @GetMapping("/reset")
-    ResponseEntity<?> resetPassword(@RequestParam String token) {
-        logger.info("reset password endpoint aangeroepen");
+    public ModelAndView loadResetPasswordPage(final ModelMap model, @RequestParam String token) {
+        logger.info("reset link aangeroepen endpoint aangeroepen");
+
         token = "Bearer " + token;
         CustomerDto customer = customerService.authenticate(token);
         if (customer != null) {
-            return new ResponseEntity<String>("vet lekker aan het werk jij", HttpStatus.OK);
+            String accessToken = customer.getAccessToken();
+            String refreshToken = customer.getRefreshToken();
+            model.addAttribute("Authorization", accessToken);
+            model.addAttribute("refresh-token", refreshToken);
+            return new ModelAndView("redirect:/reset-password");
         } else {
-            return new ResponseEntity<String>("mail not known", HttpStatus.I_AM_A_TEAPOT);
+
+            return new ModelAndView("redirect:/index");
+
         }
     }
 
