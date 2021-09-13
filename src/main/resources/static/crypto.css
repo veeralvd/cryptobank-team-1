@@ -4,6 +4,13 @@ body {
     font-family: sans-serif;
     background: #2d3436;
 }
+h1{
+    color: #fbc531;
+    text-align: right;
+    margin-right: 50px;
+
+}
+
 /**
 Bepaalt inhoud en plaatsing van box om alle elementen
 */
@@ -38,13 +45,15 @@ Bepaalt stijl voor Login header
 /*
 h5 valt onder registratieform. Later andere css maken voor regform
 */
-.box h5{
+h5{
     color: white;
 }
-.box input[type = "text"],
-.box input[type = "password"],
-.box input[type = "date"],
-.box input[type = "email"]
+
+/*.box input[type = "text"],*/
+/*.box input[type = "password"],*/
+/*.box input[type = "date"],*/
+/*.box input[type = "email"]*/
+input
 {
     border: 0;
     background: none;
@@ -62,14 +71,20 @@ h5 valt onder registratieform. Later andere css maken voor regform
 /*
 Transformeert de stijl van de invulveld als de cursor erop staat
 */
-.box input[type = "text"]:focus,
-.box input[type = "password"]:focus,
-.box input[type = "email"]:focus,
-.box input[type = "date"]:focus{
+/*.box input[type = "text"]:focus,*/
+/*.box input[type = "password"]:focus,*/
+/*.box input[type = "email"]:focus,*/
+/*.box input[type = "date"]:focus*/
+input:focus
+{
     width: 250px;
     border-color: #fbc531;
 }
-.box button[type = "submit"]{
+
+/*
+Voor de login button
+*/
+button[type = "submit"]{
     border: 0;
     background: none;
     display: block;
@@ -83,14 +98,18 @@ Transformeert de stijl van de invulveld als de cursor erop staat
     border-radius: 10px;
     transition: 0.25s;
 }
-.box button[type = "submit"]:hover{
+button[type = "submit"]:hover{
     background: #fbc531;
     color: #2d3436;
     border-color: #fbc531;
     transition: 0.25s;
 }
-.box button[type = "button"]{
-    border: 0;
+
+/*
+Styling voor signup en forgotpassord buttons
+*/
+button[type = "button"]{
+    border: none;
     background: none;
     display: block;
     margin: 10px auto;
@@ -99,12 +118,9 @@ Transformeert de stijl van de invulveld als de cursor erop staat
     width: 100px;
     outline: none;
     color: #fbc531;
-}
-.box button[type = "button"]:hover{
-    opacity:1;
-}
 
-.container-fluid #inlogheader {
-    color: indianred;
-    margin-bottom: 1em;
+}
+button[type = "button"]:hover{
+    opacity:1;
+    text-decoration: underline;
 }
