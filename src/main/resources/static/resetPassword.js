@@ -2,6 +2,7 @@ const URL = window.location.href;
 
 getToken();
 
+// deze functie doet nog twee dingen: getToken en goede form selecteren
 function getToken(){
     const stringUrl = URL.split(`=`)
     const token = stringUrl[1];
@@ -20,8 +21,8 @@ document.querySelector('#resetPassword').addEventListener(`click`,
         // // selecteer inputs en zet waarden omde normale submit functie uitgevoerd
 
 
-        let password = String(document.querySelector('#password').value)
-        let passwordConf = String(document.querySelector('#passwordConf').value)
+        let password = String(document.querySelector('#passwordResetForm').value)
+        let passwordConf = String(document.querySelector('#passwordResetFormConf').value)
 
         let passwordsAreEqual = Boolean(password === passwordConf);
 
@@ -34,22 +35,26 @@ document.querySelector('#resetPassword').addEventListener(`click`,
 
         else {
 
-            // Stuurt username en password naar de server
+            // Token uit url halen (getToken aanroepen ipv strings hieronder)
+            const stringUrl = URL.split(`=`)
+            const token = stringUrl[1];
+            console.log(token);
             let data = '?password=' + password
             const url = `http://localhost:8080/api/forgot/submit` + data;
             const options = {
                 method: `POST`,
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    // token toevoegen aan de header (want @RequestHeader)
+                    'Authorization': token
                 }
             }
-            // Token komt terug als username & password erkent wordt
+
             fetch(url, options)
                 .then(response => {
                     if (response.ok) {
                         response.text();
-
-                        // Door naar volgende pagina/scherm
+                        alert("New password saved.")
                         window.location.assign("http://localhost:8080/index.html")
                     } else if (!response.ok) {
                         console.log('Failed to save new password')

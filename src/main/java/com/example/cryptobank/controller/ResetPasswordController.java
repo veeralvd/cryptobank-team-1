@@ -79,9 +79,7 @@ public class ResetPasswordController {
     @PostMapping("/submit")
     public ResponseEntity<?> resetPassword(@RequestParam String password, @RequestHeader("Authorization") String accessToken) {
     logger.info("reset password aangeroepen");
-
     logger.info(password);
-
     CustomerDto customer = customerService.authenticate(accessToken);
         if (customer != null) {
             boolean passwordIsReset =  customerService.updatePassword(password, customer);
