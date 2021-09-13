@@ -7,7 +7,7 @@ document.getElementById("showAssets").addEventListener('click',
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
-            //'Authorization': localStorage.getItem('Authorization')
+            'Authorization': localStorage.getItem('Authorization')
         }
     }
     fetchTable(urlAssets, options);
