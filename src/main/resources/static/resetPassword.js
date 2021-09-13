@@ -17,14 +17,18 @@ document.querySelector('#resetPassword').addEventListener(`click`,
         // // selecteer inputs en zet waarden omde normale submit functie uitgevoerd
 
 
-        let password = String(document.querySelector('#username').value)
-        let passwordConf = String(document.querySelector('#password').value)
+        let password = String(document.querySelector('#password').value)
+        let passwordConf = String(document.querySelector('#passwordConf').value)
 
         let passwordsAreEqual = Boolean(password === passwordConf);
+        // Moet de check op gelijke wachtwoorden hier?
+        if (!passwordsAreEqual) {
+            console.log('Passwords not the same')
+        }
 
         // Stuurt username en password naar de server
         let data = '?password=' + password
-        const url = `http://localhost:8080/login` + data;
+        const url = `http://localhost:8080/submitnewpassword` + data;
         const options = {
             method: `POST`,
             headers: {
@@ -42,9 +46,10 @@ document.querySelector('#resetPassword').addEventListener(`click`,
                     console.log(refreshToken + "hallo refresh");
                     localStorage.setItem('Authorization', accessToken);
                     localStorage.setItem('refresh_token', refreshToken);
-                    window.location.assign("http://localhost:8080/assets.html")
+                    // Door naar volgende pagina/scherm
+                    // window.location.assign("http://localhost:8080/assets.html")
                 }else if (!response.ok) {
-                    console.log('username and/or password are incorrect')
+                    console.log('Failed to save new password')
                 }})
             .catch((error) => {
                 console.error('Error ' + error);
