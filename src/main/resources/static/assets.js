@@ -55,7 +55,7 @@ function fetchTable(url, options) {
             if (response.ok) {
                 response.json()
                     .then(json => {
-                        let jason = json;
+                        let jason = json.getItem(2);
                         let table = document.querySelector("table");
                         let data = Object.keys(jason[0]);
                         generateTableHead(table, data);
