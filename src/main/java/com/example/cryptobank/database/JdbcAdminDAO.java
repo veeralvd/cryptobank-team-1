@@ -67,24 +67,4 @@ public class JdbcAdminDAO implements AdminDAO {
         return null;
     }
 
-    @Override
-    public String findAdminUsernameByToken(String token) {
-        String sql = "SELECT * from admin where token = ?";
-        String tokenFromDatabase = jdbcTemplate.query(sql, new AdminRowMapper(), token).get(0).getAccessToken();
-        return tokenFromDatabase;
-    }
-
-    private PreparedStatement insertTokenStatement(String username, String token, Connection connection) throws SQLException{
-        PreparedStatement preparedStatement = connection.prepareStatement(
-                "UPDATE admin SET token = ? WHERE username = ?"
-        );
-        preparedStatement.setString(1, token);
-        preparedStatement.setString(2, username);
-        return preparedStatement;
-    }
-
-    @Override
-    public void insertTokenByAdminUsername(String username, String token) {
-        jdbcTemplate.update(connection -> insertTokenStatement(username, token, connection));
-    }
 }

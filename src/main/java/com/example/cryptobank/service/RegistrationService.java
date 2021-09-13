@@ -45,7 +45,6 @@ public class RegistrationService {
         Customer customerToRegister = new Customer(username, password);
         if (checkIfCustomerCanBeRegistered(username) && checkIfSocialSecurityNumberExists(socialSecurityNumber)) {
             String salt = new Saltmaker().generateSalt();
-            String token = UUID.randomUUID().toString();
             customerToRegister.setPassword(HashHelper.hash(password, salt, PepperService.getPepper()));
             customerToRegister.setSalt(salt);
             customerToRegister.setFirstName(firstName);
@@ -54,7 +53,6 @@ public class RegistrationService {
             customerToRegister.setSocialSecurityNumber(socialSecurityNumber);
             customerToRegister.setAddress(new Address(street, zipcode, houseNumber, addition, city));
             customerToRegister.setBankAccount(new BankAccount());
-            customerToRegister.setAccessToken(token);
             Customer customerRegistered = rootRepository.save(customerToRegister);
             return customerRegistered;
         }
