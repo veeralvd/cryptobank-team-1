@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link href="crypto.css" rel="stylesheet">
+    <title>All Currencies</title>
+</head>
+
+<body>
+
+    <div>
+        <h1 id="lijstCurrencies">Currencies</h1>
+    </div>
+    <div id="assetsTable">
+
+    </div>
+
+    <div>
+        <!--<h1 id="doge">Dogecoin</h1>-->
+        <form id="orderForm" action="http://localhost:8080/assets" method="get">
+
+            <button id="showAssets" type="button">Show Assets</button>
+            <label><b>Amount</b>
+                <input type="text" id="amount" placeholder="Enter Amount" name="amount" required>
+            </label>
+            <label><b>Limit</b>
+                <input type="number" id="limitPrice" placeholder="Optional: add limit" name="limit">
+            </label><br><br>
+            <button id="showPortfolio" type="button">My Portfolio</button>
+            <!--<button id="buy" type="button"  >BUY NOW</button>-->
+        </form>
+    </div>
+
+    <table>
+
+
+    </table>
+
+    <script src="assets.js"></script>
+
+</body>
+</html>
