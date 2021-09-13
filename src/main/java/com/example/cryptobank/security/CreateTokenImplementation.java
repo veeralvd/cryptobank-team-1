@@ -10,7 +10,7 @@ import java.util.Date;
 @Service
 public class CreateTokenImplementation implements CreateToken{
     private final Logger logger = LoggerFactory.getLogger(CreateTokenImplementation.class);
-    private final static String BEARER = "Bearer:";
+   // private final static String BEARER = "Bearer=";
 
 
     public CreateTokenImplementation() {
@@ -24,7 +24,7 @@ public class CreateTokenImplementation implements CreateToken{
                 .withSubject(username)
                 .withExpiresAt(new Date(System.currentTimeMillis() + 10 * 60 * 1000))
                 .sign(algorithm);
-         return BEARER + access_token;
+         return access_token;
     }
 
     @Override
@@ -34,6 +34,6 @@ public class CreateTokenImplementation implements CreateToken{
                 .withSubject(username)
                 .withExpiresAt(new Date(System.currentTimeMillis() + 30 * 60 * 1000))
                 .sign(algorithm);
-        return BEARER + refresh_token;
+        return refresh_token;
     }
 }

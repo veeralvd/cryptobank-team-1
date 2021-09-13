@@ -23,7 +23,7 @@ public class AuthenticationService {
     private CreateToken createToken;
 
     private final Logger logger = LoggerFactory.getLogger(AuthenticationService.class);
-    private final static String BEARER = "Bearer:";
+   // private final static String BEARER = "Bearer=";
 
     @Autowired
     public AuthenticationService(RootRepository rootRepository, HashHelper hashHelper, CreateToken createToken) {
@@ -35,30 +35,30 @@ public class AuthenticationService {
 
 
     public Admin authenticateAdminToken(String accessToken) {
-        if (accessToken.startsWith(BEARER)) {
+//        if (accessToken.startsWith(BEARER)) {
             try {
-                String token = accessToken.substring(BEARER.length());
+               //String token = accessToken.substring(BEARER.length());
                 Algorithm algorithm = Algorithm.HMAC256(TokenKeyService.getAdminKey().getBytes());
                 JWTVerifier verifier = JWT.require(algorithm).build();
-                DecodedJWT decodedJWT = verifier.verify(token);
+                DecodedJWT decodedJWT = verifier.verify(accessToken);
                 Admin admin = rootRepository.findAdminByUsername(decodedJWT.getSubject());
                 return admin;
             } catch (Exception exception) {
                 logger.info(exception.getMessage());
                 return null;
             }
-        } else
-            return null;
+//        } else
+//            return null;
     }
 
     // TODO: 08/09/2021 Afmaken die hap
     public CustomerDto authenticateCustomerToken(String accessToken) {
-        if (accessToken.startsWith(BEARER)) {
+//        if (accessToken.startsWith(BEARER)) {
             try {
-                String token = accessToken.substring(BEARER.length());
+               // String token = accessToken.substring(BEARER.length());
                 Algorithm algorithm = Algorithm.HMAC256(TokenKeyService.getCustomerKey().getBytes());
                 JWTVerifier verifier = JWT.require(algorithm).build();
-                DecodedJWT decodedJWT = verifier.verify(token);
+                DecodedJWT decodedJWT = verifier.verify(accessToken);
                 Customer customer = rootRepository.findCustomerByUsername(decodedJWT.getSubject());
                 CustomerDto customerDto = new CustomerDto(customer.getUsername(), null,
                         customer.getFirstName(), customer.getBankAccount().getIban(), customer.getEmail());
@@ -68,8 +68,8 @@ public class AuthenticationService {
                 logger.info(exception.getMessage());
                 return null;
             }
-        } else
-            return null;
+//        } else
+//            return null;
     }
 
 
