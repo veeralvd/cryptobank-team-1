@@ -37,9 +37,6 @@ public class LoginService {
             if(authenticate(adminInDatabase.getPassword(), hashedPassword)) {
                 attemptToLogin.setPassword(hashedPassword);
                 attemptToLogin.setSalt(salt);
-//                token = UUID.randomUUID().toString();
-//                rootRepository.insertTokenByAdminUsername(username, token);
-
                 attemptToLogin.setAccessToken(createToken.createAccessToken(
                         username, TokenKeyService.getAdminKey()));
                 attemptToLogin.setRefreshToken(createToken.createRefreshToken(
@@ -58,8 +55,7 @@ public class LoginService {
     public CustomerDto loginCustomer(String username, String password) {
         String token = null;
         CustomerDto user = new CustomerDto(username, password);
-        // waarom stond dit hier uberhaubt?
-        // user.setAccessToken(token);
+
         Customer customerInDatabase = rootRepository.findCustomerByUsername(username);
 
         if (customerInDatabase != null && user.getUsername().equals(customerInDatabase.getUsername())) {
@@ -67,8 +63,6 @@ public class LoginService {
             String hashedPassword = HashHelper.hash(user.getPassword(), salt, PepperService.getPepper());
 
             if (authenticate(customerInDatabase.getPassword(), hashedPassword)) {
-//                token = UUID.randomUUID().toString();
-//                rootRepository.insertTokenByCustomerUsername(customerDto.getUsername(), token);
                 user.setAccessToken(createToken.createAccessToken(
                         user.getUsername(), TokenKeyService.getCustomerKey()));
                 user.setRefreshToken(createToken.createRefreshToken(

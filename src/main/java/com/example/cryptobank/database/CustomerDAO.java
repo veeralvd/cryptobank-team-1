@@ -2,6 +2,7 @@ package com.example.cryptobank.database;
 
 
 import com.example.cryptobank.domain.Customer;
+import com.example.cryptobank.dto.CustomerDto;
 
 import java.util.List;
 
@@ -12,7 +13,7 @@ public interface CustomerDAO {
 
     List<Customer> getAll();
 
-    String findCustomerUsernameByToken(String username);
-
     void insertTokenByCustomerUsername(String username, String token);
+
+    CustomerDto findCustomerByEmail(String email);
 }

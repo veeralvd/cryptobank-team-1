@@ -10,6 +10,7 @@ import java.util.Date;
 @Service
 public class CreateTokenImplementation implements CreateToken{
     private final Logger logger = LoggerFactory.getLogger(CreateTokenImplementation.class);
+   // private final static String BEARER = "Bearer=";
 
 
     public CreateTokenImplementation() {

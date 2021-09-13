@@ -3,6 +3,7 @@ package com.example.cryptobank.service;
 import com.example.cryptobank.database.CustomerDAO;
 import com.example.cryptobank.database.RootRepository;
 import com.example.cryptobank.domain.Customer;
+import com.example.cryptobank.domain.Mail;
 import com.example.cryptobank.dto.CustomerDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,16 +39,7 @@ public class CustomerService {
         return registrationService.register(customerToRegister);
     }
 
-//    public Customer registerCustomer(Customer customerToRegister) {
-//        return registrationService.registerCustomer(customerToRegister.getUsername(), customerToRegister.getPassword(),
-//                customerToRegister.getFirstName(), customerToRegister.getLastName(), customerToRegister.getDateOfBirth(),
-//                customerToRegister.getSocialSecurityNumber(), customerToRegister.g);
-//    }
 
-//    public Customer login(String username, String password) {
-//        Customer attemptToLogin = loginService.loginCustomer(username, password);
-//        return attemptToLogin;
-//    }
 
     public CustomerDto login(String username, String password) {
         return loginService.loginCustomer(username, password);
@@ -59,5 +51,14 @@ public class CustomerService {
 
     public void refresh(CustomerDto customerToRefreshToken) {
         authenticationService.refreshCustomerToken(customerToRefreshToken);
+    }
+
+    public CustomerDto findCustomerByEmail(String email) {
+        CustomerDto customer = rootRepository.findCustomerByEmail(email);
+        if (customer != null) {
+            authenticationService.refreshCustomerToken(customer);
+            return customer;
+        }
+        return null;
     }
 }
