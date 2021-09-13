@@ -13,7 +13,7 @@ public interface CustomerDAO {
 
     List<Customer> getAll();
 
-    void insertTokenByCustomerUsername(String username, String token);
-
     CustomerDto findCustomerByEmail(String email);
+
+    boolean updatePassword(CustomerDto customerDto, String salt);
 }

@@ -111,18 +111,6 @@ public class RootRepository {
         return portfolio;
     }
 
-    public String findAdminUsernameByToken(String token) {
-        return adminDAO.findAdminUsernameByToken(token);
-    }
-
-
-    public void insertTokenByAdminUsername(String username, String token) {
-        adminDAO.insertTokenByAdminUsername(username, token);
-    }
-
-    public void insertTokenByCustomerUsername(String username, String token) {
-        customerDAO.insertTokenByCustomerUsername(username, token);
-    }
 
     // TODO placeOrder / saveOrder
     public Order placeOrder(Order order) {
@@ -214,5 +202,9 @@ public class RootRepository {
 
     public CustomerDto findCustomerByEmail(String email) {
         return customerDAO.findCustomerByEmail(email);
+    }
+
+    public boolean updatePassword(CustomerDto customer, String salt) {
+        return customerDAO.updatePassword(customer, salt);
     }
 } // end of class RootRepository

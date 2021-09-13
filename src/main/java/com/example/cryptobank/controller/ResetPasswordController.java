@@ -76,4 +76,21 @@ public class ResetPasswordController {
         }
     }
 
+    @PostMapping("/submit")
+    public ResponseEntity<?> resetPassword(@RequestParam String password, @RequestHeader("Authorization") String accessToken) {
+    logger.info("reset password aangeroepen");
+
+    logger.info(password);
+
+    CustomerDto customer = customerService.authenticate(accessToken);
+        if (customer != null) {
+            boolean passwordIsReset =  customerService.updatePassword(password, customer);
+            if (passwordIsReset) {
+                return new ResponseEntity<String>("password successfully updated", HttpStatus.OK);
+            }
+        } else {
+        return new ResponseEntity<String>("password not saved", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity<String>("Unauthorized request", HttpStatus.UNAUTHORIZED);
+    }
 }

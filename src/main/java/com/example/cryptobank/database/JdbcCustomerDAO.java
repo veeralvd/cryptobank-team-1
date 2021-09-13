@@ -104,20 +104,28 @@ public class JdbcCustomerDAO implements CustomerDAO{
         return allCustomers;
     }
 
+    @Override
+    public boolean updatePassword(CustomerDto customerDto, String salt) {
+        try {
+            jdbcTemplate.update(connection -> updatePasswordInDatabase(customerDto.getUsername(),
+                    customerDto.getPassword(), salt,  connection));
+            return true;
+        } catch (Exception sqlException) {
+            logger.info(sqlException.getMessage());
+            return false;
+        }
+    }
 
-    private PreparedStatement insertTokenByCustomerUsername(String username, String token, Connection connection)
-            throws SQLException {
+    private PreparedStatement updatePasswordInDatabase(String username, String password, String salt, Connection connection)
+        throws SQLException {
         PreparedStatement preparedStatement = connection.prepareStatement(
-                "UPDATE customer SET token = ? WHERE username = ?");
-        preparedStatement.setString(1, token);
-        preparedStatement.setString(2, username);
+                "UPDATE customer SET password = ?, salt = ? WHERE username = ?");
+        preparedStatement.setString(1, password);
+        preparedStatement.setString(2, salt);
+        preparedStatement.setString(3, username);
         return preparedStatement;
     }
 
-    @Override
-    public void insertTokenByCustomerUsername(String username, String token) {
-        jdbcTemplate.update(connection -> insertTokenByCustomerUsername(username, token, connection));
-    }
 
     @Override
     public CustomerDto findCustomerByEmail(String email) {
@@ -129,10 +137,7 @@ public class JdbcCustomerDAO implements CustomerDAO{
             Customer customer = customerList.get(0);
             return new CustomerDto(customer.getUsername(), null,
                     customer.getFirstName(), customer.getBankAccount().getIban(), customer.getEmail());
-            }
+        }
         return null;
     }
-
-
-
 }

@@ -31,7 +31,9 @@ public class PortfolioController {
 
     @GetMapping("/portfolio")
     public ResponseEntity<?> getPortfolio (@RequestHeader("Authorization") String accessToken){
+        logger.info("get portfolio aangeroepen");
         CustomerDto customer = customerService.authenticate(accessToken);
+        logger.info(String.valueOf(customer));
         if (customer != null){
             PortfolioDto portfolioDto = portfolioService.showPortfolioDto(customer.getIban(), customer.getFirstName());
             return new ResponseEntity<String>(portfolioDto.toString(), HttpStatus.OK);

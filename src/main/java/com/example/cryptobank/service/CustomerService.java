@@ -5,6 +5,7 @@ import com.example.cryptobank.database.RootRepository;
 import com.example.cryptobank.domain.Customer;
 import com.example.cryptobank.domain.Mail;
 import com.example.cryptobank.dto.CustomerDto;
+import com.example.cryptobank.security.PepperService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,5 +61,12 @@ public class CustomerService {
             return customer;
         }
         return null;
+    }
+
+    public boolean updatePassword(String password, CustomerDto customer) {
+        String salt = new Saltmaker().generateSalt();
+        customer.setPassword(HashHelper.hash(password, salt, PepperService.getPepper()));
+
+        return rootRepository.updatePassword(customer, salt);
     }
 }

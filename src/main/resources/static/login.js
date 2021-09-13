@@ -17,7 +17,7 @@ document.querySelector('#submitButton').addEventListener(`click`,
                 'Content-Type': 'application/json'
             }
         }
-        // Token komt terug als username & password erkent wordt
+        // Token komt terug als username & password worden erkend
        fetch(url,options)
             .then(response => {
                 if (response.ok){
@@ -38,7 +38,13 @@ document.querySelector('#submitButton').addEventListener(`click`,
 
     })
 
+document.querySelector('#signupButton').addEventListener('click', () => {
+location.href = "/register.html"
+});
 
+document.querySelector('#forgotPasswordButton').addEventListener('click', () => {
+    location.href = "/reset-password.html"
+});
 
 
 
