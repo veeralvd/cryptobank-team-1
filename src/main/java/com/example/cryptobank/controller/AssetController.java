@@ -1,5 +1,6 @@
 package com.example.cryptobank.controller;
 
+import com.example.cryptobank.dto.AssetDto;
 import com.example.cryptobank.service.AssetService;
 import com.example.cryptobank.domain.Asset;
 import org.slf4j.Logger;
@@ -26,7 +27,7 @@ public class AssetController {
 
     @GetMapping("/assets")
     public ResponseEntity<?> showAssets() {
-        ArrayList<Asset> allAssets = assetService.getAssets();
+        ArrayList<AssetDto> allAssets = assetService.getAssets();
         logger.info("Show assets aangeroepen");
         return new ResponseEntity<>(allAssets, HttpStatus.OK);
     }
