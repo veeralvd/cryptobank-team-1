@@ -14,6 +14,7 @@ document.getElementById("myPortfolio").addEventListener('click',
         event.preventDefault()
         const urlPortfolio = "http://localhost:8080/portfolio"
 
+        //TODO toont hem nu ook bij een 403 geen authorization, moet natuurlijk niet
         fetchTable(urlPortfolio, options, "#portfolioTable");
         document.title = "My Portfolio";
         document.getElementById("allAssets").style.display="none"
@@ -49,13 +50,12 @@ function fetchTable(url, options, tableId) {
                         let data = Object.keys(jason[0]);
                         generateTableHead(table, data);
                         generateTable(table, jason);
-
                     })
                     .catch((error) => {
                         console.error('Error' + error);
                     })
             } else {
-                console.log('niet gelukt')
+                console.log('Failed to fetch data for table')
             }
         })
 }
