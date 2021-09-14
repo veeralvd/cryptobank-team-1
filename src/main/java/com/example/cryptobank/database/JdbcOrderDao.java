@@ -3,6 +3,7 @@ package com.example.cryptobank.database;
 import com.example.cryptobank.domain.BankAccount;
 import com.example.cryptobank.domain.Asset;
 import com.example.cryptobank.domain.Order;
+import com.example.cryptobank.dto.OrderDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,19 +35,19 @@ public class JdbcOrderDao implements OrderDao {
         logger.info("New JdbcOrderDao");
     }
 
-    private PreparedStatement insertOrderStatement(Order order, Connection connection) throws SQLException {
+    private PreparedStatement insertOrderStatement(OrderDto order, Connection connection) throws SQLException {
         PreparedStatement preparedStatement = connection.prepareStatement("insert into cryptobank.order (iban, " +
                 "dateTimeCreated, abbreviation, assetAmount, desiredPrice) values (?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
-        preparedStatement.setString(1, order.getBankAccount().getIban());
+        preparedStatement.setString(1, order.getIban());
         preparedStatement.setString(2, String.valueOf(order.getDateTimeCreated()));
-        preparedStatement.setString(3, order.getAsset().getAbbreviation());
+        preparedStatement.setString(3, order.getAssetAbbr());
         preparedStatement.setDouble(4, order.getAssetAmount());
         preparedStatement.setDouble(5, order.getDesiredPrice());
         return preparedStatement;
     }
 
     @Override
-    public Order save(Order order) {
+    public OrderDto save(OrderDto order) {
         logger.info("orderDao.save aangeroepen");
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(connection -> insertOrderStatement(order, connection), keyHolder);
