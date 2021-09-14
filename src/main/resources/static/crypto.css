@@ -4,12 +4,40 @@ body {
     font-family: sans-serif;
     background: #2d3436;
 }
-h1{
-    color: #fbc531;
-    text-align: right;
-    margin-right: 50px;
+.header {
+    /*height: 50px;*/
+    /*width: 100%;*/
+    /*background-color: #454a54;*/
+    /*position: fixed;*/
+    overflow: hidden;
+    background-color: #454a54;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    /*height: 10%; !* Bedekt letters uit header A nu*!*/
 
 }
+.header a{
+    /*float: right;*/
+    /*color: #fbc531;*/
+    /*font-size: 30px;*/
+    /*font-weight: bold;*/
+    float: right;
+    display: block;
+    color: #fbc531;
+    text-align: right;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 30px;
+
+}
+
+/*h1{*/
+/*    color: #fbc531;*/
+/*    text-align: right;*/
+/*    margin-right: 50px;*/
+
+/*}*/
 
 /**
 Bepaalt inhoud en plaatsing van box om alle elementen
@@ -82,7 +110,7 @@ input:focus
 }
 
 /*
-Voor de login button
+Voor de submit buttons
 */
 button[type = "submit"]{
     border: 0;
@@ -92,7 +120,7 @@ button[type = "submit"]{
     text-align: center;
     border: 2px solid #ffffff;
     padding: 10px 8px;
-    width: 100px;
+    min-width: 100px;
     outline: none;
     color: white;
     border-radius: 10px;
@@ -106,7 +134,7 @@ button[type = "submit"]:hover{
 }
 
 /*
-Styling voor signup en forgotpassord buttons
+Styling voor normale buttons
 */
 button[type = "button"]{
     border: none;
@@ -123,4 +151,13 @@ button[type = "button"]{
 button[type = "button"]:hover{
     opacity:1;
     text-decoration: underline;
+}
+
+/*
+Division overlay op recoveryscherm
+*/
+#emailsuccesful {
+    visibility: hidden;
+    text-align: center;
+    color: white;
 }

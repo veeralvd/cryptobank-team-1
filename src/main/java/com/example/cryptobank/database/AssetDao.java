@@ -1,6 +1,7 @@
 package com.example.cryptobank.database;
 
 import com.example.cryptobank.domain.Asset;
+import com.example.cryptobank.dto.AssetDto;
 
 import java.util.ArrayList;
 

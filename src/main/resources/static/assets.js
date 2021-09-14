@@ -26,6 +26,7 @@ document.getElementById("showPortfolio").addEventListener('click',
                 'Authorization': localStorage.getItem('Authorization')
             }
         }
+        console.log(localStorage.getItem('Authorization'))
         //fetchTable(urlPortfolio, options);
         fetch(urlPortfolio, options)
             .then(response => {
