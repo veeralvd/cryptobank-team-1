@@ -1,6 +1,7 @@
 package com.example.cryptobank.controller;
 
 import com.example.cryptobank.dto.CustomerDto;
+import com.example.cryptobank.dto.OwnedAssetDto;
 import com.example.cryptobank.service.CustomerService;
 import com.example.cryptobank.service.PortfolioService;
 import com.example.cryptobank.domain.Portfolio;
@@ -14,6 +15,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 public class PortfolioController {
@@ -36,7 +40,9 @@ public class PortfolioController {
         logger.info(String.valueOf(customer));
         if (customer != null){
             PortfolioDto portfolioDto = portfolioService.showPortfolioDto(customer.getIban(), customer.getFirstName());
-            return new ResponseEntity<String>(portfolioDto.toString(), HttpStatus.OK);
+            List<OwnedAssetDto> ownedAssetsList = portfolioDto.getList();
+            return new ResponseEntity<>(ownedAssetsList, HttpStatus.OK);
+            //return new ResponseEntity<String>(portfolioDto.toString(), HttpStatus.OK);
         } else{
             return new ResponseEntity<String>(HttpStatus.FORBIDDEN);
         }

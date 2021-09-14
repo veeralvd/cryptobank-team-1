@@ -1,18 +1,13 @@
-
-document.getElementById("showAssets").addEventListener('click',
-    function (event) {
-    event.preventDefault()
-    const urlAssets = "http://localhost:8080/assets"
-    const options = {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': localStorage.getItem('Authorization')
-        }
+//document.getElementById("allAssets"). {
+const urlAssets = "http://localhost:8080/assets"
+const optionsAssets = {
+    method: 'GET',
+    headers: {
+        'Content-Type': 'application/json',
+        'Authorization': localStorage.getItem('Authorization')
     }
-    fetchTable(urlAssets, options);
-    document.getElementById("showAssets").style.display="none"
-    })
+}
+fetchTable(urlAssets, optionsAssets);
 
 
 document.getElementById("showPortfolio").addEventListener('click',
@@ -26,28 +21,26 @@ document.getElementById("showPortfolio").addEventListener('click',
                 'Authorization': localStorage.getItem('Authorization')
             }
         }
-        console.log(localStorage.getItem('Authorization'))
-        //fetchTable(urlPortfolio, options);
-        fetch(urlPortfolio, options)
-            .then(response => {
-                if (response.ok) {
-                    response.json()
-                        .then(json => {
-                            let jason = json;
-                            let table = document.querySelector("table");
-                            let data = Object.keys(jason[0]);
-                            generateTableHead(table, data);
-                            generateTable(table, jason);
+        fetchTable(urlPortfolio, options);
+        document.title = "My Portfolio";
+        document.getElementById("allAssets").style.display="none"
+        document.getElementById("showPortfolio").style.display
+        /*document.getElementById("showPortfolio").style.display="none"
+        document.getElementById("showAssets").style.display="block"
+        document.getElementById("assetsTable").style.display="none"
+        document.getElementById("portfolioTable").style.display="block"*/
+    }, false);
 
-                        })
-                        .catch((error) => {
-                            console.error('Error' + error);
-                        })
-                } else {
-                    console.log('niet gelukt')
-                }
-            })
-    })
+
+document.getElementById("showAssets").addEventListener('click',
+    function (event) {
+        event.preventDefault()
+        fetchTable(urlAssets, optionsAssets);
+        document.getElementById("showAssets").style.display="none"
+        document.getElementById("showPortfolio").style.display="block"
+        document.getElementById("portfolioTable").style.display="none"
+        document.getElementById("assetsTable").style.display="block"
+    }, false);
 
 
 function fetchTable(url, options) {
@@ -56,7 +49,7 @@ function fetchTable(url, options) {
             if (response.ok) {
                 response.json()
                     .then(json => {
-                        let jason = json.getItem(2);
+                        let jason = json;
                         let table = document.querySelector("table");
                         let data = Object.keys(jason[0]);
                         generateTableHead(table, data);
@@ -98,14 +91,11 @@ function generateTable(table, data) {
 }
 
 
-// let table = document.querySelector("assetTable");
-// let data = Object.keys(assetsReturned[0]);
-// generateTableHead(table, data);
 
-/*
-let abbreviation = "?abbreviation" + abbreviation
-let url = "http://localhost:8080/assets/doge"
-*/
+
+/*let abbreviation = "?abbreviation" + abbreviation
+let url = "http://localhost:8080/assets/doge"*/
+
 /*let url = new URL(window.location.href)
 console.log(url.origin)
 const options = {
@@ -120,26 +110,3 @@ const options = {
     .then(response => response.json())
     .then(data => console.log(data));*/
 
-
-/*const assets = [
-    {"abbreviation":"ADA","name":"Cardano","description":"ADA","rate":null},
-    {"abbreviation":"BCH","name":"Bitcoin Cash","description":"BCH","rate":null},
-    {"abbreviation":"BNB","name":"Binance Coin","description":"BNB","rate":null},
-    {"abbreviation":"BTC","name":"Bitcoin","description":"BTC","rate":null},
-    {"abbreviation":"BUSD","name":"Binance USD","description":"BUSD","rate":null},
-    {"abbreviation":"CAKE","name":"PancakeSwap","description":"pannekoek, goed idee voor lunch","rate":null},
-    {"abbreviation":"DOGE","name":"Dogecoin","description":"DOGE","rate":null},
-    {"abbreviation":"DOT","name":"Polkadot","description":"polka klinkt wel lekker pools en gezellig","rate":null},
-    {"abbreviation":"ETH","name":"Ethereum","description":"ETH","rate":null},
-    {"abbreviation":"HEX","name":"HEX","description":"HEX","rate":null},
-    {"abbreviation":"LINK","name":"Chainlink","description":"LINK","rate":null},
-    {"abbreviation":"LTC","name":"Litecoin","description":"LTC","rate":null},
-    {"abbreviation":"LUNA","name":"Terra","description":"LUNA","rate":null},
-    {"abbreviation":"MATIC","name":"Polygon","description":"MATIC","rate":null},
-    {"abbreviation":"SOL","name":"Solana","description":"SOL is een prima zomerbiertje","rate":null},
-    {"abbreviation":"UNI","name":"Uniswap","description":"UNI","rate":null},
-    {"abbreviation":"USDC","name":"USDC","description":"USDC","rate":null},
-    {"abbreviation":"USDT","name":"Tether USD","description":"USDT","rate":null},
-    {"abbreviation":"WBTC","name":"Wrapped BTC","description":"een wrap is altijd lekker","rate":null},
-    {"abbreviation":"XRP","name":"XRP","description":"XRP","rate":null}
-]*/
