@@ -1,5 +1,3 @@
-//document.getElementById("allAssets"). {
-const urlAssets = "http://localhost:8080/assets"
 const optionsAssets = {
     method: 'GET',
     headers: {
@@ -7,10 +5,11 @@ const optionsAssets = {
         'Authorization': localStorage.getItem('Authorization')
     }
 }
-fetchTable(urlAssets, optionsAssets);
+const urlAssets = "http://localhost:8080/assets"
 
+showAllAssets()
 
-document.getElementById("showPortfolio").addEventListener('click',
+document.getElementById("myPortfolio").addEventListener('click',
     function (event) {
         event.preventDefault()
         const urlPortfolio = "http://localhost:8080/portfolio"
@@ -21,36 +20,37 @@ document.getElementById("showPortfolio").addEventListener('click',
                 'Authorization': localStorage.getItem('Authorization')
             }
         }
-        fetchTable(urlPortfolio, options);
+        fetchTable(urlPortfolio, options, "#portfolioTable");
         document.title = "My Portfolio";
         document.getElementById("allAssets").style.display="none"
-        document.getElementById("showPortfolio").style.display
-        /*document.getElementById("showPortfolio").style.display="none"
-        document.getElementById("showAssets").style.display="block"
-        document.getElementById("assetsTable").style.display="none"
-        document.getElementById("portfolioTable").style.display="block"*/
+        document.getElementById("showPortfolio").style.display="block"
     }, false);
 
 
 document.getElementById("showAssets").addEventListener('click',
     function (event) {
         event.preventDefault()
-        fetchTable(urlAssets, optionsAssets);
-        document.getElementById("showAssets").style.display="none"
-        document.getElementById("showPortfolio").style.display="block"
-        document.getElementById("portfolioTable").style.display="none"
-        document.getElementById("assetsTable").style.display="block"
+        fetchTable(urlAssets, optionsAssets, "#assetTable");
+        document.getElementById("showPortfolio").style.display="none"
+        document.getElementById("allAssets").style.display="block"
     }, false);
 
+function showAllAssets() {
+    document.getElementById("allAssets")
+    {
+        fetchTable(urlAssets, optionsAssets, "#assetTable");
+    }
+}
 
-function fetchTable(url, options) {
+function fetchTable(url, options, tableId) {
     fetch(url, options)
         .then(response => {
             if (response.ok) {
                 response.json()
                     .then(json => {
                         let jason = json;
-                        let table = document.querySelector("table");
+                        let table = document.querySelector(tableId);
+                        table.innerHTML = "";
                         let data = Object.keys(jason[0]);
                         generateTableHead(table, data);
                         generateTable(table, jason);
