@@ -43,7 +43,7 @@ location.href = "/register.html"
 });
 
 document.querySelector('#forgotPasswordButton').addEventListener('click', () => {
-    location.href = "/reset-password.html"
+    location.href = "/forgot-password.html" // andere pagina
 });
 
 
