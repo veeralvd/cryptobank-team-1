@@ -17,6 +17,7 @@ public class CreateTokenImplementation implements CreateToken{
         logger.info("New Token creation requested");
     }
 
+    // TODO: 13/09/2021 code smell @ line 26 and 36, magic numbers 
     @Override
     public String createAccessToken(String username, String key) {
         Algorithm algorithm = Algorithm.HMAC256(key.getBytes());

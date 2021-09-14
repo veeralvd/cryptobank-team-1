@@ -2,12 +2,14 @@ package com.example.cryptobank.service;
 
 import com.example.cryptobank.database.RootRepository;
 import com.example.cryptobank.domain.Asset;
+import com.example.cryptobank.dto.AssetDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 /**
  * @author Sarah-Jayne Nogarede
@@ -26,9 +28,15 @@ public class AssetService {
         logger.info("New AssetService");
     }
 
-    public ArrayList<Asset> getAssets() {
+    public ArrayList<AssetDto> getAssets() {
         ArrayList<Asset> allAssets = rootRepository.getAll();
-        return allAssets;
+        Map<String, Double> currentRates = rootRepository.getAllCurrentRates();
+        ArrayList<AssetDto> allAssetsWithRate = new ArrayList<>();
+        for (Asset asset : allAssets) {
+            allAssetsWithRate.add(new AssetDto(asset.getAbbreviation(), asset.getName(), asset.getDescription(),
+                    currentRates.get(asset.getAbbreviation())));
+        }
+        return allAssetsWithRate;
     }
 
     public Asset getByAbbreviation(String abbreviation) {

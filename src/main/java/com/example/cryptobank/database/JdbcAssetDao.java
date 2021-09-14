@@ -2,6 +2,7 @@ package com.example.cryptobank.database;
 
 import com.example.cryptobank.domain.Asset;
 import com.example.cryptobank.domain.CryptoCurrencyRate;
+import com.example.cryptobank.dto.AssetDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,6 +64,8 @@ public class JdbcAssetDao implements AssetDao {
 
     } // end of nested class AssetRowMapper
 
+
+
     @Override
     public Asset findByAbbreviation(String abbreviation) {
         String sql = "SELECT * from asset where abbreviation = ?";
@@ -91,4 +94,5 @@ public class JdbcAssetDao implements AssetDao {
         List<Asset> allAssets = jdbcTemplate.query(sql, new AssetRowMapper());
         return (ArrayList<Asset>) allAssets;
     }
+
 } // end of class JdbcAssetDao
