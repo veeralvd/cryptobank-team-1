@@ -1,21 +1,13 @@
-
-document.getElementById("showAssets").addEventListener('click',
-    function (event) {
-        event.preventDefault()
-        const urlAssets = "http://localhost:8080/assets"
-        const options = {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': localStorage.getItem('Authorization')
-            }
-        }
-        fetchTable(urlAssets, options);
-        document.getElementById("showAssets").style.display="none"
-        document.getElementById("showPortfolio").style.display="block"
-        document.getElementById("portfolioTable").style.display="none"
-        document.getElementById("assetsTable").style.display="block"
-    }, false);
+//document.getElementById("allAssets"). {
+const urlAssets = "http://localhost:8080/assets"
+const optionsAssets = {
+    method: 'GET',
+    headers: {
+        'Content-Type': 'application/json',
+        'Authorization': localStorage.getItem('Authorization')
+    }
+}
+fetchTable(urlAssets, optionsAssets);
 
 
 document.getElementById("showPortfolio").addEventListener('click',
@@ -30,10 +22,24 @@ document.getElementById("showPortfolio").addEventListener('click',
             }
         }
         fetchTable(urlPortfolio, options);
-        document.getElementById("showPortfolio").style.display="none"
+        document.title = "My Portfolio";
+        document.getElementById("allAssets").style.display="none"
+        document.getElementById("showPortfolio").style.display
+        /*document.getElementById("showPortfolio").style.display="none"
         document.getElementById("showAssets").style.display="block"
         document.getElementById("assetsTable").style.display="none"
-        document.getElementById("portfolioTable").style.display="block"
+        document.getElementById("portfolioTable").style.display="block"*/
+    }, false);
+
+
+document.getElementById("showAssets").addEventListener('click',
+    function (event) {
+        event.preventDefault()
+        fetchTable(urlAssets, optionsAssets);
+        document.getElementById("showAssets").style.display="none"
+        document.getElementById("showPortfolio").style.display="block"
+        document.getElementById("portfolioTable").style.display="none"
+        document.getElementById("assetsTable").style.display="block"
     }, false);
 
 
