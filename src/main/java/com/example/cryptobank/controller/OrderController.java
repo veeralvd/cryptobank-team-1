@@ -34,12 +34,14 @@ public class OrderController {
      * worden.
      */
     @PostMapping(value = "/buyasset", produces = "application/json")
-    public ResponseEntity<?> buyAsset(@RequestBody OrderDto order, @RequestHeader("Authorization") String accessToken) {
+    public ResponseEntity<?> buyAsset(@RequestParam String assetAbbr, double assetAmount, @RequestHeader("Authorization") String accessToken) {
         CustomerDto customer = customerService.authenticate(accessToken);
         if (customer == null) {
             return new ResponseEntity<String>(HttpStatus.FORBIDDEN);
         }
-        OrderDto orderToSave = orderService.saveOrder(order);
+        String iban = customer.getIban();
+        OrderDto orderToSave = orderService.assembleOrderTemp(iban, assetAbbr, assetAmount);
+        OrderDto orderSaved = orderService.saveOrder(orderToSave);
         if (orderToSave == null) {
             return new ResponseEntity<String>("Failed to save order", HttpStatus.BAD_REQUEST);
         } else {

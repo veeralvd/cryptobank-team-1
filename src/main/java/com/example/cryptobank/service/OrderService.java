@@ -1,6 +1,7 @@
 package com.example.cryptobank.service;
 
 import com.example.cryptobank.database.RootRepository;
+import com.example.cryptobank.domain.Asset;
 import com.example.cryptobank.domain.Order;
 import com.example.cryptobank.dto.OrderDto;
 import org.slf4j.Logger;
@@ -33,6 +34,17 @@ public class OrderService {
         double desiredPrice = order.getDesiredPrice();
         LocalDateTime dateTimeCreated = order.getDateTimeCreated();
         return new OrderDto(orderId, iban, assetAbbr, assetAmount, desiredPrice, dateTimeCreated);
+    }
+
+    public OrderDto assembleOrderTemp(String iban, String assetAbbr, double assetAmount) {
+        Asset asset = rootRepository.getByAbbreviation(assetAbbr);
+        OrderDto order = new OrderDto();
+        order.setIban(iban);
+        order.setAssetAbbr(assetAbbr);
+        order.setAssetAmount(assetAmount);
+        order.setDesiredPrice(asset.getRate().getCryptoRate());
+        order.setDateTimeCreated(LocalDateTime.now());
+        return order;
     }
 
     public OrderDto saveOrder(OrderDto orderToSave) {

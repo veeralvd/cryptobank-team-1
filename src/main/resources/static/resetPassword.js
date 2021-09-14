@@ -36,6 +36,7 @@ document.querySelector('#resetPassword').addEventListener(`click`,
         else {
 
             // Token uit url halen (getToken aanroepen ipv strings hieronder)
+            // zie assets.js voor een beter voorbeeld.
             const stringUrl = URL.split(`=`)
             const token = stringUrl[1];
             console.log(token);
@@ -47,6 +48,7 @@ document.querySelector('#resetPassword').addEventListener(`click`,
                     'Content-Type': 'application/json',
                     // token toevoegen aan de header (want @RequestHeader)
                     'Authorization': token
+                    // 'Authorization': localStorage.getItem('Authorization')
                 }
             }
 
