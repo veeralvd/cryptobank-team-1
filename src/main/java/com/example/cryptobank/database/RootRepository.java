@@ -3,6 +3,7 @@ package com.example.cryptobank.database;
 
 import com.example.cryptobank.domain.*;
 import com.example.cryptobank.dto.CustomerDto;
+import com.example.cryptobank.dto.OrderDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -111,9 +112,7 @@ public class RootRepository {
         return portfolio;
     }
 
-
-    // TODO placeOrder / saveOrder
-    public Order placeOrder(Order order) {
+    public OrderDto saveOrder(OrderDto order) {
         return orderDao.save(order);
     }
 

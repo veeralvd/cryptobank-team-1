@@ -1,14 +1,16 @@
 package com.example.cryptobank.service;
 
 import com.example.cryptobank.database.RootRepository;
-import com.example.cryptobank.domain.Asset;
 import com.example.cryptobank.domain.Order;
+import com.example.cryptobank.dto.OrderDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class OrderService {
@@ -23,37 +25,31 @@ public class OrderService {
         logger.info("New OrderService");
     }
 
-    /**
-     * Methode placeOrder
-     * @return boolean status (voor nu, straks order teruggeven) -> kan je niet gewoon de save methode gebruiken? Ik heb het alvast even gedaan, je oude boolean is uitgecomment.
-     */
-
-    public Order placeOrder(Order orderPlaced) {
-        return rootRepository.placeOrder(orderPlaced);
+    public OrderDto getOrderDto(Order order) {
+        int orderId = order.getOrderId();
+        String iban = order.getBankAccount().getIban();
+        String assetAbbr = order.getAsset().getAbbreviation();
+        double assetAmount = order.getAssetAmount();
+        double desiredPrice = order.getDesiredPrice();
+        LocalDateTime dateTimeCreated = order.getDateTimeCreated();
+        return new OrderDto(orderId, iban, assetAbbr, assetAmount, desiredPrice, dateTimeCreated);
     }
 
-    /**
-     * TODO nu gaan we uit van prijs per eenheid
-     * Hulpmethode om bedrag asset koerwwaarde * aantal te berekenen
-     */
-    private double calculateAssetCost(Asset asset, double amount) {
-        return asset.getRate().getCryptoRate() * amount;
+    public OrderDto saveOrder(OrderDto orderToSave) {
+        return rootRepository.saveOrder(orderToSave);
     }
 
-    /**
-     * TODO naar Transaction
-     * Hulpmethode om transactiekosten te berekenen op basis van assetCost
-     * Tijdelijk vast op 3%
-     */
-    private double calculateTransactionCost(double assetCost) {
-        return assetCost * 0.03;
+    public OrderDto findByOrderId(int orderId) {
+        Order orderToFind = rootRepository.findByOrderId(orderId);
+        return getOrderDto(orderToFind);
     }
 
-    public Order findByOrderId(int orderId) {
-        return rootRepository.findByOrderId(orderId);
-    }
-
-    public ArrayList<Order> getAllByIban(String iban) {
-        return rootRepository.getAllOrdersByIban(iban);
+    public List<OrderDto> getAllOrdersByIban(String iban) {
+        ArrayList<Order> ordersByIban = rootRepository.getAllOrdersByIban(iban);
+        List<OrderDto> orderDtosByIban = new ArrayList<>();
+        for (Order order: ordersByIban) {
+            orderDtosByIban.add(getOrderDto(order));
+        }
+        return orderDtosByIban;
     }
 }

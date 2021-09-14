@@ -2,6 +2,7 @@ package com.example.cryptobank.database;
 
 
 import com.example.cryptobank.domain.Order;
+import com.example.cryptobank.dto.OrderDto;
 
 import java.util.ArrayList;
 
@@ -12,7 +13,7 @@ import java.util.ArrayList;
  */
 public interface OrderDao {
 
-    Order save (Order order);
+    OrderDto save (OrderDto order);
     Order findByOrderId (int orderId);
     ArrayList<Order> getAllByIban (String iban);
     String getAssetAbbrFromOrderId(int orderId);

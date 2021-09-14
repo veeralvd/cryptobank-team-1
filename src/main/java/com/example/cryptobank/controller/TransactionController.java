@@ -46,9 +46,17 @@ public class TransactionController {
         }
         TransactionDto transactionDto = transactionService.completeTransaction(orderToProcess);
         if (transactionDto == null) {
-            return new ResponseEntity<>("Failed to save transaction", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Failed to save transaction", HttpStatus.BAD_REQUEST); //TODO andere statuscode
         }
-        return new ResponseEntity<>(transactionDto, HttpStatus.OK);
+        return new ResponseEntity<>(transactionDto, HttpStatus.CREATED);
+    }
+
+    public boolean authenticateCustomerByAccessToken(String accessToken) {
+        CustomerDto customer = customerService.authenticate(accessToken);
+        if (customer == null) {
+            return false;
+        }
+        return true;
     }
 
 }
