@@ -3,14 +3,16 @@ document.querySelector('#register').addEventListener('click',
         console.log("hallo");
         event.preventDefault();
 
-        let registerForm = document.getElementById('#registrationForm')
-        let formData = new FormData(registerForm)
+        let formData = new FormData(document.querySelector('#registrationForm'));
 
+        console.log(formData.toString());
+        formData.forEach(i => console.log(i))
+        console.log(formData.entries());
         let plainFormData = Object.fromEntries(formData.entries());
-        let formDataJsonString = JSON.stringify(plainFormData);
+        let personalFormDataJsonString = JSON.stringify(plainFormData);
+        console.log(personalFormDataJsonString)
 
 
-        console.log(formDataJsonString)
         // let username = String(document.querySelector('#username').value)
         // let password = String(document.querySelector('#password').value)
         // let firstName = String(document.querySelector('#firstName').value)
@@ -31,20 +33,22 @@ document.querySelector('#register').addEventListener('click',
             method: `POST`,
             headers: {
                 'Content-Type': 'application/json'
-            }
+            },
+            body: personalFormDataJsonString
         }
-        // Token komt terug als username & password erkent wordt
-        // fetch(url,options)
-        //     .then(response => {
-        //         if (response.ok){
-        //             response.text();
-        //
-        //             window.location.assign("http://localhost:8080/login.html")
-        //         }else if (!response.ok) {
-        //             console.log('username and/or password are incorrect')
-        //         }})
-        //     .catch((error) => {
-        //         console.error('Error ' + error);
-        //     })
+
+        // Token komt terug als username & password erkend wordt
+        fetch(url,options)
+            .then(response => {
+                if (response.ok){
+                    response.text();
+                    alert('User registered');
+                    window.location.assign("http://localhost:8080/index.html")
+                }else if (!response.ok) {
+                    console.log('username and/or password are incorrect')
+                }})
+            .catch((error) => {
+                console.error('Error ' + error);
+            })
 
     })
