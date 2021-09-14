@@ -1,4 +1,4 @@
-const optionsAssets = {
+const options = {
     method: 'GET',
     headers: {
         'Content-Type': 'application/json',
@@ -13,13 +13,7 @@ document.getElementById("myPortfolio").addEventListener('click',
     function (event) {
         event.preventDefault()
         const urlPortfolio = "http://localhost:8080/portfolio"
-        const options = {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': localStorage.getItem('Authorization')
-            }
-        }
+
         fetchTable(urlPortfolio, options, "#portfolioTable");
         document.title = "My Portfolio";
         document.getElementById("allAssets").style.display="none"
@@ -30,15 +24,16 @@ document.getElementById("myPortfolio").addEventListener('click',
 document.getElementById("showAssets").addEventListener('click',
     function (event) {
         event.preventDefault()
-        fetchTable(urlAssets, optionsAssets, "#assetTable");
+        fetchTable(urlAssets, options, "#assetTable");
         document.getElementById("showPortfolio").style.display="none"
         document.getElementById("allAssets").style.display="block"
     }, false);
 
+
 function showAllAssets() {
     document.getElementById("allAssets")
     {
-        fetchTable(urlAssets, optionsAssets, "#assetTable");
+        fetchTable(urlAssets, options, "#assetTable");
     }
 }
 
