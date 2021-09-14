@@ -14,7 +14,7 @@ document.getElementById("myPortfolio").addEventListener('click',
         event.preventDefault()
         const urlPortfolio = "http://localhost:8080/portfolio"
 
-        //TODO toont hem nu ook bij een 403 geen authorization, moet natuurlijk niet
+        //TODO nu leeg scherm bij een 403 geen authorization, moet opnieuw inloggen
         fetchTable(urlPortfolio, options, "#portfolioTable");
         document.title = "My Portfolio";
         document.getElementById("allAssets").style.display="none"
@@ -29,6 +29,36 @@ document.getElementById("showAssets").addEventListener('click',
         document.getElementById("showPortfolio").style.display="none"
         document.getElementById("allAssets").style.display="block"
     }, false);
+
+document.getElementById("buy").addEventListener("click", function (event) {
+    event.preventDefault()
+
+    let asset = String(document.querySelector("#asset").value)
+    let amount = Number(document.querySelector("#amount").value)
+    let data = "?assetAbbr=" + asset + "&assetAmount=" + amount
+    const urlBuy = "http://localhost:8080/buyasset" + data;
+    const optionsPost = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': localStorage.getItem('Authorization')
+        }
+    }
+    fetch(urlBuy, optionsPost)
+        .then(response => {
+            if (response.ok) {
+                response.text(); //TODO uitlegd krijgen wat dit doet
+                alert("Assets gekocht")
+                //TODO blijven we op hetzelfde scherm? Gaan we elders heen? Wat ziet de gebruiker?
+            } else if (!response.ok) {
+                alert("Failed to buy assets")
+                console.log("Failed to buy assets")
+            }
+        })
+        .catch((error) => {
+            console.log("Error " + error);
+        })
+})
 
 
 function showAllAssets() {

@@ -25,6 +25,7 @@ public class OrderController {
     @Autowired
     public OrderController(OrderService orderService, CustomerService customerService) {
         this.orderService = orderService;
+        this.customerService = customerService;
         logger.info("New OrderController");
     }
 
@@ -34,7 +35,8 @@ public class OrderController {
      * worden.
      */
     @PostMapping(value = "/buyasset", produces = "application/json")
-    public ResponseEntity<?> buyAsset(@RequestParam String assetAbbr, double assetAmount, @RequestHeader("Authorization") String accessToken) {
+    public ResponseEntity<?> buyAsset(@RequestParam String assetAbbr, @RequestParam double assetAmount, @RequestHeader("Authorization") String accessToken) {
+        logger.info("/buyAsset aangeroepen");
         CustomerDto customer = customerService.authenticate(accessToken);
         if (customer == null) {
             return new ResponseEntity<String>(HttpStatus.FORBIDDEN);
