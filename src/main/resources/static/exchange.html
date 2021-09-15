@@ -4,40 +4,49 @@
 <head>
     <meta charset="UTF-8">
     <link href="crypto.css" rel="stylesheet">
-    <title>All Currencies</title>
+    <title>Exchange</title>
 </head>
 
 <body>
 
-    <div>
+    <header>
+     <div class="flex-box">
+            <div class="site-logo" href= "/index.html">
+                <a id="cryptologo" href= "/index.html"><img src="logo.jpg"> </a></div>
+            <button id="aboutNav" type="button">About</button>
+            <button id="dashboardNav" type="button">My CryptoKnights</button>
+            <button id="exchangeNav" type="button">Exchange</button>
+            <button id="signupNav" type="button">Signup</button>
+            <button id="loginNav" type="submit" >Login</button>
+            <span id="pagetitle">CryptoKnights </span>
+        </div>
+    </header>
+
+    <!--<div id="buttons">
         <button id="logOut" type="button">Log Out</button>
-    </div>
+        <button id="dashboard" type="button">Dashboard</button>
+        <button id="exchange" type="button">Exchange</button>
+        <button id="account" type="button">Account</button>
+    </div>-->
 
     <div id="allAssets">
-        <button id="myPortfolio" type="button">My Portfolio</button>
-        <h1 id="allCurrencies">Currencies</h1>
+        <h1 id="exchangeHeader">Exchange</h1>
         <table id="assetTable">
         </table>
-
-        <form id="orderForm"> <!--action="http://localhost:8080/assets" method="get"-->
-            <!--<select id="asset" name="asset" required></select>-->
-            <input type="text" id="asset" placeholder="Enter Asset" name="asset" required>
+    </div>
+    <div id="buyForm">
+        <form id="orderForm"> <!--action="http://localhost:8080/buyasset" method="post"-->
+            <select id="selectAsset" name="selectAsset" required></select>
+            <!--<input type="text" id="asset" placeholder="Enter Asset" name="asset" required>-->
             <input type="number" id="amount" placeholder="Enter Amount" name="amount" required>
             <!--<input type="number" id="limitPrice" placeholder="Optional: add limit" name="limit">-->
             <button id="buy" type="button"  >BUY NOW</button>
         </form>
-
-    </div>
-
-    <div id="showPortfolio" style="display: none">
-        <button id="showAssets" type="button">Show Assets</button>
-        <h1 id="portfolioHeader">My Portfolio</h1>
-        <table id="portfolioTable">
-        </table>
     </div>
 
 
     <script src="exchange.js"></script>
+    <script src='crypto.js'></script>
 
 </body>
 </html>

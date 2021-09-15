@@ -39,6 +39,13 @@ public class AssetController {
         return assetToShow;
     }
 
+    @GetMapping("/assets/abbreviations")
+    public ArrayList showListAbbreviations() {
+        return assetService.getListAbbreviations();
+    }
+
+
+
     // TODO endpoint buy asset naar hiertoe verplaatsen vanuit transactioncontroller
     // /assets/{abbreviation}/buy
     // /asset/bte/buy

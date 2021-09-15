@@ -44,4 +44,9 @@ public class AssetService {
         return assetToShow;
     }
 
+    public ArrayList<String> getListAbbreviations() {
+        ArrayList<String> listAbbreviations = rootRepository.getListAbbreviations();
+        return listAbbreviations;
+    }
+
 }

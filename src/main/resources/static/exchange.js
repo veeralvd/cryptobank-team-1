@@ -6,10 +6,34 @@ const options = {
     }
 }
 const urlAssets = "http://localhost:8080/assets"
+const urlAbbreviations = "http://localhost:8080/assets/abbreviations"
 
 showAllAssets()
+populateDropdownWithAbbreviations()
 
-document.getElementById("myPortfolio").addEventListener('click',
+function populateDropdownWithAbbreviations() {
+    fetch(urlAbbreviations, options)
+        .then(response => {
+            if (response.ok) {
+                response.json()
+                    .then(json => {
+                        console.log(json);
+                        let list = json;
+                        let dropdown = document.querySelector("#selectAsset");
+                        for (index in list) {
+                            dropdown.options[dropdown.options.length] = new Option(list[index], index);
+                        }
+                    })
+                    .catch((error) => {
+                        console.error('Error' + error);
+                    })
+            } else {
+                console.log('Failed to fetch AbbreviationsList')
+            }
+        })
+}
+
+/*document.getElementById("myPortfolio").addEventListener('click',
     function (event) {
         event.preventDefault()
         const urlPortfolio = "http://localhost:8080/portfolio"
@@ -28,12 +52,12 @@ document.getElementById("showAssets").addEventListener('click',
         fetchTable(urlAssets, options, "#assetTable");
         document.getElementById("showPortfolio").style.display="none"
         document.getElementById("allAssets").style.display="block"
-    }, false);
+    }, false);*/
 
 document.getElementById("buy").addEventListener("click", function (event) {
     event.preventDefault()
 
-    let asset = String(document.querySelector("#asset").value)
+    let asset = String(document.querySelector("#selectAsset").value)
     let amount = Number(document.querySelector("#amount").value)
     let data = "?assetAbbr=" + asset + "&assetAmount=" + amount
     const urlBuy = "http://localhost:8080/buyasset" + data;
