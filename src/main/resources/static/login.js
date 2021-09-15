@@ -28,7 +28,7 @@ document.querySelector('#submitButton').addEventListener(`click`,
                 console.log(refreshToken + "hallo refresh");
                 localStorage.setItem('Authorization', accessToken);
                 localStorage.setItem('refresh_token', refreshToken);
-                window.location.assign("http://localhost:8080/assets.html")
+                window.location.assign("http://localhost:8080/dashboard.html")
             }else if (!response.ok) {
                     console.log('username and/or password are incorrect')
                 }})
