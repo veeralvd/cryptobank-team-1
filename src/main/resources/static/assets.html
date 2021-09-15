@@ -18,6 +18,15 @@
         <h1 id="allCurrencies">Currencies</h1>
         <table id="assetTable">
         </table>
+
+        <form id="orderForm"> <!--action="http://localhost:8080/assets" method="get"-->
+            <!--<select id="asset" name="asset" required></select>-->
+            <input type="text" id="asset" placeholder="Enter Asset" name="asset" required>
+            <input type="number" id="amount" placeholder="Enter Amount" name="amount" required>
+            <!--<input type="number" id="limitPrice" placeholder="Optional: add limit" name="limit">-->
+            <button id="buy" type="button"  >BUY NOW</button>
+        </form>
+
     </div>
 
     <div id="showPortfolio" style="display: none">
@@ -33,13 +42,4 @@
 </body>
 </html>
 
-<!--<form id="orderForm" action="http://localhost:8080/assets" method="get">
-            &lt;!&ndash;<label>
-                <input type="text" id="amount" placeholder="Enter Amount" name="amount" required>
-            </label>
-            <label>
-                <input type="number" id="limitPrice" placeholder="Optional: add limit" name="limit">
-            </label><br><br>&ndash;&gt;
-
-            &lt;!&ndash;<button id="buy" type="button"  >BUY NOW</button>&ndash;&gt;
-        </form>-->
+<!---->
