@@ -95,4 +95,10 @@ public class JdbcAssetDao implements AssetDao {
         return (ArrayList<Asset>) allAssets;
     }
 
+    public ArrayList<String> getListAbbreviations() {
+        String sql = "SELECT abbreviation from asset";
+        List<String> allAbbreviations = jdbcTemplate.queryForList(sql, String.class);
+        return (ArrayList<String>) allAbbreviations;
+    }
+
 } // end of class JdbcAssetDao
