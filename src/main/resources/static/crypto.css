@@ -39,6 +39,17 @@ header {
 .flex-box #signupNav{
     color: #fbc531;
 }
+.flex-box #loginNav{
+    color: #fbc531;
+    border-color: #fbc531;
+    background: #fbc531;
+    color: #2d3436;
+}
+
+.flex-box #loginNav:hover{
+    opacity: 0.8;
+}
+
 header a{
     float: right;
     display: block;
