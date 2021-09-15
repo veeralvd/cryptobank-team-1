@@ -15,12 +15,13 @@ class TransactionServiceTest {
 
     private RootRepository mockRepository;
     private TransactionService transactionService;
+    private SendMailService sendMailService;
 
-    @BeforeAll
+    /*@BeforeAll
     public void testSetup() {
         mockRepository= Mockito.mock(RootRepository.class);
         transactionService = new TransactionService(mockRepository);
-    }
+    }*/
 
     @Test
     void findByTransactionId() {

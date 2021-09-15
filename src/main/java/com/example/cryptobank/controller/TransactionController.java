@@ -50,7 +50,7 @@ public class TransactionController {
         OrderDto orderToProcess = orderService.findByOrderId(orderId);
         TransactionDto transactionCompleted = transactionService.completeTransaction(orderToProcess);
         if (transactionCompleted == null) {
-            return new ResponseEntity<>("Failed to save transaction", HttpStatus.BAD_REQUEST); //TODO andere statuscode
+            return new ResponseEntity<>("Failed to save transaction", HttpStatus.OK);
         }
         return new ResponseEntity<>("Transaction saved and completed", HttpStatus.CREATED);
     }

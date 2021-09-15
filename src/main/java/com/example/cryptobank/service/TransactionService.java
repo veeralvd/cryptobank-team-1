@@ -1,10 +1,7 @@
 package com.example.cryptobank.service;
 
 import com.example.cryptobank.database.RootRepository;
-import com.example.cryptobank.domain.Asset;
-import com.example.cryptobank.domain.Bank;
-import com.example.cryptobank.domain.BankAccount;
-import com.example.cryptobank.domain.Transaction;
+import com.example.cryptobank.domain.*;
 import com.example.cryptobank.dto.OrderDto;
 import com.example.cryptobank.dto.TransactionDto;
 import org.slf4j.Logger;
@@ -18,7 +15,7 @@ import java.util.List;
 public class TransactionService {
 
     private RootRepository rootRepository;
-    private BankAccountService bankAccountService;
+    private SendMailService mailService;
     private Bank bank = Bank.getInstance();
     private BankAccount buyerAccount;
     private BankAccount sellerAccount;
@@ -30,7 +27,8 @@ public class TransactionService {
     private final Logger logger = LoggerFactory.getLogger(TransactionService.class);
 
     @Autowired
-    public TransactionService(RootRepository rootRepository) {
+    public TransactionService(RootRepository rootRepository, SendMailService mailService) {
+        this.mailService = mailService;
         this.rootRepository = rootRepository;
         logger.info("New TransactionService");
     }
@@ -73,6 +71,7 @@ public class TransactionService {
             Transaction transactionToComplete = assembleNewTransaction(orderToProcess);
             saveTransaction(getTransactionDto(transactionToComplete));
             logger.info("Transactie opgeslagen");
+            sentConfirmationMailTransaction(getTransactionDto(transactionToComplete));
             return getTransactionDto(transactionToComplete);
         }
 
@@ -154,19 +153,22 @@ public class TransactionService {
         double amountToPayReceive = calculateAmountToPayReceive(orderToProcess);
         double updatedBalanceBuyer = rootRepository.withdraw(buyerAccount.getIban(), amountToPayReceive);
         double updatedBalanceSeller = rootRepository.deposit(sellerAccount.getIban(), amountToPayReceive);
-        logger.info("UpdatedBalanceBuyer: " + updatedBalanceBuyer + " , updatedBalanceSeller: " + updatedBalanceSeller);
+        logger.info("BalanceBuyer update: " + updatedBalanceBuyer + ", BalanceSeller updated: " + updatedBalanceSeller
+                + ", with: " + amountToPayReceive);
     }
 
     private void updatePortfolio(OrderDto orderToProcess) {
-        logger.info("Remove assets from portfolio seller / add assets to portfolio buyer");
         Transaction transactionToComplete = assembleNewTransaction(orderToProcess);
+        String assetAbbr = transactionToComplete.getAsset().getAbbreviation();
+        double assetAmount = transactionToComplete.getAssetAmount();
         boolean portfolioBuyerContainsAsset = checkIfPortfolioBuyerContainsAsset(orderToProcess);
         if (!portfolioBuyerContainsAsset) {
             rootRepository.insertAssetIntoPortfolio(transactionToComplete);
-            logger.info("New asset inserted into ownedAsset table");
+            logger.info("New asset inserted into ownedAsset table: " + assetAbbr);
         }
         rootRepository.updateAssetAmountNegative(transactionToComplete);
         rootRepository.updateAssetAmountPositive(transactionToComplete);
+        logger.info("Asset removed from portfolio seller & added to portfolio buyer: " + assetAbbr + ", " + assetAmount);
     }
 
     private Transaction assembleNewTransaction(OrderDto orderToProcess) {
@@ -184,6 +186,14 @@ public class TransactionService {
 
     public TransactionDto saveTransaction(TransactionDto transaction) {
         return rootRepository.saveTransaction(transaction);
+    }
+
+    public void sentConfirmationMailTransaction(TransactionDto transaction) {
+        Mail mail = new Mail();
+        mail.setRecipient("anne.van.der.veer@hva.nl");
+        mail.setSubject("Confirmation transaction Cryptoknights");
+        mail.setMessage(transaction.toString());
+        mailService.sendMail(mail);
     }
 
 }
