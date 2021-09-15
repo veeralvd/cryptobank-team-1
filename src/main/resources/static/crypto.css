@@ -6,11 +6,38 @@ body {
 }
 header {
     /*background-image: url("logo.jpg");*/
+
     overflow: hidden;
     background-color: #454a54;
     position: relative;
     top: 0;
     width: 100%;
+}
+.flex-box{
+    display: flex;
+    flex-direction: row;
+    align-content: end;
+
+}
+.flex-box button[type = "button"]{
+    min-width: 200px;
+    margin: 10px 10px 10px 10px;
+    color: white;
+
+}
+.flex-box #pagetitle{
+    float: right;
+    display: block;
+    color: #fbc531;
+    text-align: right;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 30px;
+    margin-left: 200px;
+}
+
+.flex-box #signupNav{
+    color: #fbc531;
 }
 header a{
     float: right;
@@ -24,7 +51,9 @@ header a{
 #cryptologo{
     max-width: 15px;
     height: auto;
+
 }
+
 
 section{
     margin: 30px;
