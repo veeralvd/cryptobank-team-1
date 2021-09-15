@@ -28,35 +28,28 @@ public class CustomerController {
         logger.info("New CustomerController");
     }
 
-//    public Customer(String username, String password,
-//                    String firstName, String lastName, LocalDate dateOfBirth, int socialSecurityNumber,
-//                    String street, String zipcode, int housenumber, String addition, String city, String email) {
-
-
     @PostMapping(value = "/register", produces = "application/json")
-    public int register(@RequestBody RegistrationDto customerRegistrationDto) {
+    public ResponseEntity<String> register(@RequestBody RegistrationDto customerRegistrationDto) {
         logger.info(customerRegistrationDto.toString());
-       // RegistrationDto customerRegistrationDto = new RegistrationDto(customer);
         Customer customerToRegister = new Customer(customerRegistrationDto.getUsername(), customerRegistrationDto.getPassword(),
                 customerRegistrationDto.getFirstName(), customerRegistrationDto.getLastName(), customerRegistrationDto.getDateOfBirth(),
                 customerRegistrationDto.getSocialSecurityNumber(), customerRegistrationDto.getStreet(), customerRegistrationDto.getZipcode(),
                 customerRegistrationDto.getHousenumber(), customerRegistrationDto.getAddition(), customerRegistrationDto.getCity(),
                 customerRegistrationDto.getEmail());
         logger.info(customerRegistrationDto.toString());
-        Customer customerRegistred = customerService.register(customerToRegister);
-        if(customerToRegister.getSalt()== null) {
-            return new ResponseEntity<String>(HttpStatus.I_AM_A_TEAPOT).getStatusCodeValue();
-        } else {
-            return new ResponseEntity<String>(HttpStatus.CREATED).getStatusCodeValue();
+        try {
+            Customer customerRegistred = customerService.register(customerToRegister);
+            if (customerRegistred.getSalt() != null) {
+                HttpHeaders responseHeaders = new HttpHeaders();
+                responseHeaders.set(HttpHeaders.AUTHORIZATION, customerRegistred.getAccessToken());
+                responseHeaders.set("refresh_token", customerRegistred.getRefreshToken());
+                return new ResponseEntity<String>(customerRegistred.getFirstName(), responseHeaders, HttpStatus.CREATED);
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<String>("Email already in use", HttpStatus.BAD_REQUEST);
         }
+        return new ResponseEntity<String>("Could not process request", HttpStatus.FORBIDDEN);
     }
-
-//    @PutMapping("/login")
-//    public Customer login(@RequestParam String username, String password) {
-//        Customer customerToLogin = customerService.login(username, password);
-//        logger.info("login customer aangeroepen");
-//        return customerToLogin;
-//    }
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestParam String username, @RequestParam String password) {
@@ -73,5 +66,4 @@ public class CustomerController {
             return new ResponseEntity<>(customerToLogin.toString(), responseHeaders, HttpStatus.OK);
         }
     }
-
 }

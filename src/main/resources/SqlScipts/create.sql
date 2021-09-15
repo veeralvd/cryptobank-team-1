@@ -71,7 +71,7 @@ CREATE TABLE IF NOT EXISTS `cryptobank`.`customer` (
   `IBAN` VARCHAR(45) NOT NULL,
   `city` VARCHAR (45) NOT NULL,
   `token` VARCHAR(512) NOT NULL,
-  `email` VARCHAR(512) NOT NULL,
+  `email` VARCHAR(512) NOT NULL UNIQUE,
   UNIQUE INDEX `IBAN_UNIQUE` (`IBAN` ASC) VISIBLE,
   INDEX `fk_Customer_bankAccount1_idx` (`IBAN` ASC) VISIBLE,
   PRIMARY KEY (`username`),
