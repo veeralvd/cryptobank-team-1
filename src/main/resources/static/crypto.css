@@ -178,3 +178,15 @@ Division overlay op recoveryscherm
     text-align: center;
     color: white;
 }
+
+small {
+    width: 235px;
+}
+
+.formData.success input {
+    border-color: rgb(215,50,0);
+}
+
+.formData.error input {
+    border-color: hsl(111,98%,50%);
+}
