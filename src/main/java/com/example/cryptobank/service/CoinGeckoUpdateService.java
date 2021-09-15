@@ -6,7 +6,6 @@ import com.example.cryptobank.dto.CoinDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.json.JacksonJsonParser;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -55,7 +54,7 @@ public class CoinGeckoUpdateService implements CoinApiUpdate {
             //double newRate = checkActualRate(abbreviation);
             for (CoinDto coin: newRates) {
                 if (coin.symbol.equals(abbreviation)) {
-                    rootRepository.save(new CryptoCurrencyRate(abbreviation.toUpperCase(),coin.current_price,
+                    rootRepository.saveTransaction(new CryptoCurrencyRate(abbreviation.toUpperCase(),coin.current_price,
                             LocalDateTime.ofInstant(coin.last_updated.toInstant(), ZoneId.systemDefault())));
                     break;
                 }

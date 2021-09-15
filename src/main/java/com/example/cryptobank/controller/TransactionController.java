@@ -1,10 +1,10 @@
 package com.example.cryptobank.controller;
 
-import com.example.cryptobank.domain.Order;
-import com.example.cryptobank.domain.Transaction;
 import com.example.cryptobank.dto.CustomerDto;
+import com.example.cryptobank.dto.OrderDto;
 import com.example.cryptobank.dto.TransactionDto;
 import com.example.cryptobank.service.CustomerService;
+import com.example.cryptobank.service.OrderService;
 import com.example.cryptobank.service.TransactionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,13 +18,16 @@ public class TransactionController {
 
     private TransactionService transactionService;
     private CustomerService customerService;
+    private OrderService orderService;
 
     private final Logger logger = LoggerFactory.getLogger(TransactionController.class);
 
     @Autowired
-    public TransactionController(TransactionService transactionService, CustomerService customerService) {
+    public TransactionController(TransactionService transactionService, CustomerService customerService,
+                                 OrderService orderService) {
         this.customerService = customerService;
         this.transactionService = transactionService;
+        this.orderService = orderService;
         logger.info("New TransactionController");
     }
 
@@ -38,17 +41,18 @@ public class TransactionController {
         return new ResponseEntity<>(transactionDto, HttpStatus.OK);
     }
 
-    @PostMapping(value = "/transactions/complete", produces = "application/json")
-    public ResponseEntity<?> completeTransactionFromBank(@RequestBody Order orderToProcess, @RequestHeader("Authorization") String accessToken) {
+    @PostMapping(value = "/completetransaction", produces = "application/json")
+    public ResponseEntity<?> completeTransaction(@RequestParam int orderId, @RequestHeader("Authorization") String accessToken) {
         CustomerDto customer = customerService.authenticate(accessToken);
         if (customer == null) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
-        TransactionDto transactionDto = transactionService.completeTransaction(orderToProcess);
-        if (transactionDto == null) {
+        OrderDto orderToProcess = orderService.findByOrderId(orderId);
+        TransactionDto transactionCompleted = transactionService.completeTransaction(orderToProcess);
+        if (transactionCompleted == null) {
             return new ResponseEntity<>("Failed to save transaction", HttpStatus.BAD_REQUEST); //TODO andere statuscode
         }
-        return new ResponseEntity<>(transactionDto, HttpStatus.CREATED);
+        return new ResponseEntity<>("Transaction saved and completed", HttpStatus.CREATED);
     }
 
     public boolean authenticateCustomerByAccessToken(String accessToken) {
