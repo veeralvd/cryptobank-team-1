@@ -218,3 +218,18 @@ Division overlay op recoveryscherm
     text-align: center;
     color: white;
 }
+
+table {
+    color: white;
+    border-radius: 10px;
+    opacity: 0.9;
+    background-size: 6px 6px;
+    background: #353b48 repeating-linear-gradient(45deg, #454a54 0, #454a54 0.6000000000000001px, #2d3436 0, #2d3436 50%);
+    padding: 30px;
+    border: 1px dotted white;
+    text-align: left;
+    /*column-width: 500px;
+    table-layout: fixed;
+    column-rule: 100px;*/
+    column-gap: 100px;
+}
