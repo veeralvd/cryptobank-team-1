@@ -3,6 +3,7 @@ package com.example.cryptobank.database;
 import com.example.cryptobank.domain.Asset;
 import com.example.cryptobank.domain.BankAccount;
 import com.example.cryptobank.domain.Transaction;
+import com.example.cryptobank.dto.TransactionDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,20 +34,20 @@ public class JdbcTransactionDao implements TransactionDao {
         logger.info("New JdbcTransactionDao");
     }
 
-    private PreparedStatement insertTransactionStatement(Transaction transaction, Connection connection) throws SQLException {
+    private PreparedStatement insertTransactionStatement(TransactionDto transaction, Connection connection) throws SQLException {
         PreparedStatement preparedStatement = connection.prepareStatement(SQL_INSERT_QUERY, Statement.RETURN_GENERATED_KEYS);
-        preparedStatement.setString(1, transaction.getAsset().getAbbreviation());
+        preparedStatement.setString(1, transaction.getAssetAbbr());
         preparedStatement.setDouble(2, transaction.getAssetAmount());
-        preparedStatement.setDouble(3, transaction.getAssetPrice());
-        preparedStatement.setString(4, transaction.getBuyerAccount().getIban());
-        preparedStatement.setString(5, transaction.getSellerAccount().getIban());
+        preparedStatement.setDouble(3, transaction.getSingleAssetPrice());
+        preparedStatement.setString(4, transaction.getIbanBuyer());
+        preparedStatement.setString(5, transaction.getIbanSeller());
         preparedStatement.setDouble(6, transaction.getTransactionCost());
-        preparedStatement.setString(7, String.valueOf(transaction.getDateTimeTransaction()));
+        preparedStatement.setString(7, String.valueOf(transaction.getDateTimeProcessed()));
         return preparedStatement;
     }
 
     @Override
-    public Transaction save(Transaction transaction) {
+    public TransactionDto save(TransactionDto transaction) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(connection -> insertTransactionStatement(transaction, connection), keyHolder);
         int newKey = keyHolder.getKey().intValue();

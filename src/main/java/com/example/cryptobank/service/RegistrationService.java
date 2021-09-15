@@ -33,7 +33,7 @@ public class RegistrationService {
             String token = UUID.randomUUID().toString();
             attemptToRegister.setSalt(salt);
             attemptToRegister.setAccessToken(token);
-            Admin registeredAdmin = rootRepository.save(attemptToRegister);
+            Admin registeredAdmin = rootRepository.saveTransaction(attemptToRegister);
             return registeredAdmin;
         }
         return attemptToRegister;
@@ -53,7 +53,7 @@ public class RegistrationService {
             customerToRegister.setSocialSecurityNumber(socialSecurityNumber);
             customerToRegister.setAddress(new Address(street, zipcode, houseNumber, addition, city));
             customerToRegister.setBankAccount(new BankAccount());
-            Customer customerRegistered = rootRepository.save(customerToRegister);
+            Customer customerRegistered = rootRepository.saveTransaction(customerToRegister);
             return customerRegistered;
         }
         return customerToRegister;
@@ -70,7 +70,7 @@ public class RegistrationService {
             String iban = IbanGenerator.generate();
             customerToRegister.setBankAccount(new BankAccount(iban));
             customerToRegister.setAccessToken(token);
-            Customer customerRegistered = rootRepository.save(customerToRegister);
+            Customer customerRegistered = rootRepository.saveTransaction(customerToRegister);
             return customerRegistered;
         }
         return customerToRegister;
