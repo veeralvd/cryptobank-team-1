@@ -1,44 +1,3 @@
-document.querySelector('#register').addEventListener('click',
-    function (event){
-        console.log("hallo");
-        event.preventDefault();
-
-        let formData = new FormData(document.querySelector('#registrationForm'));
-
-        console.log(formData.toString());
-        formData.forEach(i => console.log(i))
-        console.log(formData.entries());
-        let plainFormData = Object.fromEntries(formData.entries());
-        let personalFormDataJsonString = JSON.stringify(plainFormData);
-        console.log(personalFormDataJsonString)
-
-
-        // Stuurt username en password naar de server
-        const url = `http://localhost:8080/register`
-        const options = {
-            method: `POST`,
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: personalFormDataJsonString
-        }
-
-        // Token komt terug als username & password erkend wordt
-        fetch(url,options)
-            .then(response => {
-                if (response.ok){
-                    response.text();
-                    alert('User registered');
-                    window.location.assign("http://localhost:8080/index.html")
-                }else if (!response.ok) {
-                    console.log('username and/or password are incorrect')
-                }})
-            .catch((error) => {
-                console.error('Error ' + error);
-            })
-
-    })
-
 const usernameInput = document.querySelector('#username');
 const passwordInput = document.querySelector('#password');
 const firstNameInput = document.querySelector('#firstName');
@@ -47,6 +6,55 @@ const socialSecurityNumberInput = document.querySelector('#socialSecurityNumber'
 const streetInput = document.querySelector('#street');
 const emailInput = document.querySelector('#email');
 const small1 = document.querySelector('#line1');
+
+document.querySelector('#register').addEventListener('click',
+    function (event){
+        console.log("hallo");
+        event.preventDefault();
+
+        let isUsernameValid = checkUsername();
+
+        if(isUsernameValid) {
+            let formData = new FormData(document.querySelector('#registrationForm'));
+
+            console.log(formData.toString());
+            formData.forEach(i => console.log(i))
+            console.log(formData.entries());
+            let plainFormData = Object.fromEntries(formData.entries());
+            let personalFormDataJsonString = JSON.stringify(plainFormData);
+            console.log(personalFormDataJsonString)
+
+
+            // Stuurt username en password naar de server
+            const url = `http://localhost:8080/register`
+            const options = {
+                method: `POST`,
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: personalFormDataJsonString
+            }
+
+            // Token komt terug als username & password erkend wordt
+            fetch(url,options)
+                .then(response => {
+                    if (response.ok){
+                        response.text();
+                        alert('User registered');
+                        window.location.assign("http://localhost:8080/index.html")
+                    }else if (!response.ok) {
+                        console.log('username and/or password are incorrect')
+                    }})
+                .catch((error) => {
+                    console.error('Error ' + error);
+                })
+
+        }
+
+
+
+    })
+
 
 const isRequired = value => value === '' ? false : true;
 const isBetween = (length, min, max) => length < min || length > max ? false : true;
@@ -62,7 +70,7 @@ const isPasswordOK = (password) => {
 const showError = (input, message) => {
     input.classList.remove('success');
     input.classList.add('error');
-    const error = input.querySelector('small');
+    const error = document.querySelector(`${input}`);
     error.textContent = message;
 }
 
