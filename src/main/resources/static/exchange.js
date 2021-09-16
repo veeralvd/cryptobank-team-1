@@ -33,27 +33,6 @@ function populateDropdownWithAbbreviations() {
         })
 }
 
-/*document.getElementById("myPortfolio").addEventListener('click',
-    function (event) {
-        event.preventDefault()
-        const urlPortfolio = "http://localhost:8080/portfolio"
-
-        //TODO nu leeg scherm bij een 403 geen authorization, moet opnieuw inloggen
-        fetchTable(urlPortfolio, options, "#portfolioTable");
-        document.title = "My Portfolio";
-        document.getElementById("allAssets").style.display="none"
-        document.getElementById("showPortfolio").style.display="block"
-    }, false);
-
-
-document.getElementById("showAssets").addEventListener('click',
-    function (event) {
-        event.preventDefault()
-        fetchTable(urlAssets, options, "#assetTable");
-        document.getElementById("showPortfolio").style.display="none"
-        document.getElementById("allAssets").style.display="block"
-    }, false);*/
-
 document.getElementById("buy").addEventListener("click", function (event) {
     event.preventDefault()
 
