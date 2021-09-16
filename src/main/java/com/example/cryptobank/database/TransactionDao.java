@@ -1,10 +1,11 @@
 package com.example.cryptobank.database;
 
 import com.example.cryptobank.domain.Transaction;
+import com.example.cryptobank.dto.TransactionDto;
 
 public interface TransactionDao {
 
-    Transaction save(Transaction transaction);
+    TransactionDto save(TransactionDto transaction);
     Transaction findByTransactionId(int transactionId);
     //ArrayList<Transaction> getAllTransactionsByIban(String iban);
 

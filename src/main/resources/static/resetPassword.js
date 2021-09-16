@@ -36,7 +36,7 @@ document.querySelector('#resetPassword').addEventListener(`click`,
         else {
 
             // Token uit url halen (getToken aanroepen ipv strings hieronder)
-            // zie assets.js voor een beter voorbeeld.
+            // zie exchange.js voor een beter voorbeeld.
             const stringUrl = URL.split(`=`)
             const token = stringUrl[1];
             console.log(token);
