@@ -54,6 +54,7 @@ public class AuthenticationService {
     // TODO: 08/09/2021 Afmaken die hap
     public CustomerDto authenticateCustomerToken(String accessToken) {
 //        if (accessToken.startsWith(BEARER)) {
+        logger.info(accessToken);
             try {
                // String token = accessToken.substring(BEARER.length());
                 Algorithm algorithm = Algorithm.HMAC256(TokenKeyService.getCustomerKey().getBytes());

@@ -8,6 +8,7 @@ import com.example.cryptobank.security.PepperService;
 import com.example.cryptobank.database.RootRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -19,6 +20,7 @@ public class RegistrationService {
     private RootRepository rootRepository;
     private final Logger logger = LoggerFactory.getLogger(RegistrationService.class);
 
+    @Autowired
     public RegistrationService(RootRepository rootRepository) {
         this.rootRepository = rootRepository;
         logger.info("New RegistrationService");

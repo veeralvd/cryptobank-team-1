@@ -10,6 +10,7 @@ import com.example.cryptobank.database.RootRepository;
 import com.example.cryptobank.dto.CustomerDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -19,9 +20,10 @@ public class LoginService {
     private CreateToken createToken;
     private final Logger logger = LoggerFactory.getLogger(LoginService.class);
 
-    public LoginService(RootRepository rootRepository, CreateTokenImplementation createTokenImplementation) {
+    @Autowired
+    public LoginService(RootRepository rootRepository, CreateToken createToken) {
         this.rootRepository = rootRepository;
-        this.createToken = createTokenImplementation;
+        this.createToken = createToken;
         logger.info("New LoginService");
     }
 
@@ -66,7 +68,7 @@ public class LoginService {
                 user.setAccessToken(createToken.createAccessToken(
                         user.getUsername(), TokenKeyService.getCustomerKey()));
                 user.setRefreshToken(createToken.createRefreshToken(
-                        user.getRefreshToken(), TokenKeyService.getCustomerKey()));
+                        user.getUsername(), TokenKeyService.getCustomerKey()));
                 user.setFirstName(customerInDatabase.getFirstName());
                 user.setIban(customerInDatabase.getBankAccount().getIban());
                 return user;
