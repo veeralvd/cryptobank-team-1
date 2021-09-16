@@ -228,8 +228,12 @@ table {
     padding: 30px;
     border: 1px dotted white;
     text-align: left;
+
     /*column-width: 500px;
     table-layout: fixed;
     column-rule: 100px;*/
-    column-gap: 100px;
+}
+
+th {
+    color: #fbc531;
 }

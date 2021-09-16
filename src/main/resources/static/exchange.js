@@ -97,8 +97,9 @@ function generateTableHead(table, data) {
     let thead = table.createTHead();
     let row = thead.insertRow();
     for (let key of data) {
+        let keyCapital = key.charAt(0).toUpperCase() + key.slice(1)
         let th = document.createElement("th");
-        let text = document.createTextNode(key);
+        let text = document.createTextNode(keyCapital);
         th.appendChild(text);
         row.appendChild(th);
     }
