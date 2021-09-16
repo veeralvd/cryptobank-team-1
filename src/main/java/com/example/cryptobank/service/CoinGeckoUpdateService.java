@@ -6,7 +6,11 @@ import com.example.cryptobank.dto.CoinDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.boot.json.JacksonJsonParser;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -21,6 +25,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+@Configuration
+@EnableScheduling
 @Service
 public class CoinGeckoUpdateService implements CoinApiUpdate {
     private RootRepository rootRepository;
@@ -41,10 +47,11 @@ public class CoinGeckoUpdateService implements CoinApiUpdate {
     public CoinGeckoUpdateService(RootRepository rootRepository) {
         this.rootRepository = rootRepository;
         logger.info("New CurrencyUpdateService");
-        startUpdate();
+        //startUpdate();
     }
 
     @Override
+    @Scheduled(fixedRate = 3600000)
     public void updateRates() {
         newRates = getRates();
 

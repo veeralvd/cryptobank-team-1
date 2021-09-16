@@ -3,6 +3,7 @@ body {
     padding: 0;
     font-family: sans-serif;
     background: #2d3436;
+    color: white;
 }
 header {
     /*background-image: url("logo.jpg");*/
@@ -180,13 +181,15 @@ Division overlay op recoveryscherm
 }
 
 small {
-    width: 235px;
+    width: auto;
+    color: rgb(215,50,0);
 }
 
-.formData.success input {
-    border-color: rgb(215,50,0);
+#registrationForm input.formData.success {
+    border: 2px solid hsl(111,98%,50%);
 }
 
-.formData.error input {
-    border-color: hsl(111,98%,50%);
+#registrationForm input.formData.error {
+    border: 2px solid rgb(215,50,0);
+    /*border-color: hsl(111,98%,50%)*/;
 }
