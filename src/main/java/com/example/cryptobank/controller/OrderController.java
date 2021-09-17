@@ -53,6 +53,7 @@ public class OrderController {
     // Tijdelijk endpoint om buy now te testen
     @PostMapping(value = "/buyassetnow", produces = "application/json")
     public ResponseEntity<?> buyAssetnow(@RequestParam String assetAbbr, double assetAmount, @RequestHeader("Authorization") String accessToken) {
+
         logger.info("/buyassetnow aangeroepen");
         CustomerDto customer = customerService.authenticate(accessToken);
         if (customer == null) {

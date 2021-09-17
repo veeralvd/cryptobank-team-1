@@ -3,6 +3,7 @@ package com.example.cryptobank.service;
 import com.example.cryptobank.database.RootRepository;
 import com.example.cryptobank.domain.Asset;
 import com.example.cryptobank.domain.Order;
+import com.example.cryptobank.dto.AssetDto;
 import com.example.cryptobank.dto.OrderDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,12 +18,14 @@ import java.util.List;
 public class OrderService {
 
     private RootRepository rootRepository;
+    private ExchangeService exchangeService;
 
     private final Logger logger = LoggerFactory.getLogger(OrderService.class);
 
     @Autowired
-    public OrderService(RootRepository rootRepository) {
+    public OrderService(RootRepository rootRepository, ExchangeService exchangeService) {
         this.rootRepository = rootRepository;
+        this.exchangeService = exchangeService;
         logger.info("New OrderService");
     }
 
@@ -37,12 +40,12 @@ public class OrderService {
     }
 
     public OrderDto assembleOrderTemp(String iban, String assetAbbr, double assetAmount) {
-        Asset asset = rootRepository.getByAbbreviation(assetAbbr);
         OrderDto order = new OrderDto();
         order.setIban(iban);
         order.setAssetAbbr(assetAbbr);
         order.setAssetAmount(assetAmount);
-        order.setDesiredPrice(asset.getRate().getCryptoRate());
+        System.out.println("Abbreviation in Order Service: "+ assetAbbr);
+        order.setDesiredPrice(exchangeService.getCurrentRateByAbbreviation(assetAbbr.toUpperCase()));
         order.setDateTimeCreated(LocalDateTime.now());
         return order;
     }
