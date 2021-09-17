@@ -61,8 +61,8 @@ document.querySelector('#register').addEventListener('click',
     })
 
 
-const isRequired = value => value === '' ? false : true;
-const isBetween = (length, min, max) => length < min || length > max ? false : true;
+const isRequired = value => value !== '';
+const isBetween = (length, min, max) => !(length < min || length > max);
 const isEmailValid = (email) => {
     const emailFormat = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return emailFormat.test(email);

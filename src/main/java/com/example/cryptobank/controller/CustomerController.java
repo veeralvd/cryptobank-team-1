@@ -31,11 +31,13 @@ public class CustomerController {
     @PostMapping(value = "/register", produces = "application/json")
     public ResponseEntity<String> register(@RequestBody RegistrationDto customerRegistrationDto) {
         logger.info(customerRegistrationDto.toString());
-        Customer customerToRegister = new Customer(customerRegistrationDto.getUsername(), customerRegistrationDto.getPassword(),
-                customerRegistrationDto.getFirstName(), customerRegistrationDto.getLastName(), customerRegistrationDto.getDateOfBirth(),
-                customerRegistrationDto.getSocialSecurityNumber(), customerRegistrationDto.getStreet(), customerRegistrationDto.getZipcode(),
-                customerRegistrationDto.getHousenumber(), customerRegistrationDto.getAddition(), customerRegistrationDto.getCity(),
-                customerRegistrationDto.getEmail());
+        Customer customerToRegister = new Customer(customerRegistrationDto.getUsername().toLowerCase(),
+                customerRegistrationDto.getPassword(), customerRegistrationDto.getFirstName(),
+                customerRegistrationDto.getLastName(), customerRegistrationDto.getDateOfBirth(),
+                customerRegistrationDto.getSocialSecurityNumber(), customerRegistrationDto.getStreet(),
+                customerRegistrationDto.getZipcode(), customerRegistrationDto.getHousenumber(),
+                customerRegistrationDto.getAddition(), customerRegistrationDto.getCity(),
+                customerRegistrationDto.getEmail().toLowerCase());
         logger.info(customerRegistrationDto.toString());
         try {
             Customer customerRegistered = customerService.register(customerToRegister);
