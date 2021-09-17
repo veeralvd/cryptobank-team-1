@@ -22,24 +22,28 @@
         </div>
     </header>
 
+    <div id="exchangePage" class="flex-box">
     <div id="allAssets">
         <table id="assetTable">
         </table>
     </div>
     <div id="buyForm">
         <form id="orderForm">
-            <div class="custom-select" style="width: 200px">
-                <select id="selectAsset" name="selectAsset" required></select>
-            </div>
+            <!--<div class="custom-select" style="width: 100px;">-->
+                <select id="selectAsset" name="selectAsset" required>
+                    <option value="" disabled selected hidden>Choose Crypto</option>
+                </select>
+            <!--</div>-->
             <input type="number" id="amount" placeholder="Enter Amount" name="amount" autocomplete="off" required>
             <!--<input type="number" id="limitPrice" placeholder="Optional: add limit" name="limit">-->
-            <button id="buy" type="button"  >BUY NOW</button>
+            <button id="buy" type="submit" >BUY NOW</button>
         </form>
+    </div>
     </div>
 
 
     <script src="exchange.js"></script>
-    <script src='crypto.js'></script>
+    <script src="crypto.js"></script>
 
 </body>
 </html>

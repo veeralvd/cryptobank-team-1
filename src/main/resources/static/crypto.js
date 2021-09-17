@@ -7,8 +7,8 @@ document.querySelector('#dashboardNav').addEventListener('click', () => {
 });
 
 document.querySelector('#exchangeNav').addEventListener('click', () => {
-        location.href = "/exchange.html"
-    });
+    location.href = "/exchange.html"
+});
 
 document.querySelector('#signupNav').addEventListener('click', () => {
     location.href = "/register.html"
