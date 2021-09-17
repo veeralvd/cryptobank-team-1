@@ -33,14 +33,21 @@ document.querySelector('#register').addEventListener('click',
 
             // Token komt terug als username & password herkend wordt
             fetch(url,options)
-                .then(response => {
-                    if (response.ok){
+                .then( response => {
+                    if (response.ok) {
                         response.text();
                         alert('User registered');
-                        window.location.assign("http://localhost:8080/index.html")
-                    }else if (!response.ok) {
-                        console.log('username and/or password are incorrect')
-                    }})
+                        localStorage.setItem('Authorization', response.headers.get('Authorization'));
+                        localStorage.setItem('refresh_token', response.headers.get('refresh_token'));
+                        window.location.assign("http://localhost:8080/dashboard.html")
+                    } else if (!response.ok) {
+                         response.text()
+                             .then(function (res) {
+                                 alert(res);
+                                 console.log(res)
+                        })
+                    }
+                })
                 .catch((error) => {
                     console.error('Error ' + error);
                 })
