@@ -23,7 +23,7 @@ public class CreateTokenImplementation implements CreateToken{
         Algorithm algorithm = Algorithm.HMAC256(key.getBytes());
          String access_token = JWT.create()
                 .withSubject(username)
-                .withExpiresAt(new Date(System.currentTimeMillis() + 1 *  30 * 1000))
+                .withExpiresAt(new Date(System.currentTimeMillis() + 10 *  60 * 1000))
                 .sign(algorithm);
          return access_token;
     }
