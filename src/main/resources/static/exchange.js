@@ -19,7 +19,7 @@ document.getElementById("buy").addEventListener("click", function (event) {
     let asset = String(document.querySelector("#selectAsset").value)
     let amount = Number(document.querySelector("#amount").value)
     let data = "?assetAbbr=" + asset + "&assetAmount=" + amount
-    const urlBuy = "http://localhost:8080/buyasset" + data;
+    const urlBuy = "http://localhost:8080/buyassetnow" + data;
     const optionsPost = {
         method: 'POST',
         headers: {
