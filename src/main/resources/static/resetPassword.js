@@ -23,14 +23,16 @@ document.querySelector('#resetPassword').addEventListener(`click`,
 
         let password = String(document.querySelector('#passwordResetForm').value)
         let passwordConf = String(document.querySelector('#passwordResetFormConf').value)
+        let isPasswordValid = isPasswordOK(password);
+        let isPasswordConfValid = isPasswordOK(passwordConf);
+        let validPassword = ((isPasswordValid && isPasswordConfValid) && (password === passwordConf));
 
-        let passwordsAreEqual = Boolean(password === passwordConf);
-
-        if (!passwordsAreEqual) {
+        if (!validPassword) {
 
             //TODO We moeten nog functionaliteit voor wanneer de wachtwoorden NIET kloppen volgens onze richtlijnen OF
             // als de wachtwoorden niet gelijk zijn aan elkaar
-            console.log('Passwords not the same')
+            console.log('Password(s) do not meet requirements');
+            alert('Password(s) do not meet requirements');
         }
 
         else {
@@ -95,3 +97,7 @@ document.getElementById('submitEmail').addEventListener('click',
             })
     })
 
+const isPasswordOK = (password) => {
+    const toCheck = new RegExp("^(?=.*[a-z])(?=.{8,})");
+    return toCheck.test(password);
+}
