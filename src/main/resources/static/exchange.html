@@ -18,27 +18,20 @@
             <button id="exchangeNav" type="button">Exchange</button>
             <button id="signupNav" type="button">Signup</button>
             <button id="loginNav" type="submit" >Login</button>
-            <span id="pagetitle">CryptoKnights </span>
+            <span id="pagetitle">Exchange</span>
         </div>
     </header>
 
-    <!--<div id="buttons">
-        <button id="logOut" type="button">Log Out</button>
-        <button id="dashboard" type="button">Dashboard</button>
-        <button id="exchange" type="button">Exchange</button>
-        <button id="account" type="button">Account</button>
-    </div>-->
-
     <div id="allAssets">
-        <h1 id="exchangeHeader">Exchange</h1>
         <table id="assetTable">
         </table>
     </div>
     <div id="buyForm">
-        <form id="orderForm"> <!--action="http://localhost:8080/buyasset" method="post"-->
-            <select id="selectAsset" name="selectAsset" required></select>
-            <!--<input type="text" id="asset" placeholder="Enter Asset" name="asset" required>-->
-            <input type="number" id="amount" placeholder="Enter Amount" name="amount" required>
+        <form id="orderForm">
+            <div class="custom-select" style="width: 200px">
+                <select id="selectAsset" name="selectAsset" required></select>
+            </div>
+            <input type="number" id="amount" placeholder="Enter Amount" name="amount" autocomplete="off" required>
             <!--<input type="number" id="limitPrice" placeholder="Optional: add limit" name="limit">-->
             <button id="buy" type="button"  >BUY NOW</button>
         </form>
@@ -50,5 +43,3 @@
 
 </body>
 </html>
-
-<!---->

@@ -9,50 +9,77 @@ const urlAssets = "http://localhost:8080/assets"
 const urlAbbreviations = "http://localhost:8080/assets/abbreviations"
 
 showAllAssets()
+
 populateDropdownWithAbbreviations()
 
-function populateDropdownWithAbbreviations() {
-    fetch(urlAbbreviations, options)
-        .then(response => {
-            if (response.ok) {
-                response.json()
-                    .then(json => {
-                        console.log(json);
-                        let list = json;
-                        let dropdown = document.querySelector("#selectAsset");
-                        for (index in list) {
-                            dropdown.options[dropdown.options.length] = new Option(list[index], index);
-                        }
-                    })
-                    .catch((error) => {
-                        console.error('Error' + error);
-                    })
-            } else {
-                console.log('Failed to fetch AbbreviationsList')
+//custom dropdown menu:
+let x, i, j, length, ll, selectedElement, a, b, c;
+x = document.getElementsByClassName("custom-select");
+length = x.length;
+for (i = 0; i < length; i++) {
+    selectedElement = x[i].getElementsByTagName("select")[0];
+    ll = selectedElement.length;
+    a = document.createElement("div");
+    a.setAttribute("class", "select-selected");
+    a.innerHTML = selectedElement.options[selectedElement.selectedIndex].innerHTML;
+    x[i].appendChild(a);
+    b = document.createElement("div");
+    b.setAttribute("class", "select-items select hide");
+    for (j = 1; j < ll; j++) {
+        c = document.createElement("div");
+        c.innerHTML = selectedElement.options[j].innerHTML;
+        c.addEventListener("click", function (e){
+            let y, i, k, s, h, sl, yl;
+            s = this.parentNode.previousSibling;
+            sl = s.length;
+            for (i = 0; i < sl; i++) {
+                if (s.options[i].innerHTML === this.innerHTML) {
+                    s.selectedIndex = i;
+                    h.innerHTML = this.innerHTML;
+                    y = this.parentNode.getElementsByClassName("same-as-selected");
+                    yl = y.length;
+                    for (k = 0; k < yl; k++) {
+                        y[k].removeAttribute("class");
+                    }
+                    this.setAttribute("class", "same-as-selected");
+                    break;
+                }
             }
-        })
+            h.click();
+        });
+        b.appendChild(c);
+    }
+    x[i].appendChild(b);
+    a.addEventListener("click", function (e) {
+        e.stopPropagation();
+        closeAllSelect(this);
+        this.nextSibling.classList.toggle("select-hide");
+        this.classList.toggle("select-arrow-active");
+    })
 }
 
-/*document.getElementById("myPortfolio").addEventListener('click',
-    function (event) {
-        event.preventDefault()
-        const urlPortfolio = "http://localhost:8080/portfolio"
+function closeAllSelect(element) {
+    let x, y, i, xl, yl, arrNo = [];
+    x = document.getElementsByClassName("select-items");
+    y = document.getElementsByClassName("select-selected");
+    xl = x.length;
+    yl = y.length;
+    for (i = 0; i < yl; i++) {
+        if (element === y[i]) {
+            arrNo.push(i)
+        } else {
+            y[i].classList.remove("select-arrow-active");
+        }
+    }
+    for (i = 0; i < xl; i++) {
+        if (arrNo.indexOf(i)) {
+            x[i].classList.add("select-hide");
+        }
+    }
+}
+document.addEventListener("click", closeAllSelect);
+//end of custom dropdown
 
-        //TODO nu leeg scherm bij een 403 geen authorization, moet opnieuw inloggen
-        fetchTable(urlPortfolio, options, "#portfolioTable");
-        document.title = "My Portfolio";
-        document.getElementById("allAssets").style.display="none"
-        document.getElementById("showPortfolio").style.display="block"
-    }, false);
-
-
-document.getElementById("showAssets").addEventListener('click',
-    function (event) {
-        event.preventDefault()
-        fetchTable(urlAssets, options, "#assetTable");
-        document.getElementById("showPortfolio").style.display="none"
-        document.getElementById("allAssets").style.display="block"
-    }, false);*/
 
 document.getElementById("buy").addEventListener("click", function (event) {
     event.preventDefault()
@@ -118,8 +145,9 @@ function generateTableHead(table, data) {
     let thead = table.createTHead();
     let row = thead.insertRow();
     for (let key of data) {
+        let keyCapital = key.charAt(0).toUpperCase() + key.slice(1)
         let th = document.createElement("th");
-        let text = document.createTextNode(key);
+        let text = document.createTextNode(keyCapital);
         th.appendChild(text);
         row.appendChild(th);
     }
@@ -139,7 +167,27 @@ function generateTable(table, data) {
     }
 }
 
-
+function populateDropdownWithAbbreviations() {
+    fetch(urlAbbreviations, options)
+        .then(response => {
+            if (response.ok) {
+                response.json()
+                    .then(json => {
+                        console.log(json);
+                        let list = json;
+                        let dropdown = document.querySelector("#selectAsset");
+                        for (index in list) {
+                            dropdown.options[dropdown.options.length] = new Option(list[index], index);
+                        }
+                    })
+                    .catch((error) => {
+                        console.error('Error' + error);
+                    })
+            } else {
+                console.log('Failed to fetch AbbreviationsList')
+            }
+        })
+}
 
 
 /*let abbreviation = "?abbreviation" + abbreviation

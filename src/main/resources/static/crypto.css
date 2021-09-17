@@ -233,3 +233,87 @@ small {
     border: 2px solid rgb(215,50,0);
     /*border-color: hsl(111,98%,50%)*/;
 }
+
+table {
+    color: white;
+    border-radius: 10px;
+    opacity: 0.9;
+    background: #353b48;
+    background-image: repeating-linear-gradient(45deg, #454a54 0, #454a54 0.6000000000000001px, #2d3436 0, #2d3436 50%);
+    background-size: 6px 6px;
+    padding: 30px;
+    border: 1px dotted white;
+    text-align: left;
+    table-layout: fixed;
+
+}
+
+th {
+    color: #fbc531;
+    font-weight: bold;
+    padding-bottom: 5px;
+}
+
+th, td {
+    padding-right: 20px;
+    padding-top: 8px;
+}
+
+#orderForm {
+    flex-flow: row wrap;
+    background: #353b48;
+    background-image: repeating-linear-gradient(45deg, #454a54 0, #454a54 0.6000000000000001px, #2d3436 0, #2d3436 50%);
+    background-size: 6px 6px;
+    padding: 30px;
+    border: 1px dotted white;
+    border-radius: 10px;
+    width: 350px;
+    margin: 30px;
+}
+
+/*select: betreft dropdown menu*/
+.custom-select {
+    position: relative;
+    font-family: sans-serif;
+}
+.custom-select select {
+    display: none;
+}
+.select-selected {
+    background-color: white;
+}
+.select-selected:after {
+    position: absolute;
+    content: "";
+    top: 14px;
+    right: 10px;
+    width: 0;
+    height: 0;
+    /*border: 6px solid transparent;
+    border-color: #fff transparent transparent transparent;*/
+}
+.select-selected.select-arrow-active:after {
+    border-color: transparent transparent #fff transparent;
+    top: 7px;
+}
+.select-items div,.select-selected {
+    color: #353b48;
+    padding: 5px;
+    border: 1px solid black;
+    border-radius: 10px;
+    cursor: pointer;
+}
+.select-items {
+    position: absolute;
+    background-color: white;
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: 99;
+}
+.select-hide {
+    display: none;
+}
+.select-items div:hover, .same-as-selected {
+    background-color: gray;
+}
