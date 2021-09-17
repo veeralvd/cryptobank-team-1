@@ -58,9 +58,9 @@ public class TransactionService {
         buyerAccount = rootRepository.getBankAccountByIban(ibanBuyer);
         sellerAccount = bank.getBankAccount();
 
-  /*      // verkoop aan bank
-        buyerAccount = bank.getBankAccount();
-        sellerAccount = orderToProcess.getBankAccount();*/
+        // verkoop aan bank
+        // buyerAccount = bank.getBankAccount();
+        // sellerAccount = orderToProcess.getBankAccount();
 
         if (validateCreditLimitBuyer(orderToProcess)
                 && validatePortfolioSellerContainsAsset(orderToProcess)
@@ -71,7 +71,7 @@ public class TransactionService {
             Transaction transactionToComplete = assembleNewTransaction(orderToProcess);
             saveTransaction(getTransactionDto(transactionToComplete));
             logger.info("Transactie opgeslagen");
-            sentConfirmationMailTransaction(getTransactionDto(transactionToComplete));
+            sendConfirmationMailTransaction(getTransactionDto(transactionToComplete));
             return getTransactionDto(transactionToComplete);
         }
 
@@ -188,7 +188,7 @@ public class TransactionService {
         return rootRepository.saveTransaction(transaction);
     }
 
-    public void sentConfirmationMailTransaction(TransactionDto transaction) {
+    public void sendConfirmationMailTransaction(TransactionDto transaction) {
         Mail mail = new Mail();
         mail.setRecipient("anne.van.der.veer@hva.nl");
         mail.setSubject("Confirmation transaction Cryptoknights");
