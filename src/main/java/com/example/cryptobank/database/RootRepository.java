@@ -73,6 +73,11 @@ public class RootRepository {
         return allAssets;
     }
 
+    public ArrayList<String> getListAbbreviations() {
+        ArrayList allAbbreviations = assetDao.getListAbbreviations();
+        return allAbbreviations;
+    }
+
     public double getBalanceByIban(String iban) {
         double balanceRetrieved = bankAccountDao.getBalanceByIban(iban);
         return balanceRetrieved;
