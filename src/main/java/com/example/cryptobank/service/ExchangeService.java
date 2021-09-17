@@ -19,8 +19,6 @@ public class ExchangeService {
     }
 
     public double getCurrentRateByAbbreviation(String abbreviation) {
-        // query voor alle Rates van alle Assets (Map aanmaken en vullen)
-        // Map. Entryset. Als getKey.equals abbrev. -> extract value (currentRate van Asset in kwestie)
         currentRates = rootRepository.getAllCurrentRates();
         return currentRates.get(abbreviation);
     }
