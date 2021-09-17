@@ -41,6 +41,7 @@ public class PortfolioController {
         if (customer != null){
             PortfolioDto portfolioDto = portfolioService.showPortfolioDto(customer.getIban(), customer.getFirstName());
             List<OwnedAssetDto> ownedAssetsList = portfolioDto.getList();
+            logger.info(ownedAssetsList.toString());
             return new ResponseEntity<>(ownedAssetsList, HttpStatus.OK);
             //return new ResponseEntity<String>(portfolioDto.toString(), HttpStatus.OK);
         } else{

@@ -47,12 +47,14 @@ public class RegistrationService {
     }
 
 
-    public Customer register(Customer customerToRegister) throws Exception, EmailError {
+    public Customer register(Customer customerToRegister) throws Exception {
         String salt = new Saltmaker().generateSalt();
 
         //check if customer can be registered, if not: exceptions is thrown
         //checks for username, socialsec number, email
         checkIfCustomerCanBeRegistered(customerToRegister);
+
+        logger.info("error wordt gegooid maar we komen wel tot hier");
 
         customerToRegister.setPassword(HashHelper.hash(customerToRegister.getPassword(),
                 salt,
