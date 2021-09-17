@@ -120,3 +120,4 @@ function generateTable(table, data) {
 function updateHeaderOptions() {
     options.headers.Authorization = localStorage.getItem('Authorization');
 }
+

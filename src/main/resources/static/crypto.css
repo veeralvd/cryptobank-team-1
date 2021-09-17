@@ -259,6 +259,15 @@ th, td {
     padding-top: 8px;
 }
 
+#exchangePage{
+    margin: 30px;
+    padding: 30px;
+}
+#assetTable {
+    margin: 30px;
+    padding: 30px;
+}
+
 #orderForm {
     flex-flow: row wrap;
     background: #353b48;
@@ -268,10 +277,11 @@ th, td {
     border: 1px dotted white;
     border-radius: 10px;
     width: 350px;
-    margin: 30px;
+    margin: 30px 30px 30px 100px;
+    text-align: center;
 }
 
-/*select: betreft dropdown menu*/
+/*!*select: betreft dropdown menu*!
 .custom-select {
     position: relative;
     font-family: sans-serif;
@@ -289,8 +299,8 @@ th, td {
     right: 10px;
     width: 0;
     height: 0;
-    /*border: 6px solid transparent;
-    border-color: #fff transparent transparent transparent;*/
+    border: 6px solid transparent;
+    border-color: #fff transparent transparent transparent;
 }
 .select-selected.select-arrow-active:after {
     border-color: transparent transparent #fff transparent;
@@ -298,10 +308,12 @@ th, td {
 }
 .select-items div,.select-selected {
     color: #353b48;
-    padding: 5px;
+    padding: 8px 16px;
     border: 1px solid black;
-    border-radius: 10px;
+    !*border-radius: 10px;*!
+    border-color: transparent transparent rgba(0, 0, 0, 0.1) transparent;
     cursor: pointer;
+    user-select: none;
 }
 .select-items {
     position: absolute;
@@ -309,11 +321,11 @@ th, td {
     top: 100%;
     left: 0;
     right: 0;
-    z-index: 99;
+    !*z-index: 99;*!
 }
 .select-hide {
     display: none;
 }
 .select-items div:hover, .same-as-selected {
     background-color: gray;
-}
+}*/
