@@ -273,13 +273,24 @@ th, td {
     background: #353b48;
     background-image: repeating-linear-gradient(45deg, #454a54 0, #454a54 0.6000000000000001px, #2d3436 0, #2d3436 50%);
     background-size: 6px 6px;
-    padding: 30px;
+    padding: 45px 40px 25px 43px;
     border: 1px dotted white;
     border-radius: 10px;
     width: 350px;
     margin: 30px 30px 30px 100px;
     text-align: center;
 }
+
+#selectAsset {
+    margin-bottom: 20px;
+    padding: 5px 60px 5px 45px;
+    border-radius: 7px;
+    text-align: center;
+}
+#amount {
+    width: 193px;
+}
+
 
 /*!*select: betreft dropdown menu*!
 .custom-select {
