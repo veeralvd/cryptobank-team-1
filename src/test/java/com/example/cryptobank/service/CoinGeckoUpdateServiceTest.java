@@ -53,7 +53,6 @@ public class CoinGeckoUpdateServiceTest {
         Map<String, Double> testMap = new HashMap<>();
         testMap.put("HEX", 0.01);
         double expected = testMap.get("HEX");
-
     }
 
     @Test
@@ -71,13 +70,5 @@ public class CoinGeckoUpdateServiceTest {
         } catch (IOException error) {
             logger.info(error.getMessage());
         }
-
-//        GsonJsonParser parser = new GsonJsonParser();
-//        String test = mapper.readValue(URL,String.class);
-//        Gson gson = new Gson();
-//        Object een = gson.fromJson(test,Object.class);
-//        System.out.println(een.toString());
     }
-
-
 }

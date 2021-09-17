@@ -8,7 +8,6 @@ let options = {
     }
 }
 
-
  function getPortfolio() {
     const urlPortfolio = "http://localhost:8080/portfolio"
 
@@ -19,18 +18,6 @@ let options = {
 document.addEventListener("DOMContentLoaded", function (){
     getPortfolio();
 })
-
-
-document.querySelector("#myportfolio").addEventListener('click',
-     function (event) {
-        event.preventDefault()
-        const urlPortfolio = "http://localhost:8080/portfolio"
-
-        getPortfolio();
-
-     }, false);
-
-
 
  function fetchTable(url, options, tableId) {
     fetchWithRetry(fetch, url, options)
@@ -83,6 +70,30 @@ function generateTable(table, data) {
     }
 }
 
+const urlPortfolioValue = "http://localhost:8080/getportfoliovalue";
 
+function getPortfolioValue() {
+    fetchTotalValue(urlPortfolioValue, options, '#currentBalance');
+    document.title = "Total Portfolio Value";
+}
+document.addEventListener("DOMContentLoaded", function (){
+    getPortfolioValue();
+})
+
+function fetchTotalValue(url, options, id){
+    fetchWithRetry(fetch, url, options)
+        .then(response => {
+            if(response.ok){
+                response.json()
+                    .then(json => {
+                        let value = json;
+                        document.querySelector('#currentBalance').insertAdjacentText('beforeend', value);
+                    })
+                    .catch((error) => {
+                        console.error('Error' + error);
+                    })
+            }
+        })
+}
 
 
