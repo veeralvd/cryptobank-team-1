@@ -1,28 +1,34 @@
 package com.example.cryptobank.service;
 
-import com.example.cryptobank.domain.Address;
 import com.example.cryptobank.domain.Admin;
 import com.example.cryptobank.domain.BankAccount;
 import com.example.cryptobank.domain.Customer;
+import com.example.cryptobank.error.EmailError;
+import com.example.cryptobank.error.SocialSecurityError;
+import com.example.cryptobank.error.UsernameError;
+import com.example.cryptobank.security.CreateToken;
 import com.example.cryptobank.security.PepperService;
 import com.example.cryptobank.database.RootRepository;
+import com.example.cryptobank.security.TokenKeyService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
 @Service
 public class RegistrationService {
     private RootRepository rootRepository;
+    private CreateToken createToken;
+    private List<Customer> customers;
     private final Logger logger = LoggerFactory.getLogger(RegistrationService.class);
 
     @Autowired
-    public RegistrationService(RootRepository rootRepository) {
+    public RegistrationService(RootRepository rootRepository, CreateToken createToken) {
         this.rootRepository = rootRepository;
+        this.createToken = createToken;
         logger.info("New RegistrationService");
     }
 
@@ -35,66 +41,71 @@ public class RegistrationService {
             String token = UUID.randomUUID().toString();
             attemptToRegister.setSalt(salt);
             attemptToRegister.setAccessToken(token);
-            Admin registeredAdmin = rootRepository.saveTransaction(attemptToRegister);
-            return registeredAdmin;
+            return rootRepository.saveTransaction(attemptToRegister);
         }
         return attemptToRegister;
     }
 
-    public Customer registerCustomer(String username, String password,
-                                     String firstName, String lastName, LocalDate dateOfBirth, int socialSecurityNumber,
-                                     String street, String zipcode, int houseNumber, String addition, String city) {
-        Customer customerToRegister = new Customer(username, password);
-        if (checkIfCustomerCanBeRegistered(username) && checkIfSocialSecurityNumberExists(socialSecurityNumber)) {
-            String salt = new Saltmaker().generateSalt();
-            customerToRegister.setPassword(HashHelper.hash(password, salt, PepperService.getPepper()));
-            customerToRegister.setSalt(salt);
-            customerToRegister.setFirstName(firstName);
-            customerToRegister.setLastName(lastName);
-            customerToRegister.setDateOfBirth(dateOfBirth);
-            customerToRegister.setSocialSecurityNumber(socialSecurityNumber);
-            customerToRegister.setAddress(new Address(street, zipcode, houseNumber, addition, city));
-            customerToRegister.setBankAccount(new BankAccount());
-            Customer customerRegistered = rootRepository.saveTransaction(customerToRegister);
-            return customerRegistered;
-        }
-        return customerToRegister;
-    }
 
-    public Customer register(Customer customerToRegister) {
+    public Customer register(Customer customerToRegister) throws Exception, EmailError {
         String salt = new Saltmaker().generateSalt();
-        String token = UUID.randomUUID().toString();
-        if (checkIfCustomerCanBeRegistered(customerToRegister.getUsername())) {
-            customerToRegister.setPassword(HashHelper.hash(customerToRegister.getPassword(),
-                    salt,
-                    PepperService.getPepper()));
-            customerToRegister.setSalt(salt);
-            String iban = IbanGenerator.generate();
-            customerToRegister.setBankAccount(new BankAccount(iban));
-            customerToRegister.setAccessToken(token);
-            Customer customerRegistered = rootRepository.saveTransaction(customerToRegister);
-            return customerRegistered;
-        }
-        return customerToRegister;
+
+        //check if customer can be registered, if not: exceptions is thrown
+        //checks for username, socialsec number, email
+        checkIfCustomerCanBeRegistered(customerToRegister);
+
+        customerToRegister.setPassword(HashHelper.hash(customerToRegister.getPassword(),
+                salt,
+                PepperService.getPepper()));
+        customerToRegister.setSalt(salt);
+        String iban = IbanGenerator.generate();
+        customerToRegister.setBankAccount(new BankAccount(iban));
+        String accessToken = createToken.createAccessToken(
+                customerToRegister.getUsername(), TokenKeyService.getCustomerKey());
+        String refreshToken = createToken.createRefreshToken(
+                customerToRegister.getUsername(), TokenKeyService.getCustomerKey());
+        customerToRegister.setAccessToken(accessToken);
+        customerToRegister.setRefreshToken(refreshToken);
+        // TODO: 17/09/2021  Deze methodenaam is niet ok. @Anne, wil jij hier nog eens naar kijken
+        return rootRepository.saveTransaction(customerToRegister);
     }
 
-    public boolean checkIfCustomerCanBeRegistered(String username) {
-        Customer customerToCheck = rootRepository.findCustomerByUsername(username);
+
+    public void checkIfCustomerCanBeRegistered(Customer customerToCheck) throws Exception {
+        customers = rootRepository.getAllCustomers();
+        String username = customerToCheck.getUsername();
+        int socialSecurityNumber = customerToCheck.getSocialSecurityNumber();
+        String email = customerToCheck.getEmail();
+
+        for (Customer customerInDatabase : customers){
+            checkIfSocialSecurityNumberExists(socialSecurityNumber, customerInDatabase.getSocialSecurityNumber());
+            checkIfUsernameExists(username, customerInDatabase.getUsername());
+            checkIfEmailExists(email, customerInDatabase.getEmail());
+        }
+
         // TODO: 1-9-2021 (Mark) logger is voor testen, moet later eruit
-        logger.info(String.format("customerToCheck is: %s", customerToCheck==null? "user NULL": customerToCheck.toString()));
-        return customerToCheck == null;
+        logger.info(String.format("customerToCheck is: %s", customerToCheck.toString()));
     }
 
-    public boolean checkIfSocialSecurityNumberExists(int socialSecurityNumber){
-        List<Customer> customers = rootRepository.getAllCustomers();
-        boolean exists = true;
-        for (Customer customer : customers){
-            if (socialSecurityNumber == customer.getSocialSecurityNumber()){
-                exists = false;
-                logger.info("Social security number already exists.");
-            }
+    private void checkIfEmailExists(String email, String emailInDatabase) throws EmailError {
+        if (email.equals(emailInDatabase)) {
+            logger.info("Username already exists");
+            throw new EmailError("Email already exists");
         }
-        return exists;
     }
 
+    private void checkIfUsernameExists(String username, String usernameInDatabase) throws UsernameError {
+        if (username.equals(usernameInDatabase)) {
+            logger.info("Username already exists");
+            throw new UsernameError("Username already exists");
+        }
+    }
+
+    public void checkIfSocialSecurityNumberExists(
+        int socialSecurityNumberToCheck, int socialSecurityNumberInDatabase) throws SocialSecurityError {
+        if (socialSecurityNumberToCheck == socialSecurityNumberInDatabase){
+            logger.info("Social security number already exists.");
+            throw new SocialSecurityError("Social security number already exists.");
+        }
+    }
 }

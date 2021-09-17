@@ -54,7 +54,11 @@ public class JdbcCustomerDAO implements CustomerDAO{
     public Customer save(Customer customer) {
         logger.info(customer.toString());
         logger.info("customer.save aangeroepen");
-        jdbcTemplate.update(connection -> insertCustomer(customer, connection));
+        try {
+            jdbcTemplate.update(connection -> insertCustomer(customer, connection));
+        } catch (Exception sqlException) {
+            logger.info(sqlException.getMessage());
+        }
         return customer;
     }
 

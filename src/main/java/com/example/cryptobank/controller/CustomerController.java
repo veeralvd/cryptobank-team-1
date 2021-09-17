@@ -38,15 +38,15 @@ public class CustomerController {
                 customerRegistrationDto.getEmail());
         logger.info(customerRegistrationDto.toString());
         try {
-            Customer customerRegistred = customerService.register(customerToRegister);
-            if (customerRegistred.getSalt() != null) {
+            Customer customerRegistered = customerService.register(customerToRegister);
+            if (customerRegistered.getSalt() != null) {
                 HttpHeaders responseHeaders = new HttpHeaders();
-                responseHeaders.set(HttpHeaders.AUTHORIZATION, customerRegistred.getAccessToken());
-                responseHeaders.set("refresh_token", customerRegistred.getRefreshToken());
-                return new ResponseEntity<String>(customerRegistred.getFirstName(), responseHeaders, HttpStatus.CREATED);
+                responseHeaders.set(HttpHeaders.AUTHORIZATION, customerRegistered.getAccessToken());
+                responseHeaders.set("refresh_token", customerRegistered.getRefreshToken());
+                return new ResponseEntity<String>(customerRegistered.getFirstName(), responseHeaders, HttpStatus.CREATED);
             }
         } catch (Exception e) {
-            return new ResponseEntity<String>("Email already in use", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<String>("Could not process request", HttpStatus.FORBIDDEN);
     }
