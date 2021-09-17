@@ -137,7 +137,7 @@ public class JdbcCustomerDAO implements CustomerDAO{
 
         logger.info(email);
         List<Customer> customerList = jdbcTemplate.query(sql, new CustomerRowMapper(), email);
-        if (customerList.size() == 1) {
+        if (customerList.size() > 0) {
             Customer customer = customerList.get(0);
             return new CustomerDto(customer.getUsername(), null,
                     customer.getFirstName(), customer.getBankAccount().getIban(), customer.getEmail());

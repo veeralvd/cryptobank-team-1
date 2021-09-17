@@ -4,6 +4,8 @@ const firstNameInput = document.querySelector('#firstName');
 const lastNameInput = document.querySelector('#lastName');
 const socialSecurityNumberInput = document.querySelector('#socialSecurityNumber');
 const streetInput = document.querySelector('#street');
+const housenumberInput = document.querySelector('#housenumber');
+const zipcodeInput = document.querySelector('#zipcode');
 const emailInput = document.querySelector('#email');
 let small1 = document.querySelector('#line1');
 const formFields = document.querySelector('#registrationForm');
@@ -15,6 +17,8 @@ document.querySelector('#register').addEventListener('click',
         event.preventDefault();
         small1.textContent = '';
 
+        //checkAllData() controleert of alle velden correct zijn ingevuld, als deze true retourneert wordt de submit
+        // uitgevoerd
         if(checkAllData()) {
             let formData = new FormData(document.querySelector('#registrationForm'));
             let plainFormData = Object.fromEntries(formData.entries());
@@ -61,8 +65,8 @@ document.querySelector('#register').addEventListener('click',
     })
 
 
-const isRequired = value => value === '' ? false : true;
-const isBetween = (length, min, max) => length < min || length > max ? false : true;
+const isRequired = value => value !== '';
+const isBetween = (length, min, max) => !(length < min || length > max);
 const isEmailValid = (email) => {
     const emailFormat = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return emailFormat.test(email);
@@ -145,6 +149,43 @@ const checkNotEmpty = () => {
     return(count === 0);
 }
 
+const checkHousenumber = () => {
+    let valid = false;
+    if (isNaN(housenumberInput.value)) {
+        showError(housenumberInput, 'Housenumber must be a numeric value')
+    } else {
+
+        valid = true;
+    }
+    return valid;
+}
+
+const checkZipcode = () => {
+    let valid = false;
+    const min = 6, max = 6;
+    const rege = /^[1-9][0-9]{3} ?(?!sa|sd|ss)[a-z]{2}$/i;
+    if(!isBetween(zipcodeInput.value.length, min, max)) {
+        showError(zipcodeInput, 'Zipcode must be 6 characters with format 1234AB')
+    } else if(!rege.test(zipcodeInput.value)){
+        showError(zipcodeInput, 'Zipcode must be 6 characters with format 1234AB')
+    } else {
+        showSuccess(zipcodeInput);
+        valid = true;
+    }
+    return valid;
+}
+
+const isUserNotEqualToPass = () => {
+    let valid = false;
+    if (usernameInput.value === passwordInput.value) {
+        showError(passwordInput, 'Password can not be equal to username')
+    } else {
+        showSuccess(passwordInput);
+        valid = true;
+    }
+    return valid;
+}
+
 
 const checkAllData = () => {
     let isNotEmpty = checkNotEmpty();
@@ -152,5 +193,9 @@ const checkAllData = () => {
     let isEmailValid = checkEmail();
     let isPasswordValid = checkPassword();
     let isSocSecNumberValid = checkSocialSecurityNumber();
-    return isNotEmpty && isUsernameValid && isEmailValid && isPasswordValid && isSocSecNumberValid;
+    let isHousenumberValid = checkHousenumber();
+    let isZipcodeValid = checkZipcode();
+    let isUsernameEqualToPass = isUserNotEqualToPass();
+    return isNotEmpty && isUsernameValid && isEmailValid && isPasswordValid && isSocSecNumberValid && isHousenumberValid
+        && isZipcodeValid && isUsernameEqualToPass;
 }

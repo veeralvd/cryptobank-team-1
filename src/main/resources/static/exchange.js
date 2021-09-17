@@ -7,6 +7,7 @@ const options = {
 }
 const urlAssets = "http://localhost:8080/assets"
 const urlAbbreviations = "http://localhost:8080/assets/abbreviations"
+let assetList = [];
 
 showAllAssets()
 
@@ -17,9 +18,11 @@ document.getElementById("buy").addEventListener("click", function (event) {
     event.preventDefault()
 
     let asset = String(document.querySelector("#selectAsset").value)
+    let assetName = assetList[asset];
     let amount = Number(document.querySelector("#amount").value)
-    let data = "?assetAbbr=" + asset + "&assetAmount=" + amount
-    const urlBuy = "http://localhost:8080/buyasset" + data;
+    let data = "?assetAbbr=" + assetName + "&assetAmount=" + amount
+
+    const urlBuy = "http://localhost:8080/buyassetnow" + data;
     const optionsPost = {
         method: 'POST',
         headers: {
@@ -106,10 +109,11 @@ function populateDropdownWithAbbreviations() {
                 response.json()
                     .then(json => {
                         console.log(json);
-                        let list = json;
+                        //let list = json;
+                        assetList = json;
                         let dropdown = document.querySelector("#selectAsset");
-                        for (index in list) {
-                            dropdown.options[dropdown.options.length] = new Option(list[index], index);
+                        for (index in assetList) {
+                            dropdown.options[dropdown.options.length] = new Option(assetList[index], index);
                         }
                     })
                     .catch((error) => {
