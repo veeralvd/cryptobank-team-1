@@ -2,10 +2,7 @@ package com.example.cryptobank.controller;
 
 import com.example.cryptobank.domain.Mail;
 import com.example.cryptobank.dto.CustomerDto;
-import com.example.cryptobank.service.AdminService;
-import com.example.cryptobank.service.AuthenticationService;
-import com.example.cryptobank.service.CustomerService;
-import com.example.cryptobank.service.SendMailServiceImpl;
+import com.example.cryptobank.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,12 +27,12 @@ public class ResetPasswordController {
     private AuthenticationService authenticationService;
     private CustomerService customerService;
     private AdminService adminService;
-    private SendMailServiceImpl sendMailService;
+    private SendMailService sendMailService;
 
 
     @Autowired
     public ResetPasswordController(AuthenticationService authenticationService, CustomerService customerService,
-                                   AdminService adminService, SendMailServiceImpl sendMailService) {
+                                   AdminService adminService, SendMailService sendMailService) {
          this.authenticationService = authenticationService;
          this.customerService = customerService;
          this.adminService = adminService;

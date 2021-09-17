@@ -4,6 +4,7 @@ package com.example.cryptobank.database;
 import com.example.cryptobank.domain.*;
 import com.example.cryptobank.dto.CustomerDto;
 import com.example.cryptobank.dto.OrderDto;
+import com.example.cryptobank.dto.TransactionDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,11 +46,11 @@ public class RootRepository {
         return admin;
     }
 
-    public Admin save(Admin admin) {
+    public Admin saveTransaction(Admin admin) {
         return adminDAO.save(admin);
     }
 
-    public Asset save(Asset asset) {
+    public Asset saveTransaction(Asset asset) {
         return assetDao.save(asset);
     }
 
@@ -92,7 +93,7 @@ public class RootRepository {
         return balanceUpdated;
     }
 
-    public Customer save(Customer customer) {
+    public Customer saveTransaction(Customer customer) {
         bankAccountDao.save(customer.getBankAccount());
         Customer customerToSave = customerDAO.save(customer);
         return customerToSave;
@@ -162,7 +163,7 @@ public class RootRepository {
         return transaction;
     }
 
-    public Transaction save(Transaction transaction) {
+    public TransactionDto saveTransaction(TransactionDto transaction) {
         return transactionDao.save(transaction);
     }
 
@@ -191,7 +192,7 @@ public class RootRepository {
         return portfolioDao.getAssetAmountByIbanAndAbbr(ibanSeller, assetAbbr);
     }
 
-    public CryptoCurrencyRate save(CryptoCurrencyRate cryptoCurrencyRate) {
+    public CryptoCurrencyRate saveTransaction(CryptoCurrencyRate cryptoCurrencyRate) {
         return cryptoCurrencyRateDAO.save(cryptoCurrencyRate);
     }
 
