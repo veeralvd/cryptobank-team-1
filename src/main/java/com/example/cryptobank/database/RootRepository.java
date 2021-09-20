@@ -205,7 +205,7 @@ public class RootRepository {
         portfolioDao.insertAssetIntoPortfolio(transactionToComplete);
     }
 
-    public CustomerDto findCustomerByEmail(String email) {
+    public Customer findCustomerByEmail(String email) {
         return customerDAO.findCustomerByEmail(email);
     }
 
