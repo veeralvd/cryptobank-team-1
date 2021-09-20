@@ -53,18 +53,20 @@ public class TransactionService {
 
     public TransactionDto completeTransaction(OrderDto orderToProcess) {
 
-//        if (orderType == 1) {
-            // koop van bank:
+        int orderType = orderToProcess.getOrderType();
+        if (orderType == 1) {
+            // koop nu van bank:
             ibanBuyer = orderToProcess.getIban();
             buyerAccount = rootRepository.getBankAccountByIban(ibanBuyer);
             sellerAccount = bank.getBankAccount();
-//        } else {
-//            // verkoop aan bank
-//            ibanSeller = orderToProcess.getIban();
-//            buyerAccount = bank.getBankAccount();
-//            sellerAccount = rootRepository.getBankAccountByIban(ibanSeller);
-//        }
-
+            logger.info("OrderType: 1 (buy now from bank)");
+        } else if (orderType == 2 ) {
+            // verkoop nu aan bank
+            ibanSeller = orderToProcess.getIban();
+            buyerAccount = bank.getBankAccount();
+            sellerAccount = rootRepository.getBankAccountByIban(ibanSeller);
+            logger.info("OrderType: 2 (Sell now to bank)");
+        }
 
         if (validateCreditLimitBuyer(orderToProcess)
                 && validatePortfolioSellerContainsAsset(orderToProcess)
