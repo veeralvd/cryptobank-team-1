@@ -40,17 +40,17 @@ public class OrderService {
     }
 
     public OrderDto assembleOrderTemp(String iban, String assetAbbr, double assetAmount) {
-        OrderDto order = new OrderDto();
-        order.setIban(iban);
-        order.setAssetAbbr(assetAbbr);
-        order.setAssetAmount(assetAmount);
-        System.out.println("Abbreviation in Order Service: "+ assetAbbr);
-        order.setDesiredPrice(exchangeService.getCurrentRateByAbbreviation(assetAbbr.toUpperCase()));
-        order.setDateTimeCreated(LocalDateTime.now());
-        return order;
+        OrderDto orderDto = new OrderDto();
+        orderDto.setIban(iban);
+        orderDto.setAssetAbbr(assetAbbr);
+        orderDto.setAssetAmount(assetAmount);
+        orderDto.setDesiredPrice(exchangeService.getCurrentRateByAbbreviation(assetAbbr.toUpperCase()));
+        orderDto.setDateTimeCreated(LocalDateTime.now());
+        return orderDto;
     }
 
-    public OrderDto saveOrder(OrderDto orderToSave) {
+    public OrderDto saveOrder(String iban, String assetAbbr, double assetAmount) {
+        OrderDto orderToSave = assembleOrderTemp(iban, assetAbbr, assetAmount);
         return rootRepository.saveOrder(orderToSave);
     }
 

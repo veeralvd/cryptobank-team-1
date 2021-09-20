@@ -53,14 +53,18 @@ public class TransactionService {
 
     public TransactionDto completeTransaction(OrderDto orderToProcess) {
 
-        // koop van bank:
-        ibanBuyer = orderToProcess.getIban();
-        buyerAccount = rootRepository.getBankAccountByIban(ibanBuyer);
-        sellerAccount = bank.getBankAccount();
+//        if (orderType == 1) {
+            // koop van bank:
+            ibanBuyer = orderToProcess.getIban();
+            buyerAccount = rootRepository.getBankAccountByIban(ibanBuyer);
+            sellerAccount = bank.getBankAccount();
+//        } else {
+//            // verkoop aan bank
+//            ibanSeller = orderToProcess.getIban();
+//            buyerAccount = bank.getBankAccount();
+//            sellerAccount = rootRepository.getBankAccountByIban(ibanSeller);
+//        }
 
-        // verkoop aan bank
-        // buyerAccount = bank.getBankAccount();
-        // sellerAccount = orderToProcess.getBankAccount();
 
         if (validateCreditLimitBuyer(orderToProcess)
                 && validatePortfolioSellerContainsAsset(orderToProcess)
@@ -188,6 +192,7 @@ public class TransactionService {
         return rootRepository.saveTransaction(transaction);
     }
 
+    //TODO mailadres van koper/verkoper ophalen via customer
     public void sendConfirmationMailTransaction(TransactionDto transaction) {
         Mail mail = new Mail();
         mail.setRecipient("anne.van.der.veer@hva.nl");
