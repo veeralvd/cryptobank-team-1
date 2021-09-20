@@ -49,12 +49,7 @@ public class PortfolioController {
         }
     }
 
-//    @GetMapping("/getportfoliovalue")
-//    public double getPortfolioValue (@RequestParam String iban){
-//        return portfolioService.getTotalValuePortfolio(iban);
-//    }
-
-    @GetMapping("/getportfoliovalue")
+    @GetMapping("/portfolio/portfoliovalue")
     public ResponseEntity<?> getPortfolioValue (@RequestHeader("Authorization") String accessToken){
         logger.info("Portfolio value called");
         CustomerDto customer = customerService.authenticate(accessToken);
@@ -63,6 +58,18 @@ public class PortfolioController {
         double portfolioValue = portfolioService.getTotalValuePortfolio(iban);
         return new ResponseEntity<>(portfolioValue, HttpStatus.OK);
         }else{
+            return new ResponseEntity<String>(HttpStatus.FORBIDDEN);
+        }
+    }
+
+    @GetMapping("/portfolio/abbreviations")
+    public ResponseEntity<?> getAbbreviations (@RequestHeader("Authorization") String accessToken){
+        logger.info("Portfolio value called");
+        CustomerDto customer = customerService.authenticate(accessToken);
+        if (customer != null){
+            List<String> abbreviationsList = portfolioService.getAbbreviationsListByIban(customer.getIban());
+            return new ResponseEntity<>(abbreviationsList, HttpStatus.OK);
+        } else{
             return new ResponseEntity<String>(HttpStatus.FORBIDDEN);
         }
     }

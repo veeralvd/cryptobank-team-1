@@ -69,6 +69,10 @@ public class Customer extends User{
         super(username, password);
     }
 
+    public Customer(BankAccount bankAccount){
+        this.bankAccount = bankAccount;
+    }
+
     public Customer(){
 
     }
