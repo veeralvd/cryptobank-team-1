@@ -13,7 +13,7 @@ import java.util.ArrayList;
  */
 public interface OrderDao {
 
-    OrderDto save (OrderDto order);
+    OrderDto save (OrderDto orderDto);
     Order findByOrderId (int orderId);
     ArrayList<Order> getAllByIban (String iban);
     String getAssetAbbrFromOrderId(int orderId);

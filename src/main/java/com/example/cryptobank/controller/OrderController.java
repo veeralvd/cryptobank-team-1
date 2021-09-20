@@ -22,6 +22,10 @@ public class OrderController {
     private OrderService orderService;
     private CustomerService customerService;
     private TransactionService transactionService;
+    private final int BUY_NOW_ORDER = 1;
+    private final int SELL_NOW_ORDER = 2;
+    private final int BUY_LATER_ORDER = 3;
+    private final int SELL_LATER_ORDER = 4;
 
     private final Logger logger = LoggerFactory.getLogger(OrderController.class);
 
@@ -41,7 +45,8 @@ public class OrderController {
             return new ResponseEntity<String>(HttpStatus.FORBIDDEN);
         }
         String iban = customer.getIban();
-        OrderDto orderSaved = orderService.saveOrder(iban, assetAbbr, assetAmount);
+        int orderType = BUY_LATER_ORDER;
+        OrderDto orderSaved = orderService.saveOrder(iban, assetAbbr, assetAmount, orderType);
         if (orderSaved == null) {
             return new ResponseEntity<String>("Failed to save order", HttpStatus.OK);
         } else {
@@ -58,7 +63,8 @@ public class OrderController {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
         String iban = customer.getIban();
-        OrderDto orderSaved = orderService.saveOrder(iban, assetAbbr, assetAmount);
+        int orderType = BUY_NOW_ORDER;
+        OrderDto orderSaved = orderService.saveOrder(iban, assetAbbr, assetAmount, orderType);
         TransactionDto transactionCompleted = transactionService.completeTransaction(orderSaved);
         if (orderSaved == null) {
             return new ResponseEntity<String>("Failed to save order", HttpStatus.OK);

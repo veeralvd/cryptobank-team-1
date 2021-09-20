@@ -14,22 +14,24 @@ public class Order {
     private Asset asset;
     private double assetAmount;
     private double desiredPrice; // per unit
+    private int orderType;
 
 
     public Order(int orderId, BankAccount bankAccount, LocalDateTime dateTimeCreated,
-                 Asset asset, double assetAmount, double desiredPrice) {
+                 Asset asset, double assetAmount, double desiredPrice, int orderType) {
         this.orderId = orderId;
         this.bankAccount = bankAccount;
         this.dateTimeCreated = dateTimeCreated;
         this.asset = asset;
         this.assetAmount = assetAmount;
         this.desiredPrice = desiredPrice;
+        this.orderType = orderType;
         logger.info("New Order");
     }
 
     public Order(BankAccount bankAccount, LocalDateTime dateTimeCreated, Asset asset,
-                 double assetAmount, double desiredPrice) {
-        this(0, bankAccount, dateTimeCreated, asset, assetAmount, desiredPrice);
+                 double assetAmount, double desiredPrice, int orderType) {
+        this(0, bankAccount, dateTimeCreated, asset, assetAmount, desiredPrice, orderType);
     }
 
     public Order() {
@@ -110,6 +112,14 @@ public class Order {
         this.desiredPrice = desiredPrice;
     }
 
+    public int getOrderType() {
+        return orderType;
+    }
+
+    public void setOrderType(int orderType) {
+        this.orderType = orderType;
+    }
+
     @Override
     public String toString() {
         return "Order{" +
@@ -119,8 +129,8 @@ public class Order {
                 ", asset=" + asset +
                 ", assetAmount=" + assetAmount +
                 ", desiredPrice=" + desiredPrice +
+                ", orderType=" + orderType +
                 '}';
     }
-
 } // end of class Order
 

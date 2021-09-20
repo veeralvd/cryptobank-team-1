@@ -118,8 +118,8 @@ public class RootRepository {
         return portfolio;
     }
 
-    public OrderDto saveOrder(OrderDto order) {
-        return orderDao.save(order);
+    public OrderDto saveOrder(OrderDto orderDto) {
+        return orderDao.save(orderDto);
     }
 
     public Order findByOrderId(int orderId) {
