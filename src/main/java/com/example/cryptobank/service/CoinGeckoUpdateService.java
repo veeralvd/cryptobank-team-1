@@ -6,9 +6,6 @@ import com.example.cryptobank.dto.CoinDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import org.springframework.beans.factory.annotation.Configurable;
-import org.springframework.boot.json.JacksonJsonParser;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -22,10 +19,6 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-import java.util.function.ToDoubleBiFunction;
 
 @Configuration
 @EnableScheduling
@@ -49,7 +42,6 @@ public class CoinGeckoUpdateService implements CoinApiUpdate {
     public CoinGeckoUpdateService(RootRepository rootRepository) {
         this.rootRepository = rootRepository;
         logger.info("New CurrencyUpdateService");
-        //startUpdate();
     }
 
     @Override
@@ -88,26 +80,5 @@ public class CoinGeckoUpdateService implements CoinApiUpdate {
         return list;
     }
 
-
-
-    private double checkActualRate(String abbreviation) {
-
-
-        return 0;
-    }
-
-    // TODO: 19/09/2021 methode verwijderen en overige code + comments opschonen 
-    public void startUpdate() {
-        logger.info("startUpdate started");
-        ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
-        service.scheduleAtFixedRate(new Runnable() {
-            @Override
-            public void run() {
-                updateRates();
-            }
-        }, 0, 2, TimeUnit.MINUTES);
-        service.shutdown();
-        logger.info("startUpdate finished");
-    }
 
 }
