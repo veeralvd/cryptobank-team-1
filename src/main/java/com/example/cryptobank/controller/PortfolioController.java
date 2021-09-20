@@ -49,9 +49,21 @@ public class PortfolioController {
         }
     }
 
-    @GetMapping("/getportfoliovalue")
-    public double getPortfolioValue (@RequestParam String iban){
-        return portfolioService.getTotalValuePortfolio(iban);
-    }
+//    @GetMapping("/getportfoliovalue")
+//    public double getPortfolioValue (@RequestParam String iban){
+//        return portfolioService.getTotalValuePortfolio(iban);
+//    }
 
+    @GetMapping("/getportfoliovalue")
+    public ResponseEntity<?> getPortfolioValue (@RequestHeader("Authorization") String accessToken){
+        logger.info("Portfolio value called");
+        CustomerDto customer = customerService.authenticate(accessToken);
+        if (customer != null){
+        String iban = customer.getIban();
+        double portfolioValue = portfolioService.getTotalValuePortfolio(iban);
+        return new ResponseEntity<>(portfolioValue, HttpStatus.OK);
+        }else{
+            return new ResponseEntity<String>(HttpStatus.FORBIDDEN);
+        }
+    }
 }

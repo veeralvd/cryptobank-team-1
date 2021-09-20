@@ -29,7 +29,7 @@ header {
 .flex-box #pagetitle{
     float: right;
     display: block;
-    color: #fbc531;
+    color: #feca57;
     text-align: right;
     padding: 14px 16px;
     text-decoration: none;
@@ -38,12 +38,12 @@ header {
 }
 
 .flex-box #signupNav{
-    color: #fbc531;
+    color: #feca57;
 }
 .flex-box #loginNav{
-    color: #fbc531;
-    border-color: #fbc531;
-    background: #fbc531;
+    color: #feca57;
+    border-color: #feca57;
+    background: #feca57;
     color: #2d3436;
 }
 
@@ -54,7 +54,7 @@ header {
 header a{
     float: right;
     display: block;
-    color: #fbc531;
+    color: #feca57;
     text-align: right;
     padding: 14px 16px;
     text-decoration: none;
@@ -97,7 +97,7 @@ Bepaalt inhoud en plaatsing van box om alle elementen
 
 }
 .box h1{
-    color: #fbc531;
+    color: #feca57;
     text-align: center;
     left: 50%;
 }
@@ -141,12 +141,12 @@ input
 
 #registrationForm input:focus{
     width: 200px;
-    border-color: #fbc531;
+    border-color: #feca57;
 }
 
 
 legend{
-    color: #fbc531;
+    color: #feca57;
 }
 
 label{
@@ -164,7 +164,7 @@ Transformeert de stijl van de invulveld als de cursor erop staat
 */
 input:focus{
     width: 250px;
-    border-color: #fbc531;
+    border-color: #feca57;
 }
 
 /*
@@ -185,9 +185,9 @@ button[type = "submit"]{
     transition: 0.25s;
 }
 button[type = "submit"]:hover{
-    background: #fbc531;
+    background: #feca57;
     color: #2d3436;
-    border-color: #fbc531;
+    border-color: #feca57;
     transition: 0.25s;
 }
 
@@ -203,7 +203,7 @@ button[type = "button"]{
     padding: 10px 8px;
     width: 100px;
     outline: none;
-    color: #fbc531;
+    color: #feca57;
 
 }
 button[type = "button"]:hover{
@@ -249,7 +249,7 @@ table {
 }
 
 th {
-    color: #fbc531;
+    color: #feca57;
     font-weight: bold;
     padding-bottom: 5px;
 }
@@ -263,7 +263,7 @@ th, td {
     margin: 30px;
     padding: 30px;
 }
-#assetTable {
+#exchangePage #assetTable {
     margin: 30px;
     padding: 30px;
 }
@@ -283,7 +283,9 @@ th, td {
 
 #selectAsset {
     margin-bottom: 20px;
-    padding: 5px 60px 5px 45px;
+    /*padding: 5px 60px 5px 45px;*/
+    width: 220px;
+    height: 30px;
     border-radius: 7px;
     text-align: center;
 }
@@ -340,3 +342,28 @@ th, td {
 .select-items div:hover, .same-as-selected {
     background-color: gray;
 }*/
+
+#currentBalanceBox{
+    margin: 30px;
+    padding: 30px;
+}
+
+#portfolioPage{
+    margin: 30px;
+    padding: 30px;
+}
+#portfolioPage #portfolioTable{
+    margin: 30px;
+    padding: 30px;
+}
+
+#portfolioPage #buyMore{
+    color: #feca57;
+    border-color: #feca57;
+    background: #feca57;
+    color: #2d3436;
+}
+
+#portfolioPage #buyMore:hover{
+    opacity: 0.8;
+}
