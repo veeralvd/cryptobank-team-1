@@ -33,8 +33,8 @@ class JdbcAssetDaoTest {
 
     @Test
     void saveAssetTest() {
-        CryptoCurrencyRate rateSaarCoin = new CryptoCurrencyRate("SAAR", 13585, LocalDateTime.now());
-        Asset saarCoin = new Asset("SAAR","saarCoin", "Keiharde Cryptonite", rateSaarCoin);
+        CryptoCurrencyRate rateSoarCoin = new CryptoCurrencyRate("SOAR", 13585, LocalDateTime.now());
+        Asset saarCoin = new Asset("SOAR","soarCoin", "Ook al keiharde Cryptonite", rateSoarCoin);
         Asset actual = assetDaoUnderTest.save(saarCoin);
         assertThat(actual).isEqualTo(saarCoin);
     }
