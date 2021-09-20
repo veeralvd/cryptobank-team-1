@@ -1,3 +1,6 @@
+const BASE_URL_DEV = 'http://localhost:8080/';
+
+
 
 document.querySelector('#sendLink').addEventListener('click', (e) => {
     e.preventDefault();
@@ -16,8 +19,9 @@ document.querySelector('#sendLink').addEventListener('click', (e) => {
                 document.querySelector('#recoveryform').style.visibility="hidden";
                 document.querySelector('#emailsuccesful').style.visibility="visible";
                 document.querySelector('#emailholder').innerHTML = `${email}`;
+                setTimeout(function () {window.location.replace(BASE_URL_DEV + 'index.html')}, 3000);
         })
-        .catch((error) => {
+        .catch((error) => {''
             console.log(error);
         })
 

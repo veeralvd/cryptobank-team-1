@@ -44,8 +44,6 @@ public class ResetPasswordController {
     ResponseEntity<?> sendResetPasswordMail(@RequestParam String email) {
         logger.info("reset password mail aangeroepen");
         CustomerDto customer = customerService.findCustomerByEmail(email);
-        System.out.println(customer.getRefreshToken());
-        System.out.println("dit is klant : " + customer);
        if (customer != null) {
            String urlToken = URL + customer.getAccessToken();
            String message = MAIL_MESSAGE + urlToken;
