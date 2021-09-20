@@ -22,6 +22,7 @@ public class OrderController {
     private OrderService orderService;
     private CustomerService customerService;
     private TransactionService transactionService;
+    private final double TRANSACTION_RATE = 0.03;
     private final int BUY_NOW_ORDER = 1;
     private final int SELL_NOW_ORDER = 2;
     private final int BUY_LATER_ORDER = 3;
@@ -84,6 +85,11 @@ public class OrderController {
     @GetMapping("/orders/iban")
     public List<OrderDto> getAllOrdersByIban(@RequestParam String iban) {
         return orderService.getAllOrdersByIban(iban);
+    }
+
+    @GetMapping("/orders/transactionrate")
+    public double getTransactionRate() {
+        return TRANSACTION_RATE;
     }
 
 } // end of class OrderController

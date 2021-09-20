@@ -21,7 +21,6 @@ public class ExchangeService {
 
     public double getCurrentRateByAbbreviation(String abbreviation) {
         currentRates = rootRepository.getAllCurrentRates();
-        currentRates.forEach((key, value) ->     System.out.println(key + value));
         return currentRates.get(abbreviation);
     }
 
