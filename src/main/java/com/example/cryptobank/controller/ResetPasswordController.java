@@ -49,10 +49,8 @@ public class ResetPasswordController {
            String message = MAIL_MESSAGE + urlToken;
            Mail mail = new Mail(customer.getEmail(), MAIL_SUBJECT, message);
            sendMailService.sendMail(mail);
-            return new ResponseEntity<String>(mail.toString(), HttpStatus.OK);
-        } else {
-            return new ResponseEntity<String>("mail not known", HttpStatus.I_AM_A_TEAPOT);
-        }
+       }
+        return new ResponseEntity<String>("mail send", HttpStatus.OK);
     }
 
     @GetMapping("/reset")
