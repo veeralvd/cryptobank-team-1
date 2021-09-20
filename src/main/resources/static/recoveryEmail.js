@@ -1,3 +1,6 @@
+const BASE_URL_DEV = 'http://localhost:8080/';
+
+
 
 document.querySelector('#sendLink').addEventListener('click', (e) => {
     e.preventDefault();
@@ -12,15 +15,11 @@ document.querySelector('#sendLink').addEventListener('click', (e) => {
 
     fetch(url, options)
         .then(response => {
-            if (response.ok) {
                 console.log(`Recovery email sent to ${email}`);
                 document.querySelector('#recoveryform').style.visibility="hidden";
                 document.querySelector('#emailsuccesful').style.visibility="visible";
                 document.querySelector('#emailholder').innerHTML = `${email}`;
-            }
-            if(!response.ok) {
-                alert('Email not known')
-            }
+                setTimeout(function () {window.location.replace(BASE_URL_DEV + 'index.html')}, 3000);
         })
         .catch((error) => {
             console.log(error);

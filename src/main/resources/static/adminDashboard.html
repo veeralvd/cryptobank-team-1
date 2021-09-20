@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+  <link href="crypto.css" rel="stylesheet">
+    <title>Admin Dashboard</title>
+</head>
+
+<body>
+
+  <header>
+    <div class="flex-box">
+      <div class="site-logo" href= "/index.html">
+        <a id="cryptologo" href= "/index.html"><img src="logo.jpg"> </a>
+      </div>
+      <button id="aboutNav" type="button">About</button>
+      <button id="dashboardNav" type="button">My CryptoKnights</button>
+      <button id="exchangeNav" type="button">Exchange</button>
+      <button id="signupNav" type="button">Signup</button>
+      <button id="loginNav" type="submit" >Login</button>
+      <span id="pagetitle">Exchange</span>
+    </div>
+  </header>
+
+  //change visibility? Onder header extra rij knoppen voor de verschillende admin functionaliteiten die steeds een van
+  onderstaande divs zichtbaar maken?
+
+//TODO mogelijkheid tot blokkeren: rekeninghouder opzoeken en inlogmogelijkheid blokkeren/intrekken, toon alle geblokkeerde
+  accounts plus tijdelijk of permanent geblokkeerd.
+  <div id="blockUsers" class="flex-box">
+
+  </div>
+
+//TODO beheerder kan bankkosten percentage wijzigen
+  <div id="transactionCosts" class="flex-box">
+
+  </div>
+
+//TODO beheerder kan bedrag op bankrekeningen (alle!) wijzigen/instellen. Bank begint met 5 miljoen euro.
+  <div id="bankAccounts" class="flex-box">
+
+  </div>
+
+//TODO beheerder kan aantallen assets in portfolio's wijzigen/instellen. Portfolio bank bevat top-20 crypto's van
+  coinmarketcap, hoeveelheid per asset gerandomiseerd tussen 1000 en 5000 (maar: we zijn vrij om te varieren in de beginwaardes)
+  <div id="portfolios" class="flex-box">
+
+  </div>
+
+//TODO beheerder kan beginkapitaal nieuwe klanten instellen
+  <div id="startCapital" class="flex-box">
+
+  </div>
+
+//TODO inzicht in aantal queries per endpoint: aantal queries afgelopen interval (default sinds middernacht),
+  overzichtslijst aantal queries per endpoint, totaal interval selecteerbaar, interval per endpoints in totaal selecteerbaar
+  <div id="nrOfQueries" class="flex-box">
+
+  </div>
+
+  <script src="adminDashboard.js"></script>
+  <script src="crypto.js"></script>
+
+</body>
+</html>

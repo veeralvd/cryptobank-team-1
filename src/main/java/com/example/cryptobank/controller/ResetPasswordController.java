@@ -45,24 +45,21 @@ public class ResetPasswordController {
         logger.info("reset password mail aangeroepen");
         CustomerDto customer = customerService.findCustomerByEmail(email);
        if (customer != null) {
-           String urlToken = URL + customer.getRefreshToken();
+           String urlToken = URL + customer.getAccessToken();
            String message = MAIL_MESSAGE + urlToken;
            Mail mail = new Mail(customer.getEmail(), MAIL_SUBJECT, message);
            sendMailService.sendMail(mail);
-            return new ResponseEntity<String>(mail.toString(), HttpStatus.OK);
-        } else {
-            return new ResponseEntity<String>("mail not known", HttpStatus.I_AM_A_TEAPOT);
-        }
+       }
+        return new ResponseEntity<String>("mail send", HttpStatus.OK);
     }
 
     @GetMapping("/reset")
     public ModelAndView loadResetPasswordPage(final ModelMap model, @RequestParam String token) {
         logger.info("reset link aangeroepen endpoint aangeroepen");
 
-        CustomerDto customer = customerService.authenticate(token);
+        CustomerDto customer = customerService.authenticateReset(token);
         if (customer != null) {
             String accessToken = customer.getAccessToken();
-            String refreshToken = customer.getRefreshToken();
             model.addAttribute("token", accessToken);
             return new ModelAndView("redirect:/reset-password.html", model);
         } else {

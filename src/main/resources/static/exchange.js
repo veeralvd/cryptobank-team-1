@@ -112,7 +112,7 @@ function populateDropdownWithAbbreviations() {
                         //let list = json;
                         assetList = json;
                         let dropdown = document.querySelector("#selectAsset");
-                        for (index in assetList) {
+                        for (let index in assetList) {
                             dropdown.options[dropdown.options.length] = new Option(assetList[index], index);
                         }
                     })
@@ -124,6 +124,8 @@ function populateDropdownWithAbbreviations() {
             }
         })
 }
+
+
 
 /*let abbreviation = "?abbreviation" + abbreviation
 let url = "http://localhost:8080/assets/doge"*/

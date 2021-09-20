@@ -10,7 +10,11 @@ import java.util.Date;
 @Service
 public class CreateTokenImplementation implements CreateToken{
     private final Logger logger = LoggerFactory.getLogger(CreateTokenImplementation.class);
-   // private final static String BEARER = "Bearer=";
+    private static final int TEN_MINUTES = 10;
+    private static final int THIRTY_MINUTES = 30;
+    private static final int SECONDS_IN_MINUTE = 60;
+    private static final int MILISECONDS_IN_SECOND = 1000;
+    // private final static String BEARER = "Bearer=";
 
 
     public CreateTokenImplementation() {
@@ -23,7 +27,8 @@ public class CreateTokenImplementation implements CreateToken{
         Algorithm algorithm = Algorithm.HMAC256(key.getBytes());
          String access_token = JWT.create()
                 .withSubject(username)
-                .withExpiresAt(new Date(System.currentTimeMillis() + 10 *  60 * 1000))
+                .withExpiresAt(new Date(System.currentTimeMillis() +
+                        TEN_MINUTES *  SECONDS_IN_MINUTE * MILISECONDS_IN_SECOND))
                 .sign(algorithm);
          return access_token;
     }
@@ -33,8 +38,20 @@ public class CreateTokenImplementation implements CreateToken{
         Algorithm algorithm = Algorithm.HMAC256(key.getBytes());
         String refresh_token = JWT.create()
                 .withSubject(username)
-                .withExpiresAt(new Date(System.currentTimeMillis() + 30 * 60 * 1000))
+                .withExpiresAt(new Date(System.currentTimeMillis() +
+                        THIRTY_MINUTES * SECONDS_IN_MINUTE * MILISECONDS_IN_SECOND))
                 .sign(algorithm);
         return refresh_token;
+    }
+
+    public String createResetToken(String username, String key, String salt) {
+        Algorithm algorithm = Algorithm.HMAC256(key.getBytes());
+        String reset_token = JWT.create()
+                .withSubject(username)
+                .withKeyId(salt)
+                .withExpiresAt(new Date(System.currentTimeMillis() +
+                        THIRTY_MINUTES * SECONDS_IN_MINUTE * MILISECONDS_IN_SECOND))
+                .sign(algorithm);
+        return reset_token;
     }
 }

@@ -92,10 +92,10 @@ UNLOCK TABLES;
 --
 
 LOCK TABLES `order` WRITE;
-INSERT INTO cryptobank.`order` (orderId, abbreviation, assetAmount, desiredPrice, iban, datetimecreated) VALUES (1, 'ADA', 1234, 2.65, 'NL69COKI5000000003', '2021-09-02 17:07:08');
-INSERT INTO cryptobank.`order` (orderId, abbreviation, assetAmount, desiredPrice, iban, datetimecreated) VALUES (2, 'CAKE', 10, 24.44, 'NL69COKI5000000003', '2021-09-02 17:05:16');
-INSERT INTO cryptobank.`order` (orderId, abbreviation, assetAmount, desiredPrice, iban, datetimecreated) VALUES (3, 'ETH', 1.6, 3130, 'NL69COKI5000000003', '2021-09-08 19:05:22');
-INSERT INTO cryptobank.`order` (orderId, abbreviation, assetAmount, desiredPrice, iban, datetimecreated) VALUES (4, 'ETH', 16, 3130, 'NL13COKI8974196092', '2021-09-09 21:11:12');
+INSERT INTO cryptobank.`order` (orderId, abbreviation, assetAmount, desiredPrice, iban, datetimecreated, orderType) VALUES (1, 'ADA', 1234, 2.65, 'NL69COKI5000000003', '2021-09-02 17:07:08', 1);
+INSERT INTO cryptobank.`order` (orderId, abbreviation, assetAmount, desiredPrice, iban, datetimecreated, orderType) VALUES (2, 'CAKE', 10, 24.44, 'NL69COKI5000000003', '2021-09-02 17:05:16', 1);
+INSERT INTO cryptobank.`order` (orderId, abbreviation, assetAmount, desiredPrice, iban, datetimecreated, orderType) VALUES (3, 'ETH', 1.6, 3130, 'NL69COKI5000000003', '2021-09-08 19:05:22', 1);
+INSERT INTO cryptobank.`order` (orderId, abbreviation, assetAmount, desiredPrice, iban, datetimecreated, orderType) VALUES (4, 'ETH', 16, 3130, 'NL13COKI8974196092', '2021-09-09 21:11:12', 1);
 UNLOCK TABLES;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;

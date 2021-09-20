@@ -102,7 +102,7 @@ function generateTable(table, data) {
     }
 }
 
-const urlPortfolioValue = "http://localhost:8080/getportfoliovalue";
+const urlPortfolioValue = "http://localhost:8080/portfolio/portfoliovalue";
 
 function getPortfolioValue() {
     fetchTotalValue(urlPortfolioValue, options, '#currentBalance');
@@ -127,5 +127,65 @@ function fetchTotalValue(url, options, id){
             }
         })
 }
+const urlAbbreviations = "http://localhost:8080/portfolio/abbreviations";
+let assetList = [];
+populateDropdownWithAbbreviations();
+
+function populateDropdownWithAbbreviations() {
+    fetch(urlAbbreviations, options)
+        .then(response => {
+            if (response.ok) {
+                response.json()
+                    .then(json => {
+                        console.log(json);
+                        //let list = json;
+                        assetList = json;
+                        let dropdown = document.querySelector("#selectAsset");
+                        for (let index in assetList) {
+                            dropdown.options[dropdown.options.length] = new Option(assetList[index], index);
+                        }
+                    })
+                    .catch((error) => {
+                        console.error('Error' + error);
+                    })
+            } else {
+                console.log('Failed to fetch AbbreviationsList')
+            }
+        })
+}
+//
+// document.getElementById("buy").addEventListener("click", function (event) {
+//     event.preventDefault()
+//
+//     let asset = String(document.querySelector("#selectAsset").value)
+//     let assetName = assetList[asset];
+//     let amount = Number(document.querySelector("#amount").value)
+//     let data = "?assetAbbr=" + assetName + "&assetAmount=" + amount
+//
+//     const urlBuy = "http://localhost:8080/buyassetnow" + data;
+//     const optionsPost = {
+//         method: 'POST',
+//         headers: {
+//             'Content-Type': 'application/json',
+//             'Authorization': localStorage.getItem('Authorization')
+//         }
+//     }
+//     fetch(urlBuy, optionsPost)
+//         .then(response => {
+//             if (response.ok) {
+//                 response.text(); //TODO uitlegd krijgen wat dit doet
+//                 alert("Assets gekocht")
+//                 //TODO blijven we op hetzelfde scherm? Gaan we elders heen? Wat ziet de gebruiker?
+//             } else if (!response.ok) {
+//                 alert("Failed to buy assets")
+//                 console.log("Failed to buy assets")
+//             }
+//         })
+//         .catch((error) => {
+//             console.log("Error " + error);
+//         })
+// })
+
+
 
 

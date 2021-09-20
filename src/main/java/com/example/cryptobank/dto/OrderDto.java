@@ -13,16 +13,18 @@ public class OrderDto {
     private double assetAmount;
     private double desiredPrice;
     private LocalDateTime dateTimeCreated;
+    private int orderType;
 
     private final Logger logger = LoggerFactory.getLogger(OrderDto.class);
 
-    public OrderDto(int orderId, String iban, String assetAbbr, double assetAmount, double desiredPrice, LocalDateTime dateTimeCreated) {
+    public OrderDto(int orderId, String iban, String assetAbbr, double assetAmount, double desiredPrice, LocalDateTime dateTimeCreated, int orderType) {
         this.orderId = orderId;
         this.iban = iban;
         this.assetAbbr = assetAbbr;
         this.assetAmount = assetAmount;
         this.desiredPrice = desiredPrice;
         this.dateTimeCreated = dateTimeCreated;
+        this.orderType = orderType;
         logger.info("New OrderDto");
     }
 
@@ -78,6 +80,14 @@ public class OrderDto {
         this.dateTimeCreated = dateTimeCreated;
     }
 
+    public int getOrderType() {
+        return orderType;
+    }
+
+    public void setOrderType(int orderType) {
+        this.orderType = orderType;
+    }
+
     @Override
     public String toString() {
         return "OrderDto{" +
@@ -87,6 +97,7 @@ public class OrderDto {
                 ", assetAmount=" + assetAmount +
                 ", desiredPrice=" + desiredPrice +
                 ", dateTimeCreated=" + dateTimeCreated +
+                ", orderType=" + orderType +
                 '}';
     }
 }

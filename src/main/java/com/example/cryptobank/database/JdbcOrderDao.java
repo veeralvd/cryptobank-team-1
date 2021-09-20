@@ -35,25 +35,26 @@ public class JdbcOrderDao implements OrderDao {
         logger.info("New JdbcOrderDao");
     }
 
-    private PreparedStatement insertOrderStatement(OrderDto order, Connection connection) throws SQLException {
+    private PreparedStatement insertOrderStatement(OrderDto orderDto, Connection connection) throws SQLException {
         PreparedStatement preparedStatement = connection.prepareStatement("insert into cryptobank.order (iban, " +
-                "dateTimeCreated, abbreviation, assetAmount, desiredPrice) values (?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
-        preparedStatement.setString(1, order.getIban());
-        preparedStatement.setString(2, String.valueOf(order.getDateTimeCreated()));
-        preparedStatement.setString(3, order.getAssetAbbr());
-        preparedStatement.setDouble(4, order.getAssetAmount());
-        preparedStatement.setDouble(5, order.getDesiredPrice());
+                "dateTimeCreated, abbreviation, assetAmount, desiredPrice, orderType) values (?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+        preparedStatement.setString(1, orderDto.getIban());
+        preparedStatement.setString(2, String.valueOf(orderDto.getDateTimeCreated()));
+        preparedStatement.setString(3, orderDto.getAssetAbbr());
+        preparedStatement.setDouble(4, orderDto.getAssetAmount());
+        preparedStatement.setDouble(5, orderDto.getDesiredPrice());
+        preparedStatement.setInt(6, orderDto.getOrderType());
         return preparedStatement;
     }
 
     @Override
-    public OrderDto save(OrderDto order) {
+    public OrderDto save(OrderDto orderDto) {
         logger.info("orderDao.save aangeroepen");
         KeyHolder keyHolder = new GeneratedKeyHolder();
-        jdbcTemplate.update(connection -> insertOrderStatement(order, connection), keyHolder);
+        jdbcTemplate.update(connection -> insertOrderStatement(orderDto, connection), keyHolder);
         int newKey = keyHolder.getKey().intValue();
-        order.setOrderId(newKey);
-        return order;
+        orderDto.setOrderId(newKey);
+        return orderDto;
     }
 
 
@@ -67,7 +68,8 @@ public class JdbcOrderDao implements OrderDao {
             Asset asset = null;
             double assetAmount = resultSet.getDouble("assetAmount");
             double desiredPrice = resultSet.getDouble("desiredPrice");
-            Order order = new Order(orderId, bankAccount, dateTimeCreated, asset, assetAmount, desiredPrice);
+            int orderType = resultSet.getInt("orderType");
+            Order order = new Order(orderId, bankAccount, dateTimeCreated, asset, assetAmount, desiredPrice, orderType);
             return order;
         }
 

@@ -124,6 +124,7 @@ CREATE TABLE IF NOT EXISTS `cryptobank`.`order` (
     `desiredPrice` DOUBLE NOT NULL,
     `iban` VARCHAR(45) NOT NULL,
     `datetimecreated` DATETIME NOT NULL,
+    `orderType` INT NOT NULL,
     PRIMARY KEY (`orderId`),
     CONSTRAINT `fk_order_asset`
         FOREIGN KEY (`abbreviation`)
