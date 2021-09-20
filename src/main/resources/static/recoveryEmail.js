@@ -21,7 +21,7 @@ document.querySelector('#sendLink').addEventListener('click', (e) => {
                 document.querySelector('#emailholder').innerHTML = `${email}`;
                 setTimeout(function () {window.location.replace(BASE_URL_DEV + 'index.html')}, 3000);
         })
-        .catch((error) => {''
+        .catch((error) => {
             console.log(error);
         })
 
