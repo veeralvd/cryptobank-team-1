@@ -132,15 +132,13 @@ public class JdbcCustomerDAO implements CustomerDAO{
 
 
     @Override
-    public CustomerDto findCustomerByEmail(String email) {
+    public Customer findCustomerByEmail(String email) {
         String sql = "SELECT * FROM customer WHERE email = ?";
 
         logger.info(email);
         List<Customer> customerList = jdbcTemplate.query(sql, new CustomerRowMapper(), email);
         if (customerList.size() > 0) {
-            Customer customer = customerList.get(0);
-            return new CustomerDto(customer.getUsername(), null,
-                    customer.getFirstName(), customer.getBankAccount().getIban(), customer.getEmail());
+          return  customerList.get(0);
         }
         return null;
     }

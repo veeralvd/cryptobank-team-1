@@ -35,9 +35,8 @@ public class AuthenticationService {
 
 
     public Admin authenticateAdminToken(String accessToken) {
-//        if (accessToken.startsWith(BEARER)) {
             try {
-               //String token = accessToken.substring(BEARER.length());
+
                 Algorithm algorithm = Algorithm.HMAC256(TokenKeyService.getAdminKey().getBytes());
                 JWTVerifier verifier = JWT.require(algorithm).build();
                 DecodedJWT decodedJWT = verifier.verify(accessToken);
@@ -47,16 +46,11 @@ public class AuthenticationService {
                 logger.info(exception.getMessage());
                 return null;
             }
-//        } else
-//            return null;
     }
 
     // TODO: 08/09/2021 Afmaken die hap
     public CustomerDto authenticateCustomerToken(String accessToken) {
-//        if (accessToken.startsWith(BEARER)) {
-        logger.info(accessToken);
             try {
-               // String token = accessToken.substring(BEARER.length());
                 Algorithm algorithm = Algorithm.HMAC256(TokenKeyService.getCustomerKey().getBytes());
                 JWTVerifier verifier = JWT.require(algorithm).build();
                 DecodedJWT decodedJWT = verifier.verify(accessToken);
@@ -69,8 +63,33 @@ public class AuthenticationService {
                 logger.info(exception.getMessage());
                 return null;
             }
-//        } else
-//            return null;
+    }
+
+    public CustomerDto authenticateResetCustomerToken(String accessToken) {
+        try {
+            Algorithm algorithm = Algorithm.HMAC256(TokenKeyService.getCustomerKey().getBytes());
+            JWTVerifier verifier = JWT.require(algorithm).build();
+            DecodedJWT decodedJWT = verifier.verify(accessToken);
+            Customer customer = rootRepository.findCustomerByUsername(decodedJWT.getSubject());
+            if (!customer.getSalt().equals(decodedJWT.getKeyId())) {
+                System.out.println("teringaap");
+                 return null;
+            }
+            CustomerDto customerDto = new CustomerDto(customer.getUsername(), null,
+                    customer.getFirstName(), customer.getBankAccount().getIban(), customer.getEmail());
+            refreshCustomerToken(customerDto);
+            return customerDto;
+        } catch (Exception exception) {
+            logger.info(exception.getMessage());
+            return null;
+        }
+    }
+
+    public void createCustomerPasswordResetToken(Customer customerToRefreshToken) {
+        customerToRefreshToken.setAccessToken(createToken.createResetToken(
+                customerToRefreshToken.getUsername(),
+                TokenKeyService.getCustomerKey(),
+                customerToRefreshToken.getSalt()));
     }
 
 
