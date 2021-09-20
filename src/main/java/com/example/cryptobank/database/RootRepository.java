@@ -171,12 +171,12 @@ public class RootRepository {
        return cryptoCurrencyRateDAO.getAllCurrentRates();
     }
 
-    public double updateAssetAmountPositive(Transaction transaction){
-        return portfolioDao.updateAssetAmountPositive(transaction);
+    public double updateAssetAmountPositive(TransactionDto transactionDto){
+        return portfolioDao.updateAssetAmountPositive(transactionDto);
     }
 
-    public double updateAssetAmountNegative(Transaction transaction){
-        return portfolioDao.updateAssetAmountNegative(transaction);
+    public double updateAssetAmountNegative(TransactionDto transactionDto){
+        return portfolioDao.updateAssetAmountNegative(transactionDto);
     }
 
     public List<String> getAbbreviationsByIban(String iban){
@@ -201,7 +201,7 @@ public class RootRepository {
     }
 
 
-    public void insertAssetIntoPortfolio(Transaction transactionToComplete) {
+    public void insertAssetIntoPortfolio(TransactionDto transactionToComplete) {
         portfolioDao.insertAssetIntoPortfolio(transactionToComplete);
     }
 

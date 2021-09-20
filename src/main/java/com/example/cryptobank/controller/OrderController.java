@@ -55,7 +55,6 @@ public class OrderController {
         }
     }
 
-    // Tijdelijk endpoint om buy now te testen
     @PostMapping(value = "/buyassetnow", produces = "application/json")
     public ResponseEntity<?> buyAssetnow(@RequestParam String assetAbbr, double assetAmount, @RequestHeader("Authorization") String accessToken) {
         logger.info("/buyassetnow aangeroepen");
@@ -66,6 +65,7 @@ public class OrderController {
         String iban = customer.getIban();
         int orderType = BUY_NOW_ORDER;
         OrderDto orderSaved = orderService.saveOrder(iban, assetAbbr, assetAmount, orderType);
+        // TODO /completetransaction in TransactionController apart aanroepen
         TransactionDto transactionCompleted = transactionService.completeTransaction(orderSaved);
         if (orderSaved == null) {
             return new ResponseEntity<String>("Failed to save order", HttpStatus.OK);

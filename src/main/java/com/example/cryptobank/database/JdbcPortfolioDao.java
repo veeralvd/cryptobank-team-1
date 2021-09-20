@@ -2,6 +2,7 @@ package com.example.cryptobank.database;
 
 import com.example.cryptobank.domain.*;
 import com.example.cryptobank.domain.Order;
+import com.example.cryptobank.dto.TransactionDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,38 +31,38 @@ public class JdbcPortfolioDao implements PortfolioDao {
     }
 
     // gebruik indien asset in kwestie nog niet eerder in de portfolio
-    private PreparedStatement insertAssetInPortfolioStatement (Transaction transaction, Connection connection) throws SQLException {
+    private PreparedStatement insertAssetInPortfolioStatement (TransactionDto transactionDto, Connection connection) throws SQLException {
         PreparedStatement ps = connection.prepareStatement(
                 "INSERT INTO ownedasset (IBAN, abbreviation, aantalEenheden) values (?, ?, ?)"
         );
-        ps.setString(1, transaction.getBuyerAccount().getIban());
-        ps.setString(2, transaction.getAsset().getAbbreviation());
-        ps.setDouble(3, transaction.getAssetAmount());
+        ps.setString(1, transactionDto.getIbanBuyer());
+        ps.setString(2, transactionDto.getAssetAbbr());
+        ps.setDouble(3, transactionDto.getAssetAmount());
         return ps;
     }
 
     @Override
-    public void insertAssetIntoPortfolio(Transaction transaction){
-        jdbcTemplate.update(connection -> insertAssetInPortfolioStatement(transaction, connection));
+    public void insertAssetIntoPortfolio(TransactionDto transactionDto){
+        jdbcTemplate.update(connection -> insertAssetInPortfolioStatement(transactionDto, connection));
     }
 
-    private PreparedStatement updatePortfolioStatementPositive (double updatedAmount, Transaction transaction,
+    private PreparedStatement updatePortfolioStatementPositive (double updatedAmount, TransactionDto transactionDto,
                                                                 Connection connection) throws SQLException {
         PreparedStatement ps = connection.prepareStatement(UPDATE_QUERY);
         ps.setDouble(1, updatedAmount);
-        ps.setString(2, transaction.getBuyerAccount().getIban());
-        ps.setString(3, transaction.getAsset().getAbbreviation());
+        ps.setString(2, transactionDto.getIbanBuyer());
+        ps.setString(3, transactionDto.getAssetAbbr());
         return ps;
     }
 
     @Override
-    public double updateAssetAmountPositive(Transaction transaction) {
-        String iban = transaction.getBuyerAccount().getIban();
-        String abbr = transaction.getAsset().getAbbreviation();
-        double transactionAssetAmount = transaction.getAssetAmount();
+    public double updateAssetAmountPositive(TransactionDto transactionDto) {
+        String iban = transactionDto.getIbanBuyer();
+        String abbr = transactionDto.getAssetAbbr();
+        double transactionAssetAmount = transactionDto.getAssetAmount();
         double currentAmount = getAssetAmountByIbanAndAbbr(iban, abbr);
         double updatedAmount = currentAmount + transactionAssetAmount;
-        int status = jdbcTemplate.update(connection -> updatePortfolioStatementPositive(updatedAmount, transaction, connection));
+        int status = jdbcTemplate.update(connection -> updatePortfolioStatementPositive(updatedAmount, transactionDto, connection));
         if (status == 1) {
             return updatedAmount;
         } else {
@@ -70,24 +71,23 @@ public class JdbcPortfolioDao implements PortfolioDao {
     }
 
     // Bij verkoop van een deel van opgeslagen asset wordt de hoeveelheid verminderd
-    private PreparedStatement updatePortfolioStatementNegative (double updatedAmount, Transaction transaction,
+    private PreparedStatement updatePortfolioStatementNegative (double updatedAmount, TransactionDto transactionDto,
                                                                 Connection connection) throws SQLException {
         PreparedStatement ps = connection.prepareStatement(UPDATE_QUERY);
         ps.setDouble(1, updatedAmount);
-        ps.setString(2, transaction.getSellerAccount().getIban());
-        ps.setString(3, transaction.getAsset().getAbbreviation());
+        ps.setString(2, transactionDto.getIbanSeller());
+        ps.setString(3, transactionDto.getAssetAbbr());
         return ps;
     }
 
     @Override
-    public double updateAssetAmountNegative(Transaction transaction) {
-        String iban = transaction.getSellerAccount().getIban();
-        String abbr = transaction.getAsset().getAbbreviation();
-        double transactionAssetAmount = transaction.getAssetAmount();
+    public double updateAssetAmountNegative(TransactionDto transactionDto) {
+        String iban = transactionDto.getIbanSeller();
+        String abbr = transactionDto.getAssetAbbr();
+        double transactionAssetAmount = transactionDto.getAssetAmount();
         double currentAmount = getAssetAmountByIbanAndAbbr(iban, abbr);
-//        double currentAmount = customer.getPortfolio().getAssetMap().get(transaction.getAsset());
         double updatedAmount = currentAmount - transactionAssetAmount;
-        int status = jdbcTemplate.update(connection -> updatePortfolioStatementNegative(updatedAmount, transaction, connection));
+        int status = jdbcTemplate.update(connection -> updatePortfolioStatementNegative(updatedAmount, transactionDto, connection));
         if (status == 1) {
             return updatedAmount;
         } else {
@@ -95,18 +95,18 @@ public class JdbcPortfolioDao implements PortfolioDao {
         }
     }
 
-    private PreparedStatement deletePortfolioStatement (Transaction transaction, Connection connection)
+    private PreparedStatement deletePortfolioStatement (TransactionDto transactionDto, Connection connection)
             throws SQLException {
         PreparedStatement ps = connection.prepareStatement(
                 "DELETE FROM ownedasset_table WHERE iban = ?"
         );
-        ps.setString(1, transaction.getSellerAccount().getIban());
+        ps.setString(1, transactionDto.getIbanSeller());
         return ps;
     }
 
     @Override
-    public void deleteAssetFromPortfolio(Transaction transaction){
-        jdbcTemplate.update(connection -> deletePortfolioStatement(transaction, connection));
+    public void deleteAssetFromPortfolio(TransactionDto transactionDto){
+        jdbcTemplate.update(connection -> deletePortfolioStatement(transactionDto, connection));
     }
 
     @Override
