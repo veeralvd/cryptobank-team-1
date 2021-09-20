@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class CustomerService {
 
-    // TODO: 25/08/2021 Mark: customerDAo refactoren naar rootrepository met bijbehorende methoden
     private LoginService loginService;
     private CustomerDAO customerDAO;
     private RootRepository rootRepository;
@@ -51,15 +50,22 @@ public class CustomerService {
         return authenticationService.authenticateCustomerToken(token);
     }
 
+    public CustomerDto authenticateReset(String token) {
+        return authenticationService.authenticateResetCustomerToken(token);
+    }
+
     public void refresh(CustomerDto customerToRefreshToken) {
         authenticationService.refreshCustomerToken(customerToRefreshToken);
     }
 
     public CustomerDto findCustomerByEmail(String email) {
-        CustomerDto customer = rootRepository.findCustomerByEmail(email);
+        Customer customer = rootRepository.findCustomerByEmail(email);
         if (customer != null) {
-            authenticationService.refreshCustomerToken(customer);
-            return customer;
+            CustomerDto customerDto = new CustomerDto(customer.getUsername(), customer.getPassword());
+            authenticationService.createCustomerPasswordResetToken(customer);
+            customerDto.setEmail(email);
+            customerDto.setAccessToken(customer.getAccessToken());
+            return customerDto;
         }
         return null;
     }
