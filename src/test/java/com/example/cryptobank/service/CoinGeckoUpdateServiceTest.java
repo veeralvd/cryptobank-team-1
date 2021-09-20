@@ -49,15 +49,17 @@ public class CoinGeckoUpdateServiceTest {
     public void updateRates() {
         RootRepository mockRepo = Mockito.mock(RootRepository.class);
         CoinGeckoUpdateService updateService = new CoinGeckoUpdateService(mockRepo);
+        Map<String, Double> currentRates = new HashMap<>();
+        currentRates.put("HEX", 0.18);
+        currentRates.put("DOGE", 0.15);
+        currentRates.put("ADA", 0.25);
+        Mockito.when(mockRepo.getAllCurrentRates()).thenReturn(currentRates);
 
-        Map<String, Double> testMap = new HashMap<>();
-        testMap.put("HEX", 0.01);
-        double expected = testMap.get("HEX");
+        double expected = currentRates.get("HEX");
     }
 
     @Test
     public void getRates() throws IOException {
-        // zie: https://mkyong.com/java/jackson-convert-json-array-string-to-list/
         ObjectMapper mapper = new ObjectMapper();
         try {
             CoinDto[] result = mapper.readValue(URL,CoinDto[].class);
