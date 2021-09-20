@@ -25,6 +25,7 @@ import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.function.ToDoubleBiFunction;
 
 @Configuration
 @EnableScheduling
@@ -95,6 +96,7 @@ public class CoinGeckoUpdateService implements CoinApiUpdate {
         return 0;
     }
 
+    // TODO: 19/09/2021 methode verwijderen en overige code + comments opschonen 
     public void startUpdate() {
         logger.info("startUpdate started");
         ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
