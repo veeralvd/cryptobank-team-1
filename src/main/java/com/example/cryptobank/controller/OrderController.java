@@ -22,6 +22,7 @@ public class OrderController {
     private OrderService orderService;
     private CustomerService customerService;
     private TransactionService transactionService;
+    private final double TRANSACTION_RATE = 0.03;
     private final int BUY_NOW_ORDER = 1;
     private final int SELL_NOW_ORDER = 2;
     private final int BUY_LATER_ORDER = 3;
@@ -54,7 +55,6 @@ public class OrderController {
         }
     }
 
-    // Tijdelijk endpoint om buy now te testen
     @PostMapping(value = "/buyassetnow", produces = "application/json")
     public ResponseEntity<?> buyAssetnow(@RequestParam String assetAbbr, double assetAmount, @RequestHeader("Authorization") String accessToken) {
         logger.info("/buyassetnow aangeroepen");
@@ -65,6 +65,7 @@ public class OrderController {
         String iban = customer.getIban();
         int orderType = BUY_NOW_ORDER;
         OrderDto orderSaved = orderService.saveOrder(iban, assetAbbr, assetAmount, orderType);
+        // TODO /completetransaction in TransactionController apart aanroepen
         TransactionDto transactionCompleted = transactionService.completeTransaction(orderSaved);
         if (orderSaved == null) {
             return new ResponseEntity<String>("Failed to save order", HttpStatus.OK);
@@ -84,6 +85,11 @@ public class OrderController {
     @GetMapping("/orders/iban")
     public List<OrderDto> getAllOrdersByIban(@RequestParam String iban) {
         return orderService.getAllOrdersByIban(iban);
+    }
+
+    @GetMapping("/orders/transactionrate")
+    public double getTransactionRate() {
+        return TRANSACTION_RATE;
     }
 
 } // end of class OrderController

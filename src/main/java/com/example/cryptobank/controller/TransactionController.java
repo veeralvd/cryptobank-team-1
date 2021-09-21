@@ -55,12 +55,6 @@ public class TransactionController {
         return new ResponseEntity<>("Transaction saved and completed", HttpStatus.CREATED);
     }
 
-    public boolean authenticateCustomerByAccessToken(String accessToken) {
-        CustomerDto customer = customerService.authenticate(accessToken);
-        if (customer == null) {
-            return false;
-        }
-        return true;
-    }
+
 
 }

@@ -17,11 +17,10 @@ public class TransactionService {
     private RootRepository rootRepository;
     private SendMailService mailService;
     private Bank bank = Bank.getInstance();
-    private BankAccount buyerAccount;
-    private BankAccount sellerAccount;
-    private String assetAbbr;
-    private String ibanBuyer;
-    private String ibanSeller;
+    private final int BUY_NOW_ORDER = 1;    // TODO enum van maken
+    private final int SELL_NOW_ORDER = 2;
+    private final int BUY_LATER_ORDER = 3;
+    private final int SELL_LATER_ORDER = 4;
     private final double TRANSACTION_RATE = 0.03;   // TODO transaction rate instelbaar maken
 
     private final Logger logger = LoggerFactory.getLogger(TransactionService.class);
@@ -52,62 +51,108 @@ public class TransactionService {
     }
 
     public TransactionDto completeTransaction(OrderDto orderToProcess) {
-
-        int orderType = orderToProcess.getOrderType();
-        if (orderType == 1) {
-            // koop nu van bank:
-            ibanBuyer = orderToProcess.getIban();
-            buyerAccount = rootRepository.getBankAccountByIban(ibanBuyer);
-            sellerAccount = bank.getBankAccount();
-            logger.info("OrderType: 1 (buy now from bank)");
-        } else if (orderType == 2 ) {
-            // verkoop nu aan bank
-            ibanSeller = orderToProcess.getIban();
-            buyerAccount = bank.getBankAccount();
-            sellerAccount = rootRepository.getBankAccountByIban(ibanSeller);
-            logger.info("OrderType: 2 (Sell now to bank)");
-        }
+        TransactionDto transactionToComplete = assembleNewTransactionDto(orderToProcess);
 
         if (validateCreditLimitBuyer(orderToProcess)
                 && validatePortfolioSellerContainsAsset(orderToProcess)
-                && validateAssetAmountSeller(orderToProcess)) {
+                && validateAssetAmountSeller(transactionToComplete)) {
 
-            updateBankAccount(orderToProcess);
-            updatePortfolio(orderToProcess);
-            Transaction transactionToComplete = assembleNewTransaction(orderToProcess);
-            saveTransaction(getTransactionDto(transactionToComplete));
+            updateBankAccount(transactionToComplete, orderToProcess);
+            updatePortfolio(transactionToComplete);
+            saveTransaction(transactionToComplete);
             logger.info("Transactie opgeslagen");
-            sendConfirmationMailTransaction(getTransactionDto(transactionToComplete));
-            return getTransactionDto(transactionToComplete);
+            sendConfirmationMailTransaction(transactionToComplete);
+            return transactionToComplete;
         }
 
         logger.info("Transactie NIET opgeslagen");
         return null;
     }
 
+    private String getIbanBuyer(OrderDto orderToProcess) {
+        String ibanBuyer;
+        int orderType = orderToProcess.getOrderType();
+        switch (orderType) {
+            case BUY_NOW_ORDER:
+                // koop nu van bank:
+                ibanBuyer = orderToProcess.getIban();
+                logger.info("OrderType: 1 (buy now from bank)");
+                break;
+            case SELL_NOW_ORDER:
+                // verkoop nu aan bank
+                ibanBuyer = bank.getBankAccount().getIban();
+                logger.info("OrderType: 2 (Sell now to bank)");
+                break;
+            case BUY_LATER_ORDER:
+            case SELL_LATER_ORDER:
+            default:
+                logger.error("getIbanBuyer() wrong orderType");
+                return null;
+        }
+        return ibanBuyer;
+    }
+
+    private String getIbanSeller(OrderDto orderToProcess) {
+        String ibanSeller;
+        int orderType = orderToProcess.getOrderType();
+        switch (orderType) {
+            case BUY_NOW_ORDER:
+                // koop nu van bank:
+                ibanSeller = bank.getBankAccount().getIban();
+                logger.info("OrderType: 1 (buy now from bank)");
+                break;
+            case SELL_NOW_ORDER:
+                // verkoop nu aan bank
+                ibanSeller = orderToProcess.getIban();
+                logger.info("OrderType: 2 (Sell now to bank)");
+                break;
+            case BUY_LATER_ORDER:
+            case SELL_LATER_ORDER:
+            default:
+                logger.error("getIbanSeller() wrong orderType");
+                return null;
+        }
+        return ibanSeller;
+    }
+
     private double calculateAssetCost(OrderDto orderToProcess) {
-        Asset asset = rootRepository.getByAbbreviation(orderToProcess.getAssetAbbr());
-        double currentSingleAssetPrice = asset.getRate().getCryptoRate();
-        double assetCost = currentSingleAssetPrice * orderToProcess.getAssetAmount();
+        double assetCost = orderToProcess.getDesiredPrice() * orderToProcess.getAssetAmount();
         return assetCost;
     }
 
     private double calculateTransactionCost(OrderDto orderToProcess) {
         double transactionCost = calculateAssetCost(orderToProcess) * TRANSACTION_RATE;
+//        if (orderToProcess.getOrderType()==SELL_NOW_ORDER{
+//            transactionCost=transactionCost*-1;
+//        }
         return transactionCost;
     }
 
-    // hier nog voor alleen koop van bank: bedrag te betalen door klant = bedrag te ontvangen door bank
     private double calculateAmountToPayReceive(OrderDto orderToProcess) {
+        int orderType = orderToProcess.getOrderType();
         double assetCost = calculateAssetCost(orderToProcess);
         double transactionCost = calculateTransactionCost(orderToProcess);
-        return assetCost + transactionCost;
+        double amountToPayReveive = 0;
+        switch (orderType) {
+            case BUY_NOW_ORDER:
+                // Customer is buyer and pays asset cost as well as transaction cost
+                amountToPayReveive = assetCost + transactionCost;
+            case SELL_NOW_ORDER:
+                // Bank is buyer and pays asset cost minus transaction cost
+                amountToPayReveive = assetCost - transactionCost;
+            case BUY_LATER_ORDER:
+            case SELL_LATER_ORDER:
+            default:
+                logger.error("calculateAmountToPayReceive() wrong orderType");
+        }
+        return amountToPayReveive;
     }
 
     private boolean validateCreditLimitBuyer(OrderDto orderToProcess) {
         logger.info("Check if buyer has enough money");
+        double balanceBuyer = rootRepository.getBalanceByIban(getIbanBuyer(orderToProcess));
         double amountToPay = calculateAmountToPayReceive(orderToProcess);
-        if (amountToPay >= buyerAccount.getBalance()) {
+        if (amountToPay >= balanceBuyer) {
             logger.info("Insufficient funds !!!");
             return false;
         }
@@ -115,8 +160,8 @@ public class TransactionService {
     }
 
     private boolean validatePortfolioSellerContainsAsset(OrderDto orderToProcess) {
-        assetAbbr = orderToProcess.getAssetAbbr();
-        ibanSeller = sellerAccount.getIban();
+        String assetAbbr = orderToProcess.getAssetAbbr();
+        String ibanSeller = getIbanSeller(orderToProcess);
         List<String> assetAbbrList = rootRepository.getAbbreviationsByIban(ibanSeller);
         for (String abbreviation: assetAbbrList) {
             if (abbreviation.equals(assetAbbr)) {
@@ -128,9 +173,9 @@ public class TransactionService {
     }
 
     // nog dubbel
-    private boolean checkIfPortfolioBuyerContainsAsset(OrderDto orderToProcess) {
-        assetAbbr = orderToProcess.getAssetAbbr();
-        ibanBuyer = buyerAccount.getIban();
+    private boolean checkIfPortfolioBuyerContainsAsset(TransactionDto transactionToComplete) {
+        String assetAbbr = transactionToComplete.getAssetAbbr();
+        String ibanBuyer = transactionToComplete.getIbanBuyer();
         List<String> assetAbbrList = rootRepository.getAbbreviationsByIban(ibanBuyer);
         for (String abbreviation: assetAbbrList) {
             if (abbreviation.equals(assetAbbr)) {
@@ -141,11 +186,11 @@ public class TransactionService {
         return false;
     }
 
-    private boolean validateAssetAmountSeller(OrderDto orderToProcess) {
+    private boolean validateAssetAmountSeller(TransactionDto transactionToComplete) {
         logger.info("Check if seller has sufficient assets");
-        double amountToRemove = orderToProcess.getAssetAmount();
-        assetAbbr = orderToProcess.getAssetAbbr(); // dubbele code
-        ibanSeller = sellerAccount.getIban(); // dubbele code
+        double amountToRemove = transactionToComplete.getAssetAmount();
+        String assetAbbr = transactionToComplete.getAssetAbbr();
+        String ibanSeller = transactionToComplete.getIbanSeller();
         double amountInPortfolio = rootRepository.getAssetAmountByIbanAndAbbr(ibanSeller, assetAbbr);
         if (amountInPortfolio >= amountToRemove) {
             return true;
@@ -154,20 +199,19 @@ public class TransactionService {
         return false;
     }
 
-    //Hier nog alleen voor aankoop van bank
-    private void updateBankAccount(OrderDto orderToProcess) {
+    //Hier nog transaction en order mee
+    private void updateBankAccount(TransactionDto transactionToComplete, OrderDto orderToProcess) {
         double amountToPayReceive = calculateAmountToPayReceive(orderToProcess);
-        double updatedBalanceBuyer = rootRepository.withdraw(buyerAccount.getIban(), amountToPayReceive);
-        double updatedBalanceSeller = rootRepository.deposit(sellerAccount.getIban(), amountToPayReceive);
+        double updatedBalanceBuyer = rootRepository.withdraw(transactionToComplete.getIbanBuyer(), amountToPayReceive);
+        double updatedBalanceSeller = rootRepository.deposit(transactionToComplete.getIbanSeller(), amountToPayReceive);
         logger.info("BalanceBuyer update: " + updatedBalanceBuyer + ", BalanceSeller updated: " + updatedBalanceSeller
                 + ", with: " + amountToPayReceive);
     }
 
-    private void updatePortfolio(OrderDto orderToProcess) {
-        Transaction transactionToComplete = assembleNewTransaction(orderToProcess);
-        String assetAbbr = transactionToComplete.getAsset().getAbbreviation();
+    private void updatePortfolio(TransactionDto transactionToComplete) {
+        String assetAbbr = transactionToComplete.getAssetAbbr();
         double assetAmount = transactionToComplete.getAssetAmount();
-        boolean portfolioBuyerContainsAsset = checkIfPortfolioBuyerContainsAsset(orderToProcess);
+        boolean portfolioBuyerContainsAsset = checkIfPortfolioBuyerContainsAsset(transactionToComplete);
         if (!portfolioBuyerContainsAsset) {
             rootRepository.insertAssetIntoPortfolio(transactionToComplete);
             logger.info("New asset inserted into ownedAsset table: " + assetAbbr);
@@ -177,16 +221,15 @@ public class TransactionService {
         logger.info("Asset removed from portfolio seller & added to portfolio buyer: " + assetAbbr + ", " + assetAmount);
     }
 
-    private Transaction assembleNewTransaction(OrderDto orderToProcess) {
-        Asset asset = rootRepository.getByAbbreviation(orderToProcess.getAssetAbbr());
-        Transaction transactionToComplete = new Transaction();
-        transactionToComplete.setAsset(asset);
+    private TransactionDto assembleNewTransactionDto(OrderDto orderToProcess) {
+        TransactionDto transactionToComplete = new TransactionDto();
+        transactionToComplete.setAssetAbbr(orderToProcess.getAssetAbbr());
         transactionToComplete.setAssetAmount(orderToProcess.getAssetAmount());
-        transactionToComplete.setAssetPrice(asset.getRate().getCryptoRate());
-        transactionToComplete.setBuyerAccount(buyerAccount);
-        transactionToComplete.setSellerAccount(sellerAccount);
+        transactionToComplete.setSingleAssetPrice(orderToProcess.getDesiredPrice());
+        transactionToComplete.setIbanBuyer(getIbanBuyer(orderToProcess));
+        transactionToComplete.setIbanSeller(getIbanSeller(orderToProcess));
         transactionToComplete.setTransactionCost(calculateTransactionCost(orderToProcess));
-        transactionToComplete.setDateTimeTransaction(LocalDateTime.now());
+        transactionToComplete.setDateTimeProcessed(LocalDateTime.now());
         return transactionToComplete;
     }
 
@@ -194,12 +237,12 @@ public class TransactionService {
         return rootRepository.saveTransaction(transaction);
     }
 
-    //TODO mailadres van koper/verkoper ophalen via customer
-    public void sendConfirmationMailTransaction(TransactionDto transaction) {
+    //TODO mailadres van koper/verkoper ophalen via customer (getCustomerByIban)
+    public void sendConfirmationMailTransaction(TransactionDto transactionDto) {
         Mail mail = new Mail();
         mail.setRecipient("anne.van.der.veer@hva.nl");
         mail.setSubject("Confirmation transaction Cryptoknights");
-        mail.setMessage(transaction.toString());
+        mail.setMessage(transactionDto.toString());
         mailService.sendMail(mail);
     }
 
