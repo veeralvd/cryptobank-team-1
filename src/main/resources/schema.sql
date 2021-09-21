@@ -1,7 +1,8 @@
-/*CREATE SCHEMA IF NOT EXISTS `cryptobank` DEFAULT CHARACTER SET utf8 ;
+CREATE SCHEMA IF NOT EXISTS `cryptobank`;
 USE `cryptobank` ;
-GRANT ALL PRIVILEGES ON cryptobank.* TO 'cryptoUser'@'localhost';
-*/
+
+GRANT ALL ON SCHEMA `cryptobank` TO cryptoUser;
+
 
 create table if not exists admin
 (
@@ -31,7 +32,7 @@ create table if not exists bankaccount
 (
     IBAN varchar(45) not null,
     balance double not null,
-    constraint IBAN_UNIQUE
+    constraint IBAN_UNIQUE2
         unique (IBAN)
 );
 
@@ -86,6 +87,7 @@ create table if not exists `order`
     desiredPrice double not null,
     iban varchar(45) not null,
     datetimecreated datetime not null,
+    orderType int not null,
     constraint fk_order_asset
         foreign key (abbreviation) references asset (abbreviation)
             on update cascade,

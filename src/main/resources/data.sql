@@ -1,7 +1,13 @@
 USE `cryptobank` ;
+
+
+-- LET OP !!! Voor de testdatabase (H2 ipv MySQL) is de syntax net anders, dus lees de run console goed om te zien wat de syntax error is.
+
+INSERT INTO asset VALUES ('ADA','Cardano','ADA'),('BCH','Bitcoin Cash','BCH'),('BNB','Binance Coin','BNB'),('BTC','Bitcoin','BTC'),('BUSD','Binance USD','BUSD'),('CAKE','PancakeSwap','pannekoek, goed idee voor lunch'),('DOGE','Dogecoin','DOGE'),('DOT','Polkadot','polka klinkt wel lekker pools en gezellig'),('ETH','Ethereum','ETH'),('HEX','HEX','HEX'),('LINK','Chainlink','LINK'),('LTC','Litecoin','LTC'),('LUNA','Terra','LUNA'),('MATIC','Polygon','MATIC'),('SOL','Solana','SOL is een prima zomerbiertje'),('UNI','Uniswap','UNI'),('USDC','USDC','USDC'),('USDT','Tether USD','USDT'),('WBTC','Wrapped BTC','een wrap is altijd lekker'),('XRP','XRP','XRP');
+
 -- inserts voor BankAccount tests
-INSERT INTO cryptobank.bankaccount ("IBAN", "balance") VALUES ('NL24COKI3309054260',5000000); -- LET OP: dit is het account van de bank
-INSERT INTO cryptobank.bankaccount ("IBAN", "balance") VALUES ('NL69COKI5000000003',1000000),('NL13COKI8974196092',1000),('NL87COKI9583557878',1000),('NL49COKI7517641892',0);
+INSERT INTO bankaccount ("IBAN", balance) VALUES ('NL24COKI3309054260',5000000); -- LET OP: dit is het account van de bank
+INSERT INTO bankaccount ("IBAN", balance) VALUES ('NL69COKI5000000003',1000000),('NL13COKI8974196092',1000),('NL87COKI9583557878',1000),('NL49COKI7517641892',0);
 
 -- inserts voor Order tests
 INSERT INTO cryptobank.`order` (orderId, abbreviation, assetAmount, desiredPrice, iban, datetimecreated, orderType) VALUES (1, 'DOGE', 10, 0.21, 'NL69COKI5000000003', '2021-09-02 17:07:08', 1);
