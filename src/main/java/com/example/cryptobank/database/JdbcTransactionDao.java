@@ -21,10 +21,10 @@ import java.util.List;
 public class JdbcTransactionDao implements TransactionDao {
 
     private JdbcTemplate jdbcTemplate;
-    private final String SQL_INSERT_QUERY = "INSERT INTO transaction " +
+    private final String SQL_INSERT_QUERY = "INSERT INTO cryptobank.transaction" +
             "(abbreviation, assetAmount, assetPrice, ibanBuyer, ibanSeller, transactioncost, datetimeprocessed)" +
             " VALUES (?,?,?,?,?,?,?)";
-    private final String SQL_SELECTBYID = "SELECT * FROM transaction WHERE transactionId = ?";
+    private final String SQL_SELECTBYID = "SELECT * FROM cryptobank.transaction WHERE transactionId = ?";
 
     private final Logger logger = LoggerFactory.getLogger(JdbcTransactionDao.class);
 
@@ -85,21 +85,21 @@ public class JdbcTransactionDao implements TransactionDao {
 
     @Override
     public String findAssetForTransaction(int transactionId) {
-        String sql = "SELECT abbreviation FROM transaction where transactionId = ?";
+        String sql = "SELECT abbreviation FROM cryptobank.transaction WHERE transactionId = ?";
         String assetAbbr = jdbcTemplate.queryForObject(sql, String.class, transactionId);
         return assetAbbr;
     }
 
     @Override
     public String findBuyerAccountForTransaction(int transactionId) {
-        String sql = "SELECT ibanBuyer FROM transaction where transactionId = ?";
+        String sql = "SELECT ibanBuyer FROM cryptobank.transaction WHERE transactionId = ?";
         String ibanBuyer = jdbcTemplate.queryForObject(sql, String.class, transactionId);
         return ibanBuyer;
     }
 
     @Override
     public String findSellerAccountForTransaction(int transactionId) {
-        String sql = "SELECT ibanSeller FROM transaction where transactionId = ?";
+        String sql = "SELECT ibanSeller FROM cryptobank.transaction WHERE transactionId = ?";
         String ibanSeller = jdbcTemplate.queryForObject(sql, String.class, transactionId);
         return ibanSeller;
     }
