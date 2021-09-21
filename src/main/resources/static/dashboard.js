@@ -105,7 +105,7 @@ function generateTable(table, data) {
 const urlPortfolioValue = "http://localhost:8080/portfolio/portfoliovalue";
 
 function getPortfolioValue() {
-    fetchTotalValue(urlPortfolioValue, options, '#currentBalance');
+    fetchTotalValue(urlPortfolioValue, options, '#totalPortfolioValue');
     document.title = "Total Portfolio Value";
 }
 document.addEventListener("DOMContentLoaded", function (){
@@ -119,7 +119,7 @@ function fetchTotalValue(url, options, id){
                 response.json()
                     .then(json => {
                         let value = json;
-                        document.querySelector('#currentBalance').insertAdjacentText('beforeend', value);
+                        document.querySelector('#totalPortfolioValue').insertAdjacentText('beforeend', value);
                     })
                     .catch((error) => {
                         console.error('Error' + error);

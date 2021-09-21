@@ -62,9 +62,27 @@ public class OrderController {
         if (customer == null) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
-        String iban = customer.getIban();
-        int orderType = BUY_NOW_ORDER;
-        OrderDto orderSaved = orderService.saveOrder(iban, assetAbbr, assetAmount, orderType);
+        OrderDto orderSaved = orderService.saveOrder(customer.getIban(), assetAbbr, assetAmount, BUY_NOW_ORDER);
+        // TODO /completetransaction in TransactionController apart aanroepen
+        TransactionDto transactionCompleted = transactionService.completeTransaction(orderSaved);
+        if (orderSaved == null) {
+            return new ResponseEntity<String>("Failed to save order", HttpStatus.OK);
+        } else if (transactionCompleted == null) {
+            // TODO frontend afvangen: te weinig geld om te kopen/assets om te verkopen. Nieuwe koop doen?
+            return new ResponseEntity<>("Failed to save transaction", HttpStatus.OK);
+        } else {
+            return new ResponseEntity<String>("Transaction saved and completed", HttpStatus.CREATED);
+        }
+    }
+
+    @PostMapping(value = "/sellassetnow", produces = "application/json")
+    public ResponseEntity<?> sellAssetnow(@RequestParam String assetAbbr, double assetAmount, @RequestHeader("Authorization") String accessToken) {
+        logger.info("/sellassetnow aangeroepen");
+        CustomerDto customer = customerService.authenticate(accessToken);
+        if (customer == null) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+        OrderDto orderSaved = orderService.saveOrder(customer.getIban(), assetAbbr, assetAmount, SELL_NOW_ORDER);
         // TODO /completetransaction in TransactionController apart aanroepen
         TransactionDto transactionCompleted = transactionService.completeTransaction(orderSaved);
         if (orderSaved == null) {
