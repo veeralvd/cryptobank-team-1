@@ -3,6 +3,8 @@ package com.example.cryptobank.domain;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Objects;
+
 public class BankAccount {
     private final Logger logger = LoggerFactory.getLogger(BankAccount.class);
 
@@ -39,6 +41,19 @@ public class BankAccount {
 
     public void setBalance(double balance) {
         this.balance = balance;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        BankAccount that = (BankAccount) o;
+        return Double.compare(that.balance, balance) == 0 && iban.equals(that.iban);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(iban, balance);
     }
 
     @Override

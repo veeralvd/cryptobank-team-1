@@ -18,10 +18,10 @@ import java.util.List;
 public class JdbcBankAccountDao implements BankAccountDao {
 
     private JdbcTemplate jdbcTemplate;
-    private final String SQL_SELECT_BALANCEBYIBAN = "SELECT balance FROM bankaccount WHERE IBAN = ?";
-    private final String SQL_SELECT_ACCOUNTBYIBAN = "SELECT * FROM bankaccount WHERE IBAN = ?";
-    private final String SQL_INSERT = "INSERT INTO bankaccount (iban, balance) VALUES (?,?)";
-    private final String SQL_UPDATE = "UPDATE bankaccount SET balance = ? WHERE iban = ?";
+    private final String SQL_SELECT_BALANCEBYIBAN = "SELECT balance FROM cryptobank.bankaccount WHERE IBAN = ?";
+    private final String SQL_SELECT_ACCOUNTBYIBAN = "SELECT * FROM cryptobank.bankaccount WHERE IBAN = ?";
+    private final String SQL_INSERT = "INSERT INTO cryptobank.bankaccount (iban, balance) VALUES (?,?)";
+    private final String SQL_UPDATE = "UPDATE cryptobank.bankaccount SET balance = ? WHERE iban = ?";
 
     private final Logger logger = LoggerFactory.getLogger(JdbcBankAccountDao.class);
 
@@ -117,8 +117,6 @@ public class JdbcBankAccountDao implements BankAccountDao {
         }
         return null;
     }
-
-
 
 
 }
