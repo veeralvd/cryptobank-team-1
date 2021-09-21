@@ -31,6 +31,7 @@ public class AssetService {
     public ArrayList<AssetDto> getAssets() {
         ArrayList<Asset> allAssets = rootRepository.getAll();
         Map<String, Double> currentRates = rootRepository.getAllCurrentRates();
+        System.out.println("**** currentRates is: " + currentRates);
         ArrayList<AssetDto> allAssetsWithRate = new ArrayList<>();
         for (Asset asset : allAssets) {
             allAssetsWithRate.add(new AssetDto(asset.getAbbreviation(), asset.getName(), asset.getDescription(),

@@ -50,11 +50,11 @@ document.getElementById("buy").addEventListener("click", function (event) {
 function showAllAssets() {
     document.getElementById("allAssets")
     {
-        fetchTable(urlAssets, options, "#assetTable");
+        fetchGenericTable(urlAssets, options, "#assetTable");
     }
 }
 
-function fetchTable(url, options, tableId) {
+function fetchGenericTable(url, options, tableId) {
     fetch(url, options)
         .then(response => {
             if (response.ok) {
