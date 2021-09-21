@@ -153,38 +153,74 @@ function populateDropdownWithAbbreviations() {
             }
         })
 }
-//
-// document.getElementById("buy").addEventListener("click", function (event) {
-//     event.preventDefault()
-//
-//     let asset = String(document.querySelector("#selectAsset").value)
-//     let assetName = assetList[asset];
-//     let amount = Number(document.querySelector("#amount").value)
-//     let data = "?assetAbbr=" + assetName + "&assetAmount=" + amount
-//
-//     const urlBuy = "http://localhost:8080/buyassetnow" + data;
-//     const optionsPost = {
-//         method: 'POST',
-//         headers: {
-//             'Content-Type': 'application/json',
-//             'Authorization': localStorage.getItem('Authorization')
-//         }
-//     }
-//     fetch(urlBuy, optionsPost)
-//         .then(response => {
-//             if (response.ok) {
-//                 response.text(); //TODO uitlegd krijgen wat dit doet
-//                 alert("Assets gekocht")
-//                 //TODO blijven we op hetzelfde scherm? Gaan we elders heen? Wat ziet de gebruiker?
-//             } else if (!response.ok) {
-//                 alert("Failed to buy assets")
-//                 console.log("Failed to buy assets")
-//             }
-//         })
-//         .catch((error) => {
-//             console.log("Error " + error);
-//         })
-// })
+
+document.getElementById("sell").addEventListener("click", function (event) {
+    event.preventDefault()
+
+    let asset = String(document.querySelector("#selectAsset").value)
+    let assetName = assetList[asset];
+    let amount = Number(document.querySelector("#amount").value)
+    let data = "?assetAbbr=" + assetName + "&assetAmount=" + amount
+
+    const urlSell = "/sellassetnow" + data;
+    const optionsPost = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': localStorage.getItem('Authorization')
+        }
+    }
+    fetch(urlSell, optionsPost)
+        .then(response => {
+            if (response.ok) {
+                response.text(); //TODO uitlegd krijgen wat dit doet
+                alert("Assets verkocht")
+                //TODO blijven we op hetzelfde scherm? Gaan we elders heen? Wat ziet de gebruiker?
+                // TODO Satish 21-09-2021: selectiescherm legen
+                location.reload();
+            } else if (!response.ok) {
+                alert("Failed to sell assets")
+                console.log("Failed to sell assets")
+            }
+        })
+        .catch((error) => {
+            console.log("Error " + error);
+        })
+})
+
+document.getElementById("buyMore").addEventListener("click", function (event) {
+    event.preventDefault()
+
+    let asset = String(document.querySelector("#selectAsset").value)
+    let assetName = assetList[asset];
+    let amount = Number(document.querySelector("#amount").value)
+    let data = "?assetAbbr=" + assetName + "&assetAmount=" + amount
+
+    const urlBuyMore = "/buyassetnow" + data;
+    const optionsPost = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': localStorage.getItem('Authorization')
+        }
+    }
+    fetch(urlBuyMore, optionsPost)
+        .then(response => {
+            if (response.ok) {
+                response.text(); //TODO uitlegd krijgen wat dit doet
+                alert("Assets gekocht")
+                //TODO blijven we op hetzelfde scherm? Gaan we elders heen? Wat ziet de gebruiker?
+                // TODO Satish 21-09-2021: selectiescherm legen
+                location.reload();
+            } else if (!response.ok) {
+                alert("Failed to buy assets")
+                console.log("Failed to buy assets")
+            }
+        })
+        .catch((error) => {
+            console.log("Error " + error);
+        })
+})
 
 
 

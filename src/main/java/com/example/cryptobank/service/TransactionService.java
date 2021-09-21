@@ -86,7 +86,7 @@ public class TransactionService {
             case BUY_LATER_ORDER:
             case SELL_LATER_ORDER:
             default:
-                logger.error("getIbanBuyer() wrong orderType");
+                logger.error("getIbanBuyer() orderType does not exist: " + orderType);
                 return null;
         }
         return ibanBuyer;
@@ -109,7 +109,7 @@ public class TransactionService {
             case BUY_LATER_ORDER:
             case SELL_LATER_ORDER:
             default:
-                logger.error("getIbanSeller() wrong orderType");
+                logger.error("getIbanSeller() orderType does not exist: " + orderType);
                 return null;
         }
         return ibanSeller;
@@ -132,20 +132,22 @@ public class TransactionService {
         int orderType = orderToProcess.getOrderType();
         double assetCost = calculateAssetCost(orderToProcess);
         double transactionCost = calculateTransactionCost(orderToProcess);
-        double amountToPayReveive = 0;
+        double amountToPayReceive = 0;
         switch (orderType) {
             case BUY_NOW_ORDER:
                 // Customer is buyer and pays asset cost as well as transaction cost
-                amountToPayReveive = assetCost + transactionCost;
+                amountToPayReceive = assetCost + transactionCost;
+                break;
             case SELL_NOW_ORDER:
                 // Bank is buyer and pays asset cost minus transaction cost
-                amountToPayReveive = assetCost - transactionCost;
+                amountToPayReceive = assetCost - transactionCost;
+                break;
             case BUY_LATER_ORDER:
             case SELL_LATER_ORDER:
             default:
-                logger.error("calculateAmountToPayReceive() wrong orderType");
+                logger.error("calculateAmountToPayReceive() orderType does not exist: " + orderType);
         }
-        return amountToPayReveive;
+        return amountToPayReceive;
     }
 
     private boolean validateCreditLimitBuyer(OrderDto orderToProcess) {
