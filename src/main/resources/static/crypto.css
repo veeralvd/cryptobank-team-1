@@ -288,8 +288,13 @@ th, td {
     border-radius: 7px;
     text-align: center;
 }
-#amount {
+#amount, #adminFindUser {
     width: 193px;
+}
+
+#blockedUsers {
+    margin: 30px;
+    padding: 30px;
 }
 
 

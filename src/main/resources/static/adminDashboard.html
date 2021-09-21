@@ -37,7 +37,19 @@
   -find by username: select user -> block(temporary/indefinitely)
   -all blocked accounts + temporary or indefinitely -->
   <div id="blockUsers" class="flex-box">
-    <button></button>
+    <div id="blockedUsers">
+      <table id="blockedUsersTable">
+        <td>Blocked users will show here</td>
+      </table>
+    </div>
+    <form id="orderForm">
+      <input type="text" id="adminFindUser" placeholder="Enter Username" name="adminFindUser" required>
+      <button id="adminFindUserSubmit" type="submit">Find User</button>
+      <div id="blockButtons" style="display: none">
+        <button id="blockUserTemporarily" type="submit">Block Temporarily</button>
+        <button id="blockUserPermanently" type="submit">Block Permanently</button>
+      </div>
+    </form>
   </div>
 
 <!--//TODO beheerder kan bankkosten percentage wijzigen-->
