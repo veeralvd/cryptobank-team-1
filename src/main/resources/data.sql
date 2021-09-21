@@ -1,4 +1,4 @@
-
+USE `cryptobank` ;
 -- inserts voor BankAccount tests
 INSERT INTO cryptobank.bankaccount ("IBAN", "balance") VALUES ('NL24COKI3309054260',5000000); -- LET OP: dit is het account van de bank
 INSERT INTO cryptobank.bankaccount ("IBAN", "balance") VALUES ('NL69COKI5000000003',1000000),('NL13COKI8974196092',1000),('NL87COKI9583557878',1000),('NL49COKI7517641892',0);

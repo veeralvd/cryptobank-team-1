@@ -1,3 +1,8 @@
+CREATE SCHEMA IF NOT EXISTS `cryptobank` DEFAULT CHARACTER SET utf8 ;
+USE `cryptobank` ;
+GRANT ALL PRIVILEGES ON cryptobank.* TO 'cryptoUser'@'localhost';
+
+
 /*create table if not exists admin
 (
     username varchar(45) not null

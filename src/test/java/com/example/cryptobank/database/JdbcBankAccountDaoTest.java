@@ -10,7 +10,7 @@ import static org.assertj.core.api.Assertions.*;
 
 
 @SpringBootTest
-@ActiveProfiles("test")
+@ActiveProfiles("Test")
 class JdbcBankAccountDaoTest {
 
     private BankAccountDao bankAccountDaoUnderTest;
@@ -29,12 +29,12 @@ class JdbcBankAccountDaoTest {
     void save() {
     }
 
-  /*  @Test
+    @Test
     void getBalanceByIban() {
         double balanceBank = bankAccountDaoUnderTest.getBalanceByIban("NL24COKI3309054260");
         double expected = 5000000;
         assertThat(balanceBank).isEqualTo(expected);
-    }*/
+    }
 
     @Test
     void deposit() {
