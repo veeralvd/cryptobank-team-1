@@ -28,12 +28,11 @@ public class JdbcAdminDAO implements AdminDAO {
 
     private PreparedStatement insertAdminStatement(Admin admin, Connection connection) throws SQLException{
         PreparedStatement preparedStatement = connection.prepareStatement(
-                "insert into admin (username, password, salt, token) values (?, ?, ?, ?)"
+                "insert into admin (username, password, salt) values (?, ?, ?)"
         );
         preparedStatement.setString(1, admin.getUsername());
         preparedStatement.setString(2, admin.getPassword());
         preparedStatement.setString(3, admin.getSalt());
-        preparedStatement.setString(4, admin.getAccessToken());
         return preparedStatement;
     }
 
@@ -51,8 +50,7 @@ public class JdbcAdminDAO implements AdminDAO {
             String username = resultSet.getString("username");
             String password = resultSet.getString("password");
             String salt = resultSet.getString("salt");
-            String token = resultSet.getString("token");
-            Admin admin = new Admin(username, password, salt, token);
+            Admin admin = new Admin(username, password, salt);
             return admin;
         }
     }

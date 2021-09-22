@@ -21,7 +21,6 @@ CREATE TABLE IF NOT EXISTS `cryptobank`.`admin` (
   `username` VARCHAR(45) NOT NULL,
   `password` VARCHAR(512) NOT NULL,
   `salt` VARCHAR(16) NOT NULL,
-  `token` VARCHAR(512) NOT NULL,
   PRIMARY KEY (`username`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
@@ -70,7 +69,6 @@ CREATE TABLE IF NOT EXISTS `cryptobank`.`customer` (
   `addition` VARCHAR (5),
   `IBAN` VARCHAR(45) NOT NULL,
   `city` VARCHAR (45) NOT NULL,
-  `token` VARCHAR(512) NOT NULL,
   `email` VARCHAR(512) NOT NULL UNIQUE,
   UNIQUE INDEX `IBAN_UNIQUE` (`IBAN` ASC) VISIBLE,
   INDEX `fk_Customer_bankAccount1_idx` (`IBAN` ASC) VISIBLE,

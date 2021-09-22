@@ -29,8 +29,8 @@ public class JdbcCustomerDAO implements CustomerDAO{
     private PreparedStatement insertCustomer(Customer customer, Connection connection) throws SQLException {
         PreparedStatement preparedStatement = connection.prepareStatement(
                 "insert into customer (username, password, salt, firstname, lastname, dateofbirth, " +
-                        "socialsecuritynumber, street, zipcode, housenumber, addition, iban, city, token, email)" +
-                        " values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
+                        "socialsecuritynumber, street, zipcode, housenumber, addition, iban, city, email)" +
+                        " values (?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
         );
         preparedStatement.setString(1, customer.getUsername());
         preparedStatement.setString(2, customer.getPassword());
@@ -45,8 +45,7 @@ public class JdbcCustomerDAO implements CustomerDAO{
         preparedStatement.setString(11, customer.getAddress().getAddition());
         preparedStatement.setString(12, customer.getBankAccount().getIban());
         preparedStatement.setString(13, customer.getAddress().getCity());
-        preparedStatement.setString(14, customer.getAccessToken());
-        preparedStatement.setString(15, customer.getEmail());
+        preparedStatement.setString(14, customer.getEmail());
         return preparedStatement;
     }
 
@@ -79,11 +78,10 @@ public class JdbcCustomerDAO implements CustomerDAO{
             String addition = resultSet.getString("addition");
             String iban = resultSet.getString("IBAN");
             String city = resultSet.getString("city");
-            String token = resultSet.getString("token");
             String email = resultSet.getString("email");
 
             Customer customer = new Customer(username, password, salt, firstName, lastName, dateOfBirth,
-                    socialSecurityNumber, street, zipcode, houseNumber, addition, city, token, email);
+                    socialSecurityNumber, street, zipcode, houseNumber, addition, city, email);
             customer.setBankAccount(new BankAccount());
             customer.getBankAccount().setIban(iban);
             return customer;

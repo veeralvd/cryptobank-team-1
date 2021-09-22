@@ -14,9 +14,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
-import java.util.UUID;
+
 
 @Service
 public class RegistrationService {
@@ -37,10 +36,13 @@ public class RegistrationService {
         Admin adminInDatabase = rootRepository.findAdminByUsername(username);
 
         if(adminInDatabase == null || attemptToRegister.getUsername().equals(adminInDatabase.getUsername())) {
-            String salt = new Saltmaker().generateSalt();attemptToRegister.setPassword(HashHelper.hash(password, salt, PepperService.getPepper()));
-            String token = UUID.randomUUID().toString();
+            String salt = new Saltmaker().generateSalt();attemptToRegister.setPassword(
+                    HashHelper.hash(password, salt, PepperService.getPepper()));
             attemptToRegister.setSalt(salt);
-            attemptToRegister.setAccessToken(token);
+            attemptToRegister.setAccessToken(createToken.createAccessToken(attemptToRegister.getUsername(),
+                    TokenKeyService.getAdminKey()));
+            attemptToRegister.setRefreshToken(createToken.createRefreshToken(attemptToRegister.getUsername(),
+                    TokenKeyService.getAdminKey()));
             return rootRepository.saveTransaction(attemptToRegister);
         }
         return attemptToRegister;
@@ -49,16 +51,9 @@ public class RegistrationService {
 
     public Customer register(Customer customerToRegister) throws Exception {
         String salt = new Saltmaker().generateSalt();
-
-        //check if customer can be registered, if not: exceptions is thrown
-        //checks for username, socialsec number, email
         checkIfCustomerCanBeRegistered(customerToRegister);
-
-        logger.info("error wordt gegooid maar we komen wel tot hier");
-
-        customerToRegister.setPassword(HashHelper.hash(customerToRegister.getPassword(),
-                salt,
-                PepperService.getPepper()));
+        customerToRegister.setPassword(HashHelper.hash(
+                customerToRegister.getPassword(), salt, PepperService.getPepper()));
         customerToRegister.setSalt(salt);
         String iban = IbanGenerator.generate();
         customerToRegister.setBankAccount(new BankAccount(iban));
@@ -84,9 +79,6 @@ public class RegistrationService {
             checkIfUsernameExists(username, customerInDatabase.getUsername());
             checkIfEmailExists(email, customerInDatabase.getEmail());
         }
-
-        // TODO: 1-9-2021 (Mark) logger is voor testen, moet later eruit
-        logger.info(String.format("customerToCheck is: %s", customerToCheck.toString()));
     }
 
     private void checkIfEmailExists(String email, String emailInDatabase) throws EmailError {
