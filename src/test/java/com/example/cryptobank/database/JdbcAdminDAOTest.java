@@ -29,7 +29,8 @@ class JdbcAdminDAOTest {
 
     @Test
     void findByUsername() {
-        Admin admin = new Admin("Huub", "Tienen", "salt");
-        //Admin expected =
+        Admin adminInDatabase = adminDAOTest.findByUsername("admin");
+        Admin expected = new Admin("admin", "adminPassword", "9d264ec3");
+        assertThat(adminInDatabase).isEqualTo(expected);
     }
 }

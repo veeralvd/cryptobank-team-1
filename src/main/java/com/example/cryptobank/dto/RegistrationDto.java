@@ -144,4 +144,22 @@ public class RegistrationDto {
     public void setEmail(String email) {
         this.email = email;
     }
+
+    @Override
+    public String toString() {
+        return "RegistrationDto{" +
+                "username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", dateOfBirth=" + dateOfBirth +
+                ", socialSecurityNumber=" + socialSecurityNumber +
+                ", street='" + street + '\'' +
+                ", zipcode='" + zipcode + '\'' +
+                ", housenumber=" + housenumber +
+                ", addition='" + addition + '\'' +
+                ", city='" + city + '\'' +
+                ", email='" + email + '\'' +
+                '}';
+    }
 }

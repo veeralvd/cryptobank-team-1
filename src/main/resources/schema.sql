@@ -9,8 +9,7 @@ create table if not exists admin
     username varchar(45) not null
         primary key,
     password varchar(512) not null,
-    salt varchar(16) not null,
-    token varchar(512) not null
+    salt varchar(16) not null
 );
 
 
@@ -65,7 +64,6 @@ create table if not exists customer
     addition varchar(5) null,
     IBAN varchar(45) not null,
     city varchar(45) not null,
-    token varchar(512) not null,
     email varchar(512) not null,
     constraint IBAN_UNIQUE
         unique (IBAN),
