@@ -24,8 +24,8 @@ public class Customer extends User{
      */
     public Customer(String username, String password, String salt,
                     String firstName, String lastName, LocalDate dateOfBirth, int socialSecurityNumber,
-                    String street, String zipcode, int housenumber, String addition, String city, String token, String email) {
-        super(username, password, salt, token);
+                    String street, String zipcode, int housenumber, String addition, String city, String email) {
+        super(username, password, salt);
         this.firstName = firstName;
         this.lastName = lastName;
         this.dateOfBirth = dateOfBirth;
@@ -39,8 +39,8 @@ public class Customer extends User{
 
     public Customer(String username, String password,
                     String firstName, String lastName, LocalDate dateOfBirth, int socialSecurityNumber,
-                    Address address, String token, String email) {
-        super(username, password, null, token);
+                    Address address, String email) {
+        super(username, password, null);
         this.firstName = firstName;
         this.lastName = lastName;
         this.dateOfBirth = dateOfBirth;
@@ -54,7 +54,7 @@ public class Customer extends User{
     public Customer(String username, String password,
                     String firstName, String lastName, LocalDate dateOfBirth, int socialSecurityNumber,
                     String street, String zipcode, int housenumber, String addition, String city, String email) {
-        super(username, password, null, null);
+        super(username, password, null);
         this.firstName = firstName;
         this.lastName = lastName;
         this.dateOfBirth = dateOfBirth;

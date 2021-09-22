@@ -42,7 +42,6 @@ public class LoginService {
                         username, TokenKeyService.getAdminKey()));
                 attemptToLogin.setRefreshToken(createToken.createRefreshToken(
                         username, TokenKeyService.getAdminKey()));
-
                 return attemptToLogin;
             }
         }

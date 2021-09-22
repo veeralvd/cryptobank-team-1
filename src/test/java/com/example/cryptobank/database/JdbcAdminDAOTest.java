@@ -22,14 +22,14 @@ class JdbcAdminDAOTest {
 
     @Test
     void save() {
-        Admin admin = new Admin("Huub", "Tienen", "salt", "token");
+        Admin admin = new Admin("Huub", "Tienen", "salt");
         Admin actual = adminDAOTest.save(admin);
         assertThat(actual).isEqualTo(admin);
     }
 
     @Test
     void findByUsername() {
-        Admin admin = new Admin("Huub", "Tienen", "salt", "token");
+        Admin admin = new Admin("Huub", "Tienen", "salt");
         //Admin expected =
     }
 }

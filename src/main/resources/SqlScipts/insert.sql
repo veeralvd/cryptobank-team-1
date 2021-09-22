@@ -20,7 +20,7 @@ Use cryptobank;
 --
 
 LOCK TABLES admin WRITE;
-INSERT INTO admin VALUES ('admin','admin','b853e2a0');
+INSERT INTO admin VALUES ('admin','5b49dfb8f336487260af55dc7998a2923e5ab79ae3dfb6899cb31f947d52749d','9d264ec3');
 UNLOCK TABLES;
 
 --
