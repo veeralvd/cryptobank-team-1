@@ -33,8 +33,6 @@ class CustomerControllerTest {
     @MockBean
     private CustomerService customerServiceTest;
 
-
-
     @Autowired
     public CustomerControllerTest( MockMvc mockMvc) {
         this.mockMvc = mockMvc;
@@ -42,28 +40,35 @@ class CustomerControllerTest {
 
     @Test
     public void registerTest() throws Exception {
-        RegistrationDto customerRegistrationDto = new RegistrationDto("Branko",
+//        RegistrationDto customerRegistrationDto = new RegistrationDto("Branko",
+//                "Beunhaas123", "Branko",
+//                "Visser", LocalDate.parse("1991-08-01"),
+//                365478912, "Lisstraat",
+//                "3037RC", 45,
+//                "a", "Rotterdam",
+//                "visserbrankie@gmail.com");
+//        Customer customerToRegister = new Customer(customerRegistrationDto.getUsername().toLowerCase(),
+//                customerRegistrationDto.getPassword(), customerRegistrationDto.getFirstName(),
+//                customerRegistrationDto.getLastName(), customerRegistrationDto.getDateOfBirth(),
+//                customerRegistrationDto.getSocialSecurityNumber(), customerRegistrationDto.getStreet(),
+//                customerRegistrationDto.getZipcode(), customerRegistrationDto.getHousenumber(),
+//                customerRegistrationDto.getAddition(), customerRegistrationDto.getCity(),
+//                customerRegistrationDto.getEmail().toLowerCase());
+
+     Customer klantje =   new Customer("Branko",
                 "Beunhaas123", "Branko",
                 "Visser", LocalDate.parse("1991-08-01"),
                 365478912, "Lisstraat",
                 "3037RC", 45,
                 "a", "Rotterdam",
                 "visserbrankie@gmail.com");
-        Customer customerToRegister = new Customer(customerRegistrationDto.getUsername().toLowerCase(),
-                customerRegistrationDto.getPassword(), customerRegistrationDto.getFirstName(),
-                customerRegistrationDto.getLastName(), customerRegistrationDto.getDateOfBirth(),
-                customerRegistrationDto.getSocialSecurityNumber(), customerRegistrationDto.getStreet(),
-                customerRegistrationDto.getZipcode(), customerRegistrationDto.getHousenumber(),
-                customerRegistrationDto.getAddition(), customerRegistrationDto.getCity(),
-                customerRegistrationDto.getEmail().toLowerCase());
 
-            when(customerServiceTest.register(customerToRegister)).thenReturn(customerToRegister);
+            Mockito.when(customerServiceTest.register(klantje)).thenReturn(klantje);
             MockHttpServletRequestBuilder request = MockMvcRequestBuilders.post("/register");
-            request.content(customerRegistrationDto.toString());
+            request.content(klantje.toString());
 
             try {
                 ResultActions resultActions = mockMvc.perform(request);
-                System.out.println(resultActions);
                 MockHttpServletResponse response = resultActions
                         .andExpect(status().isOk())
                         .andDo(print())
