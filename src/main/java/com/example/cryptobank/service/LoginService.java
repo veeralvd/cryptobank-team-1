@@ -30,7 +30,6 @@ public class LoginService {
     public Admin loginAdmin(String username, String password) {
         Admin attemptToLogin = new Admin(username, password);
         Admin adminInDatabase = rootRepository.findAdminByUsername(username);
-        String token = null;
 
         if(adminInDatabase != null && attemptToLogin.getUsername().equals(adminInDatabase.getUsername())) {
             String salt = adminInDatabase.getSalt();

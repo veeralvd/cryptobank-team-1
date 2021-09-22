@@ -19,3 +19,5 @@ INSERT INTO cryptobank.`order` (orderId, abbreviation, assetAmount, desiredPrice
 INSERT INTO cryptobank.transaction (transactionId, abbreviation, assetAmount, assetPrice, ibanBuyer, ibanSeller, transactioncost, datetimeprocessed) VALUES (1, 'BTC', 2, 46123.25, 'NL69COKI5000000003', 'NL24COKI3309054260', 5.25, '2021-09-01 10:47:08');
 INSERT INTO cryptobank.transaction (transactionId, abbreviation, assetAmount, assetPrice, ibanBuyer, ibanSeller, transactioncost, datetimeprocessed) VALUES (2, 'CAKE', 25, 19.75, 'NL69COKI5000000003', 'NL24COKI3309054260', 8.3, '2021-08-31 09:15:36');
 INSERT INTO cryptobank.transaction (transactionId, abbreviation, assetAmount, assetPrice, ibanBuyer, ibanSeller, transactioncost, datetimeprocessed) VALUES (3, 'DOGE', 12500, 0.20, 'NL69COKI5000000003', 'NL24COKI3309054260', 9.95, '2021-09-02 16:47:51');
+
+INSERT INTO cryptobank.`admin` (orderId, abbreviation, assetAmount, desiredPrice, iban, datetimecreated, orderType) VALUES (1, 'DOGE', 10, 0.21, 'NL69COKI5000000003', '2021-09-02 17:07:08', 1);

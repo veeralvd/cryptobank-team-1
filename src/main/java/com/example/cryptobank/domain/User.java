@@ -8,11 +8,10 @@ public  abstract class User implements Comparable<User>{
     private String accessToken;
     private String refreshToken;
 
-    public User(String username, String password, String salt, String token) {
+    public User(String username, String password, String salt) {
         this.username = username;
         this.password = password;
         this.salt = salt;
-        this.accessToken = token;
     }
 
     public User(String username, String password) {
