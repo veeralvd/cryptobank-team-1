@@ -32,7 +32,7 @@ class JdbcBankAccountDaoTest {
     @Test
     void getBalanceByIban() {
         double balanceBank = bankAccountDaoUnderTest.getBalanceByIban("NL24COKI3309054260");
-        double expected = 5000001;
+        double expected = 5000000;
         assertThat(balanceBank).isEqualTo(expected);
     }
 
